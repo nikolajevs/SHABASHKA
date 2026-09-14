@@ -1,3 +1,4 @@
+import { localizedJson } from "../../i18n/shared";
 import { env } from "cloudflare:workers";
 import { getChatGPTUser } from "../../chatgpt-auth";
 export const dynamic = "force-dynamic";
@@ -40,7 +41,8 @@ const cities = [
   "Другой населённый пункт Латвии",
   "Удалённо · Латвия",
 ];
-export async function GET() {
+export async function GET(request: Request) {
+  const reply = localizedJson(request);
   try {
     const u = await getChatGPTUser();
     const db = database();
@@ -54,7 +56,7 @@ export async function GET() {
     const account = rows.results.find(
       (r) => r.kind === "account" && r.owner === uid,
     );
-    return Response.json(
+    return reply(
       {
         user: u
           ? {
@@ -70,32 +72,27 @@ export async function GET() {
     );
   } catch (e) {
     console.error(e);
-    return Response.json(
+    return reply(
       { error: "Не удалось загрузить данные. Попробуйте ещё раз." },
       { status: 503 },
     );
   }
 }
 export async function POST(request: Request) {
+  const reply = localizedJson(request);
   try {
     if (request.headers.get("origin") !== new URL(request.url).origin)
-      return Response.json(
-        { error: "Недопустимый источник запроса" },
-        { status: 403 },
-      );
+      return reply({ error: "Недопустимый источник запроса" }, { status: 403 });
     const u = await getChatGPTUser();
     if (!u)
-      return Response.json(
+      return reply(
         { error: "Войдите, чтобы сохранить данные." },
         { status: 401 },
       );
     const db = database();
     const raw = await request.text();
     if (raw.length > 16000)
-      return Response.json(
-        { error: "Слишком большой запрос" },
-        { status: 413 },
-      );
+      return reply({ error: "Слишком большой запрос" }, { status: 413 });
     const b = JSON.parse(raw) as Record<string, unknown>;
     const action = b.action;
     const value = (key: string, max = 2000) => {
@@ -134,7 +131,7 @@ export async function POST(request: Request) {
         )
         .bind("account:" + u.userId, u.userId, JSON.stringify(data), now)
         .run();
-      return Response.json({ ok: true });
+      return reply({ ok: true });
     }
     if (!identity)
       throw Error("Сначала завершите регистрацию в личном кабинете");
@@ -252,10 +249,7 @@ export async function POST(request: Request) {
         .bind(bid.parent)
         .first<Row>();
       if (!task || !(bid.owner === u.userId || task.owner === u.userId))
-        return Response.json(
-          { error: "Нет доступа к диалогу" },
-          { status: 403 },
-        );
+        return reply({ error: "Нет доступа к диалогу" }, { status: 403 });
       await insert(
         "message",
         { description: value("description"), name: identity.name },
@@ -288,11 +282,11 @@ export async function POST(request: Request) {
         "review:" + task.id,
       );
     } else throw Error("Неизвестное действие");
-    return Response.json({ ok: true, id });
+    return reply({ ok: true, id });
   } catch (e) {
     console.error(e);
     const message = e instanceof Error ? e.message : "";
-    return Response.json(
+    return reply(
       {
         error: message.includes("UNIQUE constraint")
           ? "Вы уже отправили отклик или отзыв."

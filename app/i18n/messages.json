@@ -1,0 +1,488 @@
+[
+  ["Все услуги", "Visi pakalpojumi", "All services"],
+  ["Ремонт", "Remonts", "Repairs"],
+  ["Уборка", "Uzkopšana", "Cleaning"],
+  ["Обучение", "Mācības", "Tutoring"],
+  ["IT и дизайн", "IT un dizains", "IT & design"],
+  ["Доставка", "Piegāde", "Delivery"],
+  ["Красота", "Skaistumkopšana", "Beauty"],
+  ["Для животных", "Mājdzīvniekiem", "Pet care"],
+  ["Рига", "Rīga", "Riga"],
+  ["Юрмала", "Jūrmala", "Jurmala"],
+  ["Даугавпилс", "Daugavpils", "Daugavpils"],
+  ["Лиепая", "Liepāja", "Liepaja"],
+  ["Елгава", "Jelgava", "Jelgava"],
+  ["Вентспилс", "Ventspils", "Ventspils"],
+  ["Резекне", "Rēzekne", "Rezekne"],
+  ["Валмиера", "Valmiera", "Valmiera"],
+  ["Екабпилс", "Jēkabpils", "Jekabpils"],
+  ["Огре", "Ogre", "Ogre"],
+  ["Цесис", "Cēsis", "Cesis"],
+  ["Сигулда", "Sigulda", "Sigulda"],
+  [
+    "Другой населённый пункт Латвии",
+    "Cita vieta Latvijā",
+    "Elsewhere in Latvia"
+  ],
+  ["Удалённо · Латвия", "Attālināti · Latvija", "Remote · Latvia"],
+  ["Мастер по ремонту", "Remontdarbu meistars", "Handyman"],
+  ["Александр Р.", "Aleksandrs R.", "Aleksandrs R."],
+  [
+    "Сборка мебели и мелкий ремонт. Помогу довести домашние дела до конца.",
+    "Mēbeļu montāža un nelieli remontdarbi. Palīdzēšu paveikt iekrātos mājas darbus.",
+    "Furniture assembly and small repairs. I can help you finish those jobs around the house."
+  ],
+  ["Уборка квартир", "Dzīvokļu uzkopšana", "Apartment cleaning"],
+  ["Мария К.", "Marija K.", "Marija K."],
+  [
+    "Поддерживающая и генеральная уборка. Обсудим объём и удобное время.",
+    "Regulārā un ģenerālā uzkopšana. Vienosimies par darbu apjomu un ērtu laiku.",
+    "Regular and deep cleaning. Let's agree on the scope and a convenient time."
+  ],
+  ["Разработка сайтов", "Mājaslapu izstrāde", "Website development"],
+  ["Дмитрий С.", "Dmitrijs S.", "Dmitrijs S."],
+  [
+    "Сайты для небольших компаний: от структуры до запуска. Работаю удалённо.",
+    "Mājaslapas maziem uzņēmumiem: no struktūras līdz palaišanai. Strādāju attālināti.",
+    "Websites for small businesses, from planning to launch. Available remotely."
+  ],
+  ["Английский язык", "Angļu valoda", "English lessons"],
+  ["Елена В.", "Jeļena V.", "Jelena V."],
+  [
+    "Индивидуальные занятия для взрослых. Разговорная практика и понятная грамматика.",
+    "Individuālas nodarbības pieaugušajiem. Sarunvalodas prakse un saprotama gramatika.",
+    "One-to-one lessons for adults. Conversation practice and clear grammar explanations."
+  ],
+  ["По договорённости", "Pēc vienošanās", "Negotiable"],
+  ["В работе", "Darbs notiek", "In progress"],
+  ["Завершено", "Pabeigts", "Completed"],
+  ["Принимает отклики", "Gaida piedāvājumus", "Open for offers"],
+  ["Все города", "Visas pilsētas", "All cities"],
+  [
+    "Не удалось загрузить данные",
+    "Neizdevās ielādēt datus",
+    "Could not load data"
+  ],
+  [
+    "Показать специалистов по текстовому запросу",
+    "Meklēt speciālistus pēc teksta",
+    "Search specialists by text"
+  ],
+  ["Некорректный запрос", "Nederīgs pieprasījums", "Invalid request"],
+  ["Сохранено.", "Saglabāts.", "Saved."],
+  [
+    "Сохранено. Обновите страницу для загрузки изменений.",
+    "Saglabāts. Pārlādējiet lapu, lai redzētu izmaiņas.",
+    "Saved. Reload the page to see the changes."
+  ],
+  ["Не удалось сохранить", "Neizdevās saglabāt", "Could not save"],
+  ["Пока нет отзывов", "Vēl nav atsauksmju", "No reviews yet"],
+  [
+    "Рейтинг: {rating} · Отзывы: {count}",
+    "Vērtējums: {rating} · Atsauksmes: {count}",
+    "Rating: {rating} · Reviews: {count}"
+  ],
+  ["Найти специалиста", "Atrast speciālistu", "Find a specialist"],
+  ["Найти задание", "Atrast darbu", "Find a task"],
+  ["Латвия", "Latvija", "Latvia"],
+  ["Мой кабинет", "Mans konts", "My account"],
+  [
+    "УСЛУГИ И ЛЮДИ РЯДОМ · ЛАТВИЯ",
+    "PAKALPOJUMI UN CILVĒKI TUVUMĀ · LATVIJA",
+    "LOCAL SERVICES, LOCAL PEOPLE · LATVIA"
+  ],
+  ["Для каждого дела", "Katram darbam", "For every task,"],
+  ["найдётся", "atradīsies", "there's"],
+  ["свой человек.", "īstais cilvēks.", "the right person."],
+  ["Создать задание", "Publicēt uzdevumu", "Post a task"],
+  [
+    "Какое задание вы ищете?",
+    "Kādu darbu meklējat?",
+    "What task are you looking for?"
+  ],
+  [
+    "Какая помощь вам нужна?",
+    "Kāda palīdzība jums vajadzīga?",
+    "What do you need help with?"
+  ],
+  ["Поиск", "Meklēšana", "Search"],
+  ["Найти", "Meklēt", "Search"],
+  ["Повторить", "Mēģināt vēlreiz", "Try again"],
+  [
+    "Специалисты под ваше дело",
+    "Speciālisti jūsu darbam",
+    "Specialists for your task"
+  ],
+  ["Задания для вас", "Uzdevumi jums", "Tasks for you"],
+  ["Обновить", "Atjaunināt", "Refresh"],
+  ["Специалисты", "Speciālisti", "Specialists"],
+  ["Задания", "Uzdevumi", "Tasks"],
+  ["Мои", "Mani", "Mine"],
+  ["Город", "Pilsēta", "City"],
+  [
+    "Ваши задания и предложения",
+    "Jūsu uzdevumi un piedāvājumi",
+    "Your tasks and offers"
+  ],
+  ["Ваша роль: {role}", "Jūsu loma: {role}", "Your role: {role}"],
+  ["заказчик", "pasūtītājs", "customer"],
+  ["исполнитель", "izpildītājs", "provider"],
+  [
+    "Выберите роль, чтобы завершить регистрацию.",
+    "Izvēlieties lomu, lai pabeigtu reģistrāciju.",
+    "Choose a role to finish registration."
+  ],
+  [
+    "Войдите, чтобы публиковать задания и откликаться.",
+    "Pierakstieties, lai publicētu uzdevumus un sūtītu piedāvājumus.",
+    "Sign in to post tasks and send offers."
+  ],
+  ["Войти через ChatGPT", "Pierakstīties ar ChatGPT", "Sign in with ChatGPT"],
+  ["Изменить имя или роль", "Mainīt vārdu vai lomu", "Change name or role"],
+  ["Завершить регистрацию", "Pabeigt reģistrāciju", "Finish registration"],
+  [
+    "Мой профиль исполнителя",
+    "Mans izpildītāja profils",
+    "My provider profile"
+  ],
+  ["Выйти", "Izrakstīties", "Sign out"],
+  ["Загружаем данные…", "Ielādē datus…", "Loading data…"],
+  ["Пример профиля", "Profila piemērs", "Example profile"],
+  ["Ваш отклик", "Jūsu piedāvājums", "Your offer"],
+  ["Предложение по заданию", "Piedāvājums uzdevumam", "Task offer"],
+  ["Вы выбраны исполнителем", "Jūs esat izvēlēts darbam", "You were selected"],
+  ["Отклик отправлен", "Piedāvājums nosūtīts", "Offer sent"],
+  ["Исполнитель выбран", "Izpildītājs izvēlēts", "Provider selected"],
+  ["Подробнее:", "Vairāk:", "Details:"],
+  [
+    "Здесь будут ваши дела",
+    "Šeit būs jūsu darbi",
+    "Your tasks will appear here"
+  ],
+  ["Пока ничего не найдено", "Nekas nav atrasts", "No results yet"],
+  [
+    "Создайте первое задание или измените поиск.",
+    "Publicējiet pirmo uzdevumu vai mainiet meklēšanas nosacījumus.",
+    "Post the first task or change your search."
+  ],
+  [
+    "Попробуйте другую категорию или опубликуйте свой профиль.",
+    "Izmēģiniet citu kategoriju vai publicējiet savu profilu.",
+    "Try another category or publish your profile."
+  ],
+  ["Сбросить фильтры", "Notīrīt filtrus", "Clear filters"],
+  ["ПРОСТО НАЧНИТЕ", "SĀCIET VIENKĀRŠI", "JUST GET STARTED"],
+  ["Опишите задачу.", "Aprakstiet uzdevumu.", "Describe your task."],
+  ["Остальное —", "Pārējo uzticiet", "Leave the rest"],
+  ["специалистам.", "speciālistiem.", "to the specialists."],
+  [
+    "Получайте предложения, сравнивайте условия и выбирайте, с кем работать.",
+    "Saņemiet piedāvājumus, salīdziniet nosacījumus un izvēlieties, ar ko sadarboties.",
+    "Get offers, compare terms and choose who to work with."
+  ],
+  ["Ваши навыки нужны", "Jūsu prasmes ir vajadzīgas", "Your skills are needed"],
+  [
+    "Находите задания по всей Латвии и предлагайте свои услуги.",
+    "Atrodiet uzdevumus visā Latvijā un piedāvājiet savus pakalpojumus.",
+    "Find tasks across Latvia and offer your services."
+  ],
+  ["Стать исполнителем", "Kļūt par izpildītāju", "Become a provider"],
+  [
+    "Договаривайтесь напрямую. SHABASHKA не принимает оплату за работы. Стоимость и условия вы согласовываете друг с другом.",
+    "Vienojieties tieši. SHABASHKA nepieņem maksājumus par darbu. Par cenu un nosacījumiem vienojaties savā starpā.",
+    "Agree directly. SHABASHKA does not accept payments for work. You agree on the price and terms with each other."
+  ],
+  [
+    "Услуги по всей Латвии",
+    "Pakalpojumi visā Latvijā",
+    "Services across Latvia"
+  ],
+  [
+    "Примеры профилей отмечены",
+    "Profilu piemēri ir atzīmēti",
+    "Example profiles are labelled"
+  ],
+  ["Новое задание", "Jauns uzdevums", "New task"],
+  ["Профиль исполнителя", "Izpildītāja profils", "Provider profile"],
+  ["Откликнуться на задание", "Nosūtīt piedāvājumu", "Send an offer"],
+  ["Ваш аккаунт", "Jūsu konts", "Your account"],
+  ["Отзыв об исполнителе", "Atsauksme par izpildītāju", "Review the provider"],
+  ["Диалог по заданию", "Uzdevuma sarakste", "Task conversation"],
+  ["Ваше предложение", "Jūsu piedāvājums", "Your offer"],
+  ["Условия и подробности", "Nosacījumi un informācija", "Terms and details"],
+  [
+    "Переписку видят только заказчик и исполнитель. Сообщения обновляются автоматически.",
+    "Saraksti redz tikai pasūtītājs un izpildītājs. Ziņas tiek atjauninātas automātiski.",
+    "Only the customer and provider can see this conversation. Messages update automatically."
+  ],
+  [
+    "Оцените работу выбранного исполнителя. Отзыв появится в его профиле.",
+    "Novērtējiet izvēlētā izpildītāja darbu. Atsauksme būs redzama viņa profilā.",
+    "Rate the selected provider's work. Your review will appear on their profile."
+  ],
+  [
+    "Один аккаунт, две роли. При необходимости роль можно сменить в кабинете.",
+    "Viens konts, divas lomas. Vajadzības gadījumā lomu var mainīt savā kontā.",
+    "One account, two roles. You can change your role in your account."
+  ],
+  [
+    "Предложите цену в евро и опишите, как вы поможете. Отклик видите только вы и заказчик.",
+    "Norādiet cenu eiro un aprakstiet, kā palīdzēsiet. Piedāvājumu redzat tikai jūs un pasūtītājs.",
+    "Quote a price in euros and describe how you can help. Only you and the customer can see the offer."
+  ],
+  [
+    "Заполните детали. Не указывайте личные контакты в публичном описании.",
+    "Aizpildiet informāciju. Publiskajā aprakstā nenorādiet privātu kontaktinformāciju.",
+    "Fill in the details. Do not include private contact details in the public description."
+  ],
+  [
+    "Это пример, а не действующий специалист. Создайте задание, чтобы получить реальные отклики.",
+    "Šis ir profila piemērs, nevis īsts speciālists. Publicējiet uzdevumu, lai saņemtu īstus piedāvājumus.",
+    "This is an example, not an active specialist. Post a task to receive real offers."
+  ],
+  ["Навыки", "Prasmes", "Skills"],
+  ["Портфолио", "Darbu piemēri", "Portfolio"],
+  ["Работа", "Darbs", "Work"],
+  [
+    "Работы ещё не добавлены.",
+    "Darbu piemēri vēl nav pievienoti.",
+    "No work samples added yet."
+  ],
+  [
+    "Создать задание в этой категории",
+    "Publicēt uzdevumu šajā kategorijā",
+    "Post a task in this category"
+  ],
+  ["Статус:", "Statuss:", "Status:"],
+  [
+    "Вы выбраны исполнителем.",
+    "Jūs esat izvēlēts darbam.",
+    "You were selected for this task."
+  ],
+  [
+    "Открыть чат с заказчиком",
+    "Atvērt saraksti ar pasūtītāju",
+    "Open chat with customer"
+  ],
+  ["Откликнуться", "Nosūtīt piedāvājumu", "Send an offer"],
+  ["Предложения исполнителей", "Izpildītāju piedāvājumi", "Provider offers"],
+  ["Чат", "Sarakste", "Chat"],
+  ["Выбрать исполнителя", "Izvēlēties izpildītāju", "Choose provider"],
+  [
+    "Другой исполнитель выбран",
+    "Izvēlēts cits izpildītājs",
+    "Another provider was selected"
+  ],
+  ["Откликов пока нет.", "Piedāvājumu vēl nav.", "No offers yet."],
+  ["Работа выполнена", "Darbs pabeigts", "Mark as completed"],
+  [
+    "Спасибо! Ваш отзыв опубликован.",
+    "Paldies! Jūsu atsauksme ir publicēta.",
+    "Thank you! Your review is published."
+  ],
+  ["Оставить отзыв", "Atstāt atsauksmi", "Leave a review"],
+  [
+    "Войдите и выберите роль, чтобы продолжить.",
+    "Pierakstieties un izvēlieties lomu, lai turpinātu.",
+    "Sign in and choose a role to continue."
+  ],
+  [
+    "Для этого действия выберите роль",
+    "Šai darbībai izvēlieties lomu",
+    "For this action, choose the role"
+  ],
+  ["заказчика", "pasūtītājs", "customer"],
+  ["исполнителя", "izpildītājs", "provider"],
+  ["Изменить роль", "Mainīt lomu", "Change role"],
+  ["Сообщения", "Ziņas", "Messages"],
+  [
+    "Обсудите детали и удобное время.",
+    "Pārrunājiet detaļas un vienojieties par ērtu laiku.",
+    "Discuss the details and a convenient time."
+  ],
+  ["Ваше имя", "Jūsu vārds", "Your name"],
+  ["Роль", "Loma", "Role"],
+  [
+    "Заказчик — ищу помощь",
+    "Pasūtītājs — meklēju palīdzību",
+    "Customer — I need help"
+  ],
+  [
+    "Исполнитель — предлагаю услуги",
+    "Izpildītājs — piedāvāju pakalpojumus",
+    "Provider — I offer services"
+  ],
+  ["Название услуги", "Pakalpojuma nosaukums", "Service title"],
+  ["Что нужно сделать?", "Kas jāpaveic?", "What needs to be done?"],
+  [
+    "Например, собрать шкаф",
+    "Piemēram, salikt skapi",
+    "For example, assemble a wardrobe"
+  ],
+  ["Категория", "Kategorija", "Category"],
+  ["Другое", "Cits", "Other"],
+  ["Где в Латвии?", "Kur Latvijā?", "Where in Latvia?"],
+  [
+    "Например: сборка мебели, электрика",
+    "Piemēram: mēbeļu montāža, elektrodarbi",
+    "For example: furniture assembly, electrical work"
+  ],
+  [
+    "Портфолио — ссылки на работы",
+    "Darbu piemēri — saites",
+    "Portfolio — links to your work"
+  ],
+  [
+    "Каждая ссылка https:// с новой строки",
+    "Katra https:// saite jaunā rindā",
+    "One https:// link per line"
+  ],
+  ["Оценка от 1 до 5", "Vērtējums no 1 līdz 5", "Rating from 1 to 5"],
+  ["Сообщение", "Ziņa", "Message"],
+  ["Как прошла работа?", "Kā noritēja darbs?", "How did the work go?"],
+  ["Описание", "Apraksts", "Description"],
+  ["Бюджет, EUR", "Budžets, EUR", "Budget, EUR"],
+  ["Стоимость, EUR", "Cena, EUR", "Price, EUR"],
+  [
+    "Например, 50 € или по договорённости",
+    "Piemēram, 50 € vai pēc vienošanās",
+    "For example, €50 or negotiable"
+  ],
+  ["Сохраняем…", "Saglabā…", "Saving…"],
+  ["Сохранить аккаунт", "Saglabāt kontu", "Save account"],
+  ["Отправить", "Nosūtīt", "Send"],
+  ["Опубликовать отзыв", "Publicēt atsauksmi", "Publish review"],
+  ["Отправить отклик", "Nosūtīt piedāvājumu", "Send offer"],
+  ["Сохранить профиль", "Saglabāt profilu", "Save profile"],
+  ["Опубликовать задание", "Publicēt uzdevumu", "Publish task"],
+  [
+    "Хранилище временно недоступно",
+    "Datu glabātuve īslaicīgi nav pieejama",
+    "Storage is temporarily unavailable"
+  ],
+  [
+    "Не удалось загрузить данные. Попробуйте ещё раз.",
+    "Neizdevās ielādēt datus. Mēģiniet vēlreiz.",
+    "Could not load data. Please try again."
+  ],
+  [
+    "Недопустимый источник запроса",
+    "Nederīgs pieprasījuma avots",
+    "Invalid request origin"
+  ],
+  [
+    "Войдите, чтобы сохранить данные.",
+    "Pierakstieties, lai saglabātu datus.",
+    "Sign in to save data."
+  ],
+  [
+    "Слишком большой запрос",
+    "Pieprasījums ir pārāk liels",
+    "Request is too large"
+  ],
+  ["Заполните корректно:", "Aizpildiet pareizi:", "Please check:"],
+  ["Выберите роль", "Izvēlieties lomu", "Choose a role"],
+  [
+    "Сначала завершите регистрацию в личном кабинете",
+    "Vispirms pabeidziet reģistrāciju savā kontā",
+    "Finish registration in your account first"
+  ],
+  [
+    "Переключитесь на роль заказчика в кабинете",
+    "Savā kontā izvēlieties pasūtītāja lomu",
+    "Switch to the customer role in your account"
+  ],
+  [
+    "Переключитесь на роль исполнителя в кабинете",
+    "Savā kontā izvēlieties izpildītāja lomu",
+    "Switch to the provider role in your account"
+  ],
+  [
+    "Выберите населённый пункт Латвии",
+    "Izvēlieties vietu Latvijā",
+    "Choose a location in Latvia"
+  ],
+  ["Выберите категорию", "Izvēlieties kategoriju", "Choose a category"],
+  [
+    "Не более 1500 символов для портфолио",
+    "Darbu piemēriem atļautas līdz 1500 rakstzīmēm",
+    "Portfolio must be no longer than 1,500 characters"
+  ],
+  [
+    "Портфолио: используйте ссылки https://",
+    "Darbu piemēriem izmantojiet https:// saites",
+    "Portfolio: use https:// links"
+  ],
+  [
+    "Отклики доступны исполнителям",
+    "Piedāvājumus var sūtīt izpildītāji",
+    "Only providers can send offers"
+  ],
+  [
+    "Это задание недоступно для отклика",
+    "Šim uzdevumam nevar nosūtīt piedāvājumu",
+    "This task is not open for offers"
+  ],
+  [
+    "Сначала заполните профиль исполнителя",
+    "Vispirms aizpildiet izpildītāja profilu",
+    "Complete your provider profile first"
+  ],
+  ["Отклик не найден", "Piedāvājums nav atrasts", "Offer not found"],
+  [
+    "Выбор исполнителя недоступен",
+    "Izpildītāju pašlaik nevar izvēlēties",
+    "Provider selection is unavailable"
+  ],
+  [
+    "Завершение недоступно",
+    "Uzdevumu nevar atzīmēt kā pabeigtu",
+    "Cannot mark this task as completed"
+  ],
+  ["Диалог не найден", "Sarakste nav atrasta", "Conversation not found"],
+  [
+    "Нет доступа к диалогу",
+    "Nav piekļuves sarakstei",
+    "You cannot access this conversation"
+  ],
+  [
+    "Отзыв доступен заказчику после выполнения",
+    "Pasūtītājs var atstāt atsauksmi pēc darba pabeigšanas",
+    "The customer can leave a review after completion"
+  ],
+  ["Исполнитель не найден", "Izpildītājs nav atrasts", "Provider not found"],
+  ["Неизвестное действие", "Nezināma darbība", "Unknown action"],
+  [
+    "Вы уже отправили отклик или отзыв.",
+    "Jūs jau nosūtījāt piedāvājumu vai atsauksmi.",
+    "You have already submitted an offer or review."
+  ],
+  [
+    "Не удалось сохранить. Попробуйте ещё раз.",
+    "Neizdevās saglabāt. Mēģiniet vēlreiz.",
+    "Could not save. Please try again."
+  ],
+  ["Не удалось сохранить.", "Neizdevās saglabāt.", "Could not save."],
+  ["Закрыть", "Aizvērt", "Close"],
+  ["Язык", "Valoda", "Language"],
+  [
+    "Пожалуйста, заполните это поле.",
+    "Lūdzu, aizpildiet šo lauku.",
+    "Please fill in this field."
+  ],
+  [
+    "Проверьте значение поля.",
+    "Pārbaudiet lauka vērtību.",
+    "Please check this field."
+  ],
+  [
+    "SHABASHKA — услуги в Латвии",
+    "SHABASHKA — pakalpojumi Latvijā",
+    "SHABASHKA — services in Latvia"
+  ],
+  [
+    "Специалисты и задания по всей Латвии. Договаривайтесь напрямую.",
+    "Speciālisti un uzdevumi visā Latvijā. Vienojieties tieši.",
+    "Specialists and tasks across Latvia. Agree directly."
+  ]
+]

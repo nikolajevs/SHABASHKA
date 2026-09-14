@@ -782,3 +782,105 @@ header {
 .intro {
   gap: 18px;
 }
+.language-switcher {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid #dce2d2;
+  border-radius: 9px;
+  background: #fff;
+  flex-shrink: 0;
+}
+.language-switcher button {
+  border: 0;
+  background: transparent;
+  padding: 8px 9px;
+  border-radius: 6px;
+  color: #526047;
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 36px;
+}
+.language-switcher button[aria-pressed="true"] {
+  background: #e6f3c6;
+  color: #273425;
+}
+.dialog-close {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  background: #eff3e8;
+  border-radius: 50%;
+  font-size: 24px;
+  line-height: 1;
+}
+.market-dialog > .language-switcher {
+  justify-self: start;
+  margin-right: 34px;
+}
+.header-right {
+  gap: 16px;
+}
+.categories button {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.market-dialog h2 {
+  padding-right: 22px;
+}
+.language-switcher button:disabled {
+  cursor: default;
+}
+@media (max-width: 850px) {
+  header {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 94px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    gap: 16px;
+  }
+  header nav {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+  }
+  .header-right {
+    gap: 10px;
+  }
+  .header-right .outline {
+    padding: 10px;
+    font-size: 14px;
+  }
+  .brand {
+    font-size: 25px;
+  }
+}
+@media (max-width: 430px) {
+  header {
+    padding: 15px 16px;
+  }
+  .header-right {
+    gap: 8px;
+  }
+  .language-switcher button {
+    padding: 6px;
+  }
+  .header-right .outline {
+    padding: 9px;
+    font-size: 13px;
+  }
+  .brand {
+    font-size: 23px;
+  }
+  .header-right {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .categories {
+    gap: 6px;
+  }
+}
