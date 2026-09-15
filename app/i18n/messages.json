@@ -1612,5 +1612,47 @@
     "Pieņemiet atjauninātos noteikumus savā kontā.",
     "Accept the updated terms in your account.",
     "Прийміть оновлені умови в кабінеті."
+  ],
+  [
+    "Удалить задание",
+    "Dzēst uzdevumu",
+    "Delete task",
+    "Видалити завдання"
+  ],
+  [
+    "Подтвердить удаление",
+    "Apstiprināt dzēšanu",
+    "Confirm deletion",
+    "Підтвердити видалення"
+  ],
+  [
+    "Подтвердите удаление задания.",
+    "Apstipriniet uzdevuma dzēšanu.",
+    "Confirm task deletion.",
+    "Підтвердьте видалення завдання."
+  ],
+  [
+    "Задание не найдено или уже удалено.",
+    "Uzdevums nav atrasts vai jau ir dzēsts.",
+    "Task not found or already deleted.",
+    "Завдання не знайдено або вже видалено."
+  ],
+  [
+    "Удалено",
+    "Dzēsts",
+    "Deleted",
+    "Видалено"
+  ],
+  [
+    "Задание удалено из каталога. История доступна только участникам.",
+    "Uzdevums ir dzēsts no kataloga. Vēsture ir pieejama tikai dalībniekiem.",
+    "The task has been removed from the catalogue. Its history is available only to participants.",
+    "Завдання видалено з каталогу. Історія доступна лише учасникам."
+  ],
+  [
+    "Удалить задание из каталога? Оно останется в кабинете участников вместе с откликами и перепиской. Отзывы сохранятся. Удаление объявления не отменяет ваши договорённости.",
+    "Dzēst uzdevumu no kataloga? Tas paliks dalībnieku kontos kopā ar piedāvājumiem un saraksti. Atsauksmes tiks saglabātas. Sludinājuma dzēšana neatceļ jūsu vienošanos.",
+    "Delete this task from the catalogue? It will remain in participants’ accounts with offers and messages. Reviews will be preserved. Deleting the listing does not cancel your agreements.",
+    "Видалити завдання з каталогу? Воно залишиться в кабінетах учасників разом із пропозиціями та листуванням. Відгуки збережуться. Видалення оголошення не скасовує ваших домовленостей."
   ]
 ]

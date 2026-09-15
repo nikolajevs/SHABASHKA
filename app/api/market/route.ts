@@ -52,9 +52,9 @@ export async function GET(request: Request) {
     const state = u ? await accountState(uid) : null;
     const rows = await db
       .prepare(
-        "SELECT * FROM records r WHERE ((kind IN ('profile','task','review') AND NOT EXISTS (SELECT 1 FROM records m WHERE m.id='hidden:'||r.id AND m.kind='hidden') AND NOT EXISTS (SELECT 1 FROM records b WHERE b.id='block:'||r.owner AND b.kind='block') AND NOT EXISTS (SELECT 1 FROM records a WHERE a.id='account:'||r.owner AND json_extract(a.data,'$.inactive')=1)) OR (owner=? AND kind IN ('account','bid','message','notice')) OR (kind='bid' AND parent IN (SELECT id FROM records WHERE kind='task' AND owner=?)) OR (kind='message' AND parent IN (SELECT id FROM records WHERE kind='bid' AND (owner=? OR parent IN (SELECT id FROM records WHERE kind='task' AND owner=?))))) ORDER BY created DESC",
+        "SELECT * FROM records r WHERE ((kind IN ('profile','task','review') AND coalesce(json_extract(r.data,'$.deleted'),0)=0 AND NOT EXISTS (SELECT 1 FROM records m WHERE m.id='hidden:'||r.id AND m.kind='hidden') AND NOT EXISTS (SELECT 1 FROM records b WHERE b.id='block:'||r.owner AND b.kind='block') AND NOT EXISTS (SELECT 1 FROM records a WHERE a.id='account:'||r.owner AND json_extract(a.data,'$.inactive')=1)) OR (kind='task' AND json_extract(r.data,'$.deleted')=1 AND (owner=? OR id IN (SELECT parent FROM records WHERE kind='bid' AND owner=?))) OR (owner=? AND kind IN ('account','bid','message','notice')) OR (kind='bid' AND parent IN (SELECT id FROM records WHERE kind='task' AND owner=?)) OR (kind='message' AND parent IN (SELECT id FROM records WHERE kind='bid' AND (owner=? OR parent IN (SELECT id FROM records WHERE kind='task' AND owner=?))))) ORDER BY created DESC",
       )
-      .bind(uid, uid, uid, uid)
+      .bind(uid, uid, uid, uid, uid, uid)
       .all<Row>();
     const account = rows.results.find(
       (r) => r.kind === "account" && r.owner === uid,
@@ -136,9 +136,9 @@ export async function POST(request: Request) {
     ) =>
       db
         .prepare(
-          "INSERT INTO records (id,kind,owner,parent,data,created) SELECT ?,?,?,?,?,? WHERE NOT EXISTS (SELECT 1 FROM records WHERE id=? AND json_extract(data,'$.inactive')=1)",
+          "INSERT INTO records (id,kind,owner,parent,data,created) SELECT ?,?,?,?,?,? WHERE NOT EXISTS (SELECT 1 FROM records WHERE id=? AND json_extract(data,'$.inactive')=1) AND (? != 'bid' OR EXISTS (SELECT 1 FROM records WHERE id=? AND kind='task' AND coalesce(json_extract(data,'$.deleted'),0)=0 AND json_extract(data,'$.status')='open'))",
         )
-        .bind(recordId, kind, u.userId, parent, JSON.stringify(data), now, 'account:'+u.userId)
+        .bind(recordId, kind, u.userId, parent, JSON.stringify(data), now, 'account:'+u.userId, kind, parent)
         .run();
     if (action === "register") {
       if(b.acceptTerms!==true && b.acceptTerms!=='on')return reply({error:"Примите условия использования."},{status:400});
@@ -156,6 +156,13 @@ export async function POST(request: Request) {
     }
     if (!identity)
       throw Error("Сначала завершите регистрацию в личном кабинете");
+    if (action === "delete-task") {
+      if (b.confirm !== true) throw Error("Подтвердите удаление задания.");
+      const result = await db.prepare("UPDATE records SET data=json_set(data,'$.deleted',1,'$.deletedAt',?) WHERE id=? AND kind='task' AND owner=? AND coalesce(json_extract(data,'$.deleted'),0)=0")
+        .bind(now, value("id",100), u.userId).run();
+      if (!result.meta.changes) return reply({error:"Задание не найдено или уже удалено."},{status:404});
+      return reply({ok:true});
+    }
     if (action === "task" || action === "profile") {
       if (identity.role !== (action === "task" ? "customer" : "provider"))
         throw Error(
@@ -219,7 +226,7 @@ export async function POST(request: Request) {
       if (
         !task ||
         task.owner === u.userId ||
-        JSON.parse(task.data).status !== "open"
+        JSON.parse(task.data).status !== "open" || JSON.parse(task.data).deleted
       )
         throw Error("Это задание недоступно для отклика");
       const profile = await db
@@ -227,7 +234,7 @@ export async function POST(request: Request) {
         .bind(u.userId)
         .first();
       if (!profile) throw Error("Сначала заполните профиль исполнителя");
-      await insert(
+      const savedBid = await insert(
         "bid",
         {
           description: value("description"),
@@ -237,6 +244,7 @@ export async function POST(request: Request) {
         parent,
         "bid:" + parent + ":" + u.userId,
       );
+      if (!savedBid.meta.changes) throw Error("Это задание недоступно для отклика");
     } else if (action === "choose") {
       const bid = await db
         .prepare("SELECT * FROM records WHERE id=? AND kind='bid'")

@@ -81,6 +81,7 @@ type Item = {
   profile?: string;
   created?: string;
   basis?: string;
+  deleted?: boolean;
 };
 type User = {
   name: string;
@@ -168,6 +169,7 @@ function Picker({
   );
 }
 export default function Home() {
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [deepLinkHandled,setDeepLinkHandled]=useState(false);
   const { locale, t, errorText } = useLanguage();
   const [view, setView] = useState("profile"),
@@ -264,6 +266,7 @@ export default function Home() {
     return () => lifecycle.abort();
   }, [t]);
   function open(kind: string, item?: Item) {
+    setDeleteConfirmation(false);
     setError("");
     setNotice("");
     setSelected(item || null);
@@ -351,7 +354,7 @@ export default function Home() {
         ? profiles
         : localizedExamples
       : view === "task"
-        ? records.filter((r) => r.kind === "task")
+        ? records.filter((r) => r.kind === "task" && !r.deleted)
         : records.filter(
             (r) => r.mine && ["task", "bid", "profile"].includes(r.kind),
           );
@@ -640,7 +643,7 @@ export default function Home() {
                     )}
                     {item.kind === "task" && (
                       <span className="status">
-                        {t(statusText(item.status))}
+                        {t(item.deleted ? "Удалено" : statusText(item.status))}
                       </span>
                     )}
                     {item.kind === "bid" && (
@@ -802,6 +805,7 @@ export default function Home() {
           )}
           {modal === "detail" && detail ? (
             <div className="details">
+              {((detail.kind === "task" && detail.deleted) || (detail.kind === "bid" && taskFor(detail)?.deleted)) && <p className="feedback">{t("Задание удалено из каталога. История доступна только участникам.")}</p>}
               {!detail.example && ['task','profile','review'].includes(detail.kind) && <ReportLink id={detail.id}/>}
               <b>{detail.name}</b>
               <p>{detail.description}</p>
@@ -875,7 +879,7 @@ export default function Home() {
                 </>
               ) : (
                 <>
-                  {!detail.mine && detail.status === "open" && (
+                  {!detail.mine && !detail.deleted && detail.status === "open" && (
                     <button
                       className="primary"
                       onClick={() => open("bid", detail)}
@@ -885,6 +889,17 @@ export default function Home() {
                   )}
                   {detail.mine && (
                     <>
+                      {detail.kind === "task" && !detail.deleted && (
+                        <div className="task-delete">
+                          {deleteConfirmation ? <>
+                            <p>{t("Удалить задание из каталога? Оно останется в кабинете участников вместе с откликами и перепиской. Отзывы сохранятся. Удаление объявления не отменяет ваши договорённости.")}</p>
+                            <div className="account-actions">
+                              <button className="outline" disabled={busy} onClick={() => setDeleteConfirmation(false)}>{t("Отмена")}</button>
+                              <button className="outline" disabled={busy} onClick={async () => {if (await action({action:"delete-task",id:detail.id,confirm:true},false)) setDeleteConfirmation(false);}}>{t("Подтвердить удаление")}</button>
+                            </div>
+                          </> : <button className="outline" onClick={() => setDeleteConfirmation(true)}>{t("Удалить задание")}</button>}
+                        </div>
+                      )}
                       <h3>{t("Предложения исполнителей ")}</h3>
                       {records
                         .filter(

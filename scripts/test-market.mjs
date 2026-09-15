@@ -169,6 +169,36 @@ assert.ok(
   !anon.records.some((r) => ["bid", "message", "account"].includes(r.kind)),
 );
 checks += 2;
+
+// Owners may remove listings without erasing participant history or reviews.
+await request(null,{action:'delete-task',id:task.id,confirm:true},401);
+await request(stranger,{action:'delete-task',id:task.id,confirm:true},404);
+await request(provider,{action:'delete-task',id:'profile:'+provider,confirm:true},404);
+await request(customer,{action:'delete-task',id:task.id},400);
+await request(customer,{action:'delete-task',id:task.id,confirm:true});
+await request(customer,{action:'delete-task',id:task.id,confirm:true},404);
+for(const viewer of [null,stranger]) {
+  const state=await request(viewer);
+  assert.ok(!state.records.some(r=>r.id===task.id));
+  assert.ok(state.records.some(r=>r.kind==='review'&&r.parent===task.id));checks+=2;
+}
+for(const viewer of [customer,provider]) {
+  const state=await request(viewer);assert.equal(state.records.find(r=>r.id===task.id).deleted,1);
+  assert.equal(state.records.filter(r=>r.parent===bid.id&&r.kind==='message').length,2);checks+=2;
+}
+const activeTask=await request(customer,{action:'task',...common});
+await request(provider,{action:'bid',parent:activeTask.id,price:'20',description:'Active task offer'});
+const activeBid=(await request(customer)).records.find(r=>r.kind==='bid'&&r.parent===activeTask.id);
+await request(customer,{action:'choose',id:activeBid.id});
+await request(customer,{action:'delete-task',id:activeTask.id,confirm:true});
+await request(provider,{action:'message',parent:activeBid.id,description:'We can still discuss the work'});
+await request(customer,{action:'complete',id:activeTask.id});
+await request(customer,{action:'review',parent:activeTask.id,rating:5,description:'Review after removal'});
+const openTask=await request(customer,{action:'task',...common});
+await request(customer,{action:'delete-task',id:openTask.id,confirm:true});
+await request(provider,{action:'bid',parent:openTask.id,price:'20',description:'Stale listing'},400);
+assert.ok(!(await request(provider)).records.some(r=>r.id===openTask.id));checks++;
+
 const csrf = await fetch(origin + "/api/market", {
   method: "POST",
   headers: {
