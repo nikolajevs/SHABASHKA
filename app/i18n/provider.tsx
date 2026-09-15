@@ -81,7 +81,7 @@ export function LanguageSwitcher() {
           aria-pressed={locale === code}
           onClick={() => setLocale(code)}
         >
-          {code.toUpperCase()}
+          {code === "uk" ? "UA" : code.toUpperCase()}
         </button>
       ))}
     </div>
