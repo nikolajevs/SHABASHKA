@@ -2,1346 +2,1615 @@
   [
     "Админка",
     "Administrēšana",
-    "Admin"
+    "Admin",
+    "Адмінпанель"
   ],
   [
     "Ваш аккаунт заблокирован администратором.",
     "Administrators ir bloķējis jūsu kontu.",
-    "Your account has been blocked by an administrator."
+    "Your account has been blocked by an administrator.",
+    "Ваш обліковий запис заблоковано адміністратором."
   ],
   [
     "Эта запись ограничена администратором.",
     "Administrators ir ierobežojis šo ierakstu.",
-    "This record has been restricted by an administrator."
+    "This record has been restricted by an administrator.",
+    "Цей запис обмежено адміністратором."
   ],
   [
     "Все услуги",
     "Visi pakalpojumi",
-    "All services"
+    "All services",
+    "Усі послуги"
   ],
   [
     "Ремонт",
     "Remonts",
-    "Repairs"
+    "Repairs",
+    "Ремонт"
   ],
   [
     "Уборка",
     "Uzkopšana",
-    "Cleaning"
+    "Cleaning",
+    "Прибирання"
   ],
   [
     "Обучение",
     "Mācības",
-    "Tutoring"
+    "Tutoring",
+    "Навчання"
   ],
   [
     "IT и дизайн",
     "IT un dizains",
-    "IT & design"
+    "IT & design",
+    "IT і дизайн"
   ],
   [
     "Доставка",
     "Piegāde",
-    "Delivery"
+    "Delivery",
+    "Доставка"
   ],
   [
     "Красота",
     "Skaistumkopšana",
-    "Beauty"
+    "Beauty",
+    "Краса"
   ],
   [
     "Для животных",
     "Mājdzīvniekiem",
-    "Pet care"
+    "Pet care",
+    "Для тварин"
   ],
   [
     "Рига",
     "Rīga",
-    "Riga"
+    "Riga",
+    "Рига"
   ],
   [
     "Юрмала",
     "Jūrmala",
-    "Jurmala"
+    "Jurmala",
+    "Юрмала"
   ],
   [
     "Даугавпилс",
     "Daugavpils",
-    "Daugavpils"
+    "Daugavpils",
+    "Даугавпілс"
   ],
   [
     "Лиепая",
     "Liepāja",
-    "Liepaja"
+    "Liepaja",
+    "Лієпая"
   ],
   [
     "Елгава",
     "Jelgava",
-    "Jelgava"
+    "Jelgava",
+    "Єлгава"
   ],
   [
     "Вентспилс",
     "Ventspils",
-    "Ventspils"
+    "Ventspils",
+    "Вентспілс"
   ],
   [
     "Резекне",
     "Rēzekne",
-    "Rezekne"
+    "Rezekne",
+    "Резекне"
   ],
   [
     "Валмиера",
     "Valmiera",
-    "Valmiera"
+    "Valmiera",
+    "Валмієра"
   ],
   [
     "Екабпилс",
     "Jēkabpils",
-    "Jekabpils"
+    "Jekabpils",
+    "Єкабпілс"
   ],
   [
     "Огре",
     "Ogre",
-    "Ogre"
+    "Ogre",
+    "Огре"
   ],
   [
     "Цесис",
     "Cēsis",
-    "Cesis"
+    "Cesis",
+    "Цесіс"
   ],
   [
     "Сигулда",
     "Sigulda",
-    "Sigulda"
+    "Sigulda",
+    "Сігулда"
   ],
   [
     "Другой населённый пункт Латвии",
     "Cita vieta Latvijā",
-    "Elsewhere in Latvia"
+    "Elsewhere in Latvia",
+    "Інший населений пункт Латвії"
   ],
   [
     "Удалённо · Латвия",
     "Attālināti · Latvija",
-    "Remote · Latvia"
+    "Remote · Latvia",
+    "Дистанційно · Латвія"
   ],
   [
     "Мастер по ремонту",
     "Remontdarbu meistars",
-    "Handyman"
+    "Handyman",
+    "Майстер із ремонту"
   ],
   [
     "Александр Р.",
     "Aleksandrs R.",
-    "Aleksandrs R."
+    "Aleksandrs R.",
+    "Олександр Р."
   ],
   [
     "Сборка мебели и мелкий ремонт. Помогу довести домашние дела до конца.",
     "Mēbeļu montāža un nelieli remontdarbi. Palīdzēšu paveikt iekrātos mājas darbus.",
-    "Furniture assembly and small repairs. I can help you finish those jobs around the house."
+    "Furniture assembly and small repairs. I can help you finish those jobs around the house.",
+    "Складання меблів і дрібний ремонт. Допоможу завершити домашні справи."
   ],
   [
     "Уборка квартир",
     "Dzīvokļu uzkopšana",
-    "Apartment cleaning"
+    "Apartment cleaning",
+    "Прибирання квартир"
   ],
   [
     "Мария К.",
     "Marija K.",
-    "Marija K."
+    "Marija K.",
+    "Марія К."
   ],
   [
     "Поддерживающая и генеральная уборка. Обсудим объём и удобное время.",
     "Regulārā un ģenerālā uzkopšana. Vienosimies par darbu apjomu un ērtu laiku.",
-    "Regular and deep cleaning. Let's agree on the scope and a convenient time."
+    "Regular and deep cleaning. Let's agree on the scope and a convenient time.",
+    "Регулярне та генеральне прибирання. Обговоримо обсяг і зручний час."
   ],
   [
     "Разработка сайтов",
     "Mājaslapu izstrāde",
-    "Website development"
+    "Website development",
+    "Розробка сайтів"
   ],
   [
     "Дмитрий С.",
     "Dmitrijs S.",
-    "Dmitrijs S."
+    "Dmitrijs S.",
+    "Дмитро С."
   ],
   [
     "Сайты для небольших компаний: от структуры до запуска. Работаю удалённо.",
     "Mājaslapas maziem uzņēmumiem: no struktūras līdz palaišanai. Strādāju attālināti.",
-    "Websites for small businesses, from planning to launch. Available remotely."
+    "Websites for small businesses, from planning to launch. Available remotely.",
+    "Сайти для невеликих компаній: від структури до запуску. Працюю дистанційно."
   ],
   [
     "Английский язык",
     "Angļu valoda",
-    "English lessons"
+    "English lessons",
+    "Англійська мова"
   ],
   [
     "Елена В.",
     "Jeļena V.",
-    "Jelena V."
+    "Jelena V.",
+    "Олена В."
   ],
   [
     "Индивидуальные занятия для взрослых. Разговорная практика и понятная грамматика.",
     "Individuālas nodarbības pieaugušajiem. Sarunvalodas prakse un saprotama gramatika.",
-    "One-to-one lessons for adults. Conversation practice and clear grammar explanations."
+    "One-to-one lessons for adults. Conversation practice and clear grammar explanations.",
+    "Індивідуальні заняття для дорослих. Розмовна практика та зрозуміла граматика."
   ],
   [
     "По договорённости",
     "Pēc vienošanās",
-    "Negotiable"
+    "Negotiable",
+    "За домовленістю"
   ],
   [
     "В работе",
     "Darbs notiek",
-    "In progress"
+    "In progress",
+    "У роботі"
   ],
   [
     "Завершено",
     "Pabeigts",
-    "Completed"
+    "Completed",
+    "Завершено"
   ],
   [
     "Принимает отклики",
     "Gaida piedāvājumus",
-    "Open for offers"
+    "Open for offers",
+    "Приймає пропозиції"
   ],
   [
     "Все города",
     "Visas pilsētas",
-    "All cities"
+    "All cities",
+    "Усі міста"
   ],
   [
     "Не удалось загрузить данные",
     "Neizdevās ielādēt datus",
-    "Could not load data"
+    "Could not load data",
+    "Не вдалося завантажити дані"
   ],
   [
     "Показать специалистов по текстовому запросу",
     "Meklēt speciālistus pēc teksta",
-    "Search specialists by text"
+    "Search specialists by text",
+    "Показати фахівців за текстовим запитом"
   ],
   [
     "Некорректный запрос",
     "Nederīgs pieprasījums",
-    "Invalid request"
+    "Invalid request",
+    "Некоректний запит"
   ],
   [
     "Сохранено.",
     "Saglabāts.",
-    "Saved."
+    "Saved.",
+    "Збережено."
   ],
   [
     "Сохранено. Обновите страницу для загрузки изменений.",
     "Saglabāts. Pārlādējiet lapu, lai redzētu izmaiņas.",
-    "Saved. Reload the page to see the changes."
+    "Saved. Reload the page to see the changes.",
+    "Збережено. Оновіть сторінку, щоб завантажити зміни."
   ],
   [
     "Не удалось сохранить",
     "Neizdevās saglabāt",
-    "Could not save"
+    "Could not save",
+    "Не вдалося зберегти"
   ],
   [
     "Пока нет отзывов",
     "Vēl nav atsauksmju",
-    "No reviews yet"
+    "No reviews yet",
+    "Відгуків поки немає"
   ],
   [
     "Рейтинг: {rating} · Отзывы: {count}",
     "Vērtējums: {rating} · Atsauksmes: {count}",
-    "Rating: {rating} · Reviews: {count}"
+    "Rating: {rating} · Reviews: {count}",
+    "Рейтинг: {rating} · Відгуки: {count}"
   ],
   [
     "Найти специалиста",
     "Atrast speciālistu",
-    "Find a specialist"
+    "Find a specialist",
+    "Знайти фахівця"
   ],
   [
     "Найти задание",
     "Atrast darbu",
-    "Find a task"
+    "Find a task",
+    "Знайти завдання"
   ],
   [
     "Латвия",
     "Latvija",
-    "Latvia"
+    "Latvia",
+    "Латвія"
   ],
   [
     "Мой кабинет",
     "Mans konts",
-    "My account"
+    "My account",
+    "Мій кабінет"
   ],
   [
     "УСЛУГИ И ЛЮДИ РЯДОМ · ЛАТВИЯ",
     "PAKALPOJUMI UN CILVĒKI TUVUMĀ · LATVIJA",
-    "LOCAL SERVICES, LOCAL PEOPLE · LATVIA"
+    "LOCAL SERVICES, LOCAL PEOPLE · LATVIA",
+    "ПОСЛУГИ ТА ЛЮДИ ПОРУЧ · ЛАТВІЯ"
   ],
   [
     "Для каждого дела",
     "Katram darbam",
-    "For every task,"
+    "For every task,",
+    "Для кожної справи"
   ],
   [
     "найдётся",
     "atradīsies",
-    "there's"
+    "there's",
+    "знайдеться"
   ],
   [
     "свой человек.",
     "īstais cilvēks.",
-    "the right person."
+    "the right person.",
+    "своя людина."
   ],
   [
     "Создать задание",
     "Publicēt uzdevumu",
-    "Post a task"
+    "Post a task",
+    "Створити завдання"
   ],
   [
     "Какое задание вы ищете?",
     "Kādu darbu meklējat?",
-    "What task are you looking for?"
+    "What task are you looking for?",
+    "Яке завдання ви шукаєте?"
   ],
   [
     "Какая помощь вам нужна?",
     "Kāda palīdzība jums vajadzīga?",
-    "What do you need help with?"
+    "What do you need help with?",
+    "Яка допомога вам потрібна?"
   ],
   [
     "Поиск",
     "Meklēšana",
-    "Search"
+    "Search",
+    "Пошук"
   ],
   [
     "Найти",
     "Meklēt",
-    "Search"
+    "Search",
+    "Знайти"
   ],
   [
     "Повторить",
     "Mēģināt vēlreiz",
-    "Try again"
+    "Try again",
+    "Повторити"
   ],
   [
     "Специалисты под ваше дело",
     "Speciālisti jūsu darbam",
-    "Specialists for your task"
+    "Specialists for your task",
+    "Фахівці для вашої справи"
   ],
   [
     "Задания для вас",
     "Uzdevumi jums",
-    "Tasks for you"
+    "Tasks for you",
+    "Завдання для вас"
   ],
   [
     "Обновить",
     "Atjaunināt",
-    "Refresh"
+    "Refresh",
+    "Оновити"
   ],
   [
     "Специалисты",
     "Speciālisti",
-    "Specialists"
+    "Specialists",
+    "Фахівці"
   ],
   [
     "Задания",
     "Uzdevumi",
-    "Tasks"
+    "Tasks",
+    "Завдання"
   ],
   [
     "Мои",
     "Mani",
-    "Mine"
+    "Mine",
+    "Мої"
   ],
   [
     "Город",
     "Pilsēta",
-    "City"
+    "City",
+    "Місто"
   ],
   [
     "Ваши задания и предложения",
     "Jūsu uzdevumi un piedāvājumi",
-    "Your tasks and offers"
+    "Your tasks and offers",
+    "Ваші завдання та пропозиції"
   ],
   [
     "Ваша роль: {role}",
     "Jūsu loma: {role}",
-    "Your role: {role}"
+    "Your role: {role}",
+    "Ваша роль: {role}"
   ],
   [
     "заказчик",
     "pasūtītājs",
-    "customer"
+    "customer",
+    "замовник"
   ],
   [
     "исполнитель",
     "izpildītājs",
-    "provider"
+    "provider",
+    "виконавець"
   ],
   [
     "Выберите роль, чтобы завершить регистрацию.",
     "Izvēlieties lomu, lai pabeigtu reģistrāciju.",
-    "Choose a role to finish registration."
+    "Choose a role to finish registration.",
+    "Оберіть роль, щоб завершити реєстрацію."
   ],
   [
     "Войдите, чтобы публиковать задания и откликаться.",
     "Pierakstieties, lai publicētu uzdevumus un sūtītu piedāvājumus.",
-    "Sign in to post tasks and send offers."
+    "Sign in to post tasks and send offers.",
+    "Увійдіть, щоб публікувати завдання та надсилати пропозиції."
   ],
   [
     "Войти через ChatGPT",
     "Pierakstīties ar ChatGPT",
-    "Sign in with ChatGPT"
+    "Sign in with ChatGPT",
+    "Увійти через ChatGPT"
   ],
   [
     "Изменить имя или роль",
     "Mainīt vārdu vai lomu",
-    "Change name or role"
+    "Change name or role",
+    "Змінити ім’я або роль"
   ],
   [
     "Завершить регистрацию",
     "Pabeigt reģistrāciju",
-    "Finish registration"
+    "Finish registration",
+    "Завершити реєстрацію"
   ],
   [
     "Мой профиль исполнителя",
     "Mans izpildītāja profils",
-    "My provider profile"
+    "My provider profile",
+    "Мій профіль виконавця"
   ],
   [
     "Выйти",
     "Izrakstīties",
-    "Sign out"
+    "Sign out",
+    "Вийти"
   ],
   [
     "Загружаем данные…",
     "Ielādē datus…",
-    "Loading data…"
+    "Loading data…",
+    "Завантажуємо дані…"
   ],
   [
     "Пример профиля",
     "Profila piemērs",
-    "Example profile"
+    "Example profile",
+    "Приклад профілю"
   ],
   [
     "Ваш отклик",
     "Jūsu piedāvājums",
-    "Your offer"
+    "Your offer",
+    "Ваша пропозиція"
   ],
   [
     "Предложение по заданию",
     "Piedāvājums uzdevumam",
-    "Task offer"
+    "Task offer",
+    "Пропозиція щодо завдання"
   ],
   [
     "Вы выбраны исполнителем",
     "Jūs esat izvēlēts darbam",
-    "You were selected"
+    "You were selected",
+    "Вас обрано виконавцем"
   ],
   [
     "Отклик отправлен",
     "Piedāvājums nosūtīts",
-    "Offer sent"
+    "Offer sent",
+    "Пропозицію надіслано"
   ],
   [
     "Исполнитель выбран",
     "Izpildītājs izvēlēts",
-    "Provider selected"
+    "Provider selected",
+    "Виконавця обрано"
   ],
   [
     "Подробнее:",
     "Vairāk:",
-    "Details:"
+    "Details:",
+    "Докладніше:"
   ],
   [
     "Здесь будут ваши дела",
     "Šeit būs jūsu darbi",
-    "Your tasks will appear here"
+    "Your tasks will appear here",
+    "Тут будуть ваші справи"
   ],
   [
     "Пока ничего не найдено",
     "Nekas nav atrasts",
-    "No results yet"
+    "No results yet",
+    "Поки нічого не знайдено"
   ],
   [
     "Создайте первое задание или измените поиск.",
     "Publicējiet pirmo uzdevumu vai mainiet meklēšanas nosacījumus.",
-    "Post the first task or change your search."
+    "Post the first task or change your search.",
+    "Створіть перше завдання або змініть пошук."
   ],
   [
     "Попробуйте другую категорию или опубликуйте свой профиль.",
     "Izmēģiniet citu kategoriju vai publicējiet savu profilu.",
-    "Try another category or publish your profile."
+    "Try another category or publish your profile.",
+    "Спробуйте іншу категорію або опублікуйте свій профіль."
   ],
   [
     "Сбросить фильтры",
     "Notīrīt filtrus",
-    "Clear filters"
+    "Clear filters",
+    "Скинути фільтри"
   ],
   [
     "ПРОСТО НАЧНИТЕ",
     "SĀCIET VIENKĀRŠI",
-    "JUST GET STARTED"
+    "JUST GET STARTED",
+    "ПРОСТО ПОЧНІТЬ"
   ],
   [
     "Опишите задачу.",
     "Aprakstiet uzdevumu.",
-    "Describe your task."
+    "Describe your task.",
+    "Опишіть завдання."
   ],
   [
     "Остальное —",
     "Pārējo uzticiet",
-    "Leave the rest"
+    "Leave the rest",
+    "Решту —"
   ],
   [
     "специалистам.",
     "speciālistiem.",
-    "to the specialists."
+    "to the specialists.",
+    "фахівцям."
   ],
   [
     "Получайте предложения, сравнивайте условия и выбирайте, с кем работать.",
     "Saņemiet piedāvājumus, salīdziniet nosacījumus un izvēlieties, ar ko sadarboties.",
-    "Get offers, compare terms and choose who to work with."
+    "Get offers, compare terms and choose who to work with.",
+    "Отримуйте пропозиції, порівнюйте умови та обирайте, з ким працювати."
   ],
   [
     "Ваши навыки нужны",
     "Jūsu prasmes ir vajadzīgas",
-    "Your skills are needed"
+    "Your skills are needed",
+    "Ваші навички потрібні"
   ],
   [
     "Находите задания по всей Латвии и предлагайте свои услуги.",
     "Atrodiet uzdevumus visā Latvijā un piedāvājiet savus pakalpojumus.",
-    "Find tasks across Latvia and offer your services."
+    "Find tasks across Latvia and offer your services.",
+    "Знаходьте завдання по всій Латвії та пропонуйте свої послуги."
   ],
   [
     "Стать исполнителем",
     "Kļūt par izpildītāju",
-    "Become a provider"
+    "Become a provider",
+    "Стати виконавцем"
   ],
   [
     "Договаривайтесь напрямую. SHABASHKA не принимает оплату за работы. Стоимость и условия вы согласовываете друг с другом.",
     "Vienojieties tieši. SHABASHKA nepieņem maksājumus par darbu. Par cenu un nosacījumiem vienojaties savā starpā.",
-    "Agree directly. SHABASHKA does not accept payments for work. You agree on the price and terms with each other."
+    "Agree directly. SHABASHKA does not accept payments for work. You agree on the price and terms with each other.",
+    "Домовляйтеся напряму. SHABASHKA не приймає оплату за роботи. Вартість та умови ви узгоджуєте між собою."
   ],
   [
     "Услуги по всей Латвии",
     "Pakalpojumi visā Latvijā",
-    "Services across Latvia"
+    "Services across Latvia",
+    "Послуги по всій Латвії"
   ],
   [
     "Примеры профилей отмечены",
     "Profilu piemēri ir atzīmēti",
-    "Example profiles are labelled"
+    "Example profiles are labelled",
+    "Приклади профілів позначено"
   ],
   [
     "Новое задание",
     "Jauns uzdevums",
-    "New task"
+    "New task",
+    "Нове завдання"
   ],
   [
     "Профиль исполнителя",
     "Izpildītāja profils",
-    "Provider profile"
+    "Provider profile",
+    "Профіль виконавця"
   ],
   [
     "Откликнуться на задание",
     "Nosūtīt piedāvājumu",
-    "Send an offer"
+    "Send an offer",
+    "Надіслати пропозицію"
   ],
   [
     "Ваш аккаунт",
     "Jūsu konts",
-    "Your account"
+    "Your account",
+    "Ваш обліковий запис"
   ],
   [
     "Отзыв об исполнителе",
     "Atsauksme par izpildītāju",
-    "Review the provider"
+    "Review the provider",
+    "Відгук про виконавця"
   ],
   [
     "Диалог по заданию",
     "Uzdevuma sarakste",
-    "Task conversation"
+    "Task conversation",
+    "Діалог щодо завдання"
   ],
   [
     "Ваше предложение",
     "Jūsu piedāvājums",
-    "Your offer"
+    "Your offer",
+    "Ваша пропозиція"
   ],
   [
     "Условия и подробности",
     "Nosacījumi un informācija",
-    "Terms and details"
+    "Terms and details",
+    "Умови та подробиці"
   ],
   [
     "Переписку видят только заказчик и исполнитель. Сообщения обновляются автоматически.",
     "Saraksti redz tikai pasūtītājs un izpildītājs. Ziņas tiek atjauninātas automātiski.",
-    "Only the customer and provider can see this conversation. Messages update automatically."
+    "Only the customer and provider can see this conversation. Messages update automatically.",
+    "Листування бачать лише замовник і виконавець. Повідомлення оновлюються автоматично."
   ],
   [
     "Оцените работу выбранного исполнителя. Отзыв появится в его профиле.",
     "Novērtējiet izvēlētā izpildītāja darbu. Atsauksme būs redzama viņa profilā.",
-    "Rate the selected provider's work. Your review will appear on their profile."
+    "Rate the selected provider's work. Your review will appear on their profile.",
+    "Оцініть роботу обраного виконавця. Відгук з’явиться в його профілі."
   ],
   [
     "Один аккаунт, две роли. При необходимости роль можно сменить в кабинете.",
     "Viens konts, divas lomas. Vajadzības gadījumā lomu var mainīt savā kontā.",
-    "One account, two roles. You can change your role in your account."
+    "One account, two roles. You can change your role in your account.",
+    "Один обліковий запис, дві ролі. За потреби роль можна змінити в кабінеті."
   ],
   [
     "Предложите цену в евро и опишите, как вы поможете. Отклик видите только вы и заказчик.",
     "Norādiet cenu eiro un aprakstiet, kā palīdzēsiet. Piedāvājumu redzat tikai jūs un pasūtītājs.",
-    "Quote a price in euros and describe how you can help. Only you and the customer can see the offer."
+    "Quote a price in euros and describe how you can help. Only you and the customer can see the offer.",
+    "Запропонуйте ціну в євро та опишіть, як ви допоможете. Пропозицію бачите лише ви та замовник."
   ],
   [
     "Заполните детали. Не указывайте личные контакты в публичном описании.",
     "Aizpildiet informāciju. Publiskajā aprakstā nenorādiet privātu kontaktinformāciju.",
-    "Fill in the details. Do not include private contact details in the public description."
+    "Fill in the details. Do not include private contact details in the public description.",
+    "Заповніть подробиці. Не зазначайте особисті контакти в публічному описі."
   ],
   [
     "Это пример, а не действующий специалист. Создайте задание, чтобы получить реальные отклики.",
     "Šis ir profila piemērs, nevis īsts speciālists. Publicējiet uzdevumu, lai saņemtu īstus piedāvājumus.",
-    "This is an example, not an active specialist. Post a task to receive real offers."
+    "This is an example, not an active specialist. Post a task to receive real offers.",
+    "Це приклад, а не чинний фахівець. Створіть завдання, щоб отримати справжні пропозиції."
   ],
   [
     "Навыки",
     "Prasmes",
-    "Skills"
+    "Skills",
+    "Навички"
   ],
   [
     "Портфолио",
     "Darbu piemēri",
-    "Portfolio"
+    "Portfolio",
+    "Портфоліо"
   ],
   [
     "Работа",
     "Darbs",
-    "Work"
+    "Work",
+    "Робота"
   ],
   [
     "Работы ещё не добавлены.",
     "Darbu piemēri vēl nav pievienoti.",
-    "No work samples added yet."
+    "No work samples added yet.",
+    "Роботи ще не додано."
   ],
   [
     "Создать задание в этой категории",
     "Publicēt uzdevumu šajā kategorijā",
-    "Post a task in this category"
+    "Post a task in this category",
+    "Створити завдання в цій категорії"
   ],
   [
     "Статус:",
     "Statuss:",
-    "Status:"
+    "Status:",
+    "Статус:"
   ],
   [
     "Вы выбраны исполнителем.",
     "Jūs esat izvēlēts darbam.",
-    "You were selected for this task."
+    "You were selected for this task.",
+    "Вас обрано виконавцем."
   ],
   [
     "Открыть чат с заказчиком",
     "Atvērt saraksti ar pasūtītāju",
-    "Open chat with customer"
+    "Open chat with customer",
+    "Відкрити чат із замовником"
   ],
   [
     "Откликнуться",
     "Nosūtīt piedāvājumu",
-    "Send an offer"
+    "Send an offer",
+    "Надіслати пропозицію"
   ],
   [
     "Предложения исполнителей",
     "Izpildītāju piedāvājumi",
-    "Provider offers"
+    "Provider offers",
+    "Пропозиції виконавців"
   ],
   [
     "Чат",
     "Sarakste",
-    "Chat"
+    "Chat",
+    "Чат"
   ],
   [
     "Выбрать исполнителя",
     "Izvēlēties izpildītāju",
-    "Choose provider"
+    "Choose provider",
+    "Обрати виконавця"
   ],
   [
     "Другой исполнитель выбран",
     "Izvēlēts cits izpildītājs",
-    "Another provider was selected"
+    "Another provider was selected",
+    "Обрано іншого виконавця"
   ],
   [
     "Откликов пока нет.",
     "Piedāvājumu vēl nav.",
-    "No offers yet."
+    "No offers yet.",
+    "Пропозицій поки немає."
   ],
   [
     "Работа выполнена",
     "Darbs pabeigts",
-    "Mark as completed"
+    "Mark as completed",
+    "Роботу виконано"
   ],
   [
     "Спасибо! Ваш отзыв опубликован.",
     "Paldies! Jūsu atsauksme ir publicēta.",
-    "Thank you! Your review is published."
+    "Thank you! Your review is published.",
+    "Дякуємо! Ваш відгук опубліковано."
   ],
   [
     "Оставить отзыв",
     "Atstāt atsauksmi",
-    "Leave a review"
+    "Leave a review",
+    "Залишити відгук"
   ],
   [
     "Войдите и выберите роль, чтобы продолжить.",
     "Pierakstieties un izvēlieties lomu, lai turpinātu.",
-    "Sign in and choose a role to continue."
+    "Sign in and choose a role to continue.",
+    "Увійдіть і оберіть роль, щоб продовжити."
   ],
   [
     "Для этого действия выберите роль",
     "Šai darbībai izvēlieties lomu",
-    "For this action, choose the role"
+    "For this action, choose the role",
+    "Для цієї дії оберіть роль"
   ],
   [
     "заказчика",
     "pasūtītājs",
-    "customer"
+    "customer",
+    "замовника"
   ],
   [
     "исполнителя",
     "izpildītājs",
-    "provider"
+    "provider",
+    "виконавця"
   ],
   [
     "Изменить роль",
     "Mainīt lomu",
-    "Change role"
+    "Change role",
+    "Змінити роль"
   ],
   [
     "Сообщения",
     "Ziņas",
-    "Messages"
+    "Messages",
+    "Повідомлення"
   ],
   [
     "Обсудите детали и удобное время.",
     "Pārrunājiet detaļas un vienojieties par ērtu laiku.",
-    "Discuss the details and a convenient time."
+    "Discuss the details and a convenient time.",
+    "Обговоріть подробиці та зручний час."
   ],
   [
     "Ваше имя",
     "Jūsu vārds",
-    "Your name"
+    "Your name",
+    "Ваше ім’я"
   ],
   [
     "Роль",
     "Loma",
-    "Role"
+    "Role",
+    "Роль"
   ],
   [
     "Заказчик — ищу помощь",
     "Pasūtītājs — meklēju palīdzību",
-    "Customer — I need help"
+    "Customer — I need help",
+    "Замовник — шукаю допомогу"
   ],
   [
     "Исполнитель — предлагаю услуги",
     "Izpildītājs — piedāvāju pakalpojumus",
-    "Provider — I offer services"
+    "Provider — I offer services",
+    "Виконавець — пропоную послуги"
   ],
   [
     "Название услуги",
     "Pakalpojuma nosaukums",
-    "Service title"
+    "Service title",
+    "Назва послуги"
   ],
   [
     "Что нужно сделать?",
     "Kas jāpaveic?",
-    "What needs to be done?"
+    "What needs to be done?",
+    "Що потрібно зробити?"
   ],
   [
     "Например, собрать шкаф",
     "Piemēram, salikt skapi",
-    "For example, assemble a wardrobe"
+    "For example, assemble a wardrobe",
+    "Наприклад, зібрати шафу"
   ],
   [
     "Категория",
     "Kategorija",
-    "Category"
+    "Category",
+    "Категорія"
   ],
   [
     "Другое",
     "Cits",
-    "Other"
+    "Other",
+    "Інше"
   ],
   [
     "Где в Латвии?",
     "Kur Latvijā?",
-    "Where in Latvia?"
+    "Where in Latvia?",
+    "Де в Латвії?"
   ],
   [
     "Например: сборка мебели, электрика",
     "Piemēram: mēbeļu montāža, elektrodarbi",
-    "For example: furniture assembly, electrical work"
+    "For example: furniture assembly, electrical work",
+    "Наприклад: складання меблів, електрика"
   ],
   [
     "Портфолио — ссылки на работы",
     "Darbu piemēri — saites",
-    "Portfolio — links to your work"
+    "Portfolio — links to your work",
+    "Портфоліо — посилання на роботи"
   ],
   [
     "Каждая ссылка https:// с новой строки",
     "Katra https:// saite jaunā rindā",
-    "One https:// link per line"
+    "One https:// link per line",
+    "Кожне посилання https:// з нового рядка"
   ],
   [
     "Оценка от 1 до 5",
     "Vērtējums no 1 līdz 5",
-    "Rating from 1 to 5"
+    "Rating from 1 to 5",
+    "Оцінка від 1 до 5"
   ],
   [
     "Сообщение",
     "Ziņa",
-    "Message"
+    "Message",
+    "Повідомлення"
   ],
   [
     "Как прошла работа?",
     "Kā noritēja darbs?",
-    "How did the work go?"
+    "How did the work go?",
+    "Як пройшла робота?"
   ],
   [
     "Описание",
     "Apraksts",
-    "Description"
+    "Description",
+    "Опис"
   ],
   [
     "Бюджет, EUR",
     "Budžets, EUR",
-    "Budget, EUR"
+    "Budget, EUR",
+    "Бюджет, EUR"
   ],
   [
     "Стоимость, EUR",
     "Cena, EUR",
-    "Price, EUR"
+    "Price, EUR",
+    "Вартість, EUR"
   ],
   [
     "Например, 50 € или по договорённости",
     "Piemēram, 50 € vai pēc vienošanās",
-    "For example, €50 or negotiable"
+    "For example, €50 or negotiable",
+    "Наприклад, 50 € або за домовленістю"
   ],
   [
     "Сохраняем…",
     "Saglabā…",
-    "Saving…"
+    "Saving…",
+    "Зберігаємо…"
   ],
   [
     "Сохранить аккаунт",
     "Saglabāt kontu",
-    "Save account"
+    "Save account",
+    "Зберегти обліковий запис"
   ],
   [
     "Отправить",
     "Nosūtīt",
-    "Send"
+    "Send",
+    "Надіслати"
   ],
   [
     "Опубликовать отзыв",
     "Publicēt atsauksmi",
-    "Publish review"
+    "Publish review",
+    "Опублікувати відгук"
   ],
   [
     "Отправить отклик",
     "Nosūtīt piedāvājumu",
-    "Send offer"
+    "Send offer",
+    "Надіслати пропозицію"
   ],
   [
     "Сохранить профиль",
     "Saglabāt profilu",
-    "Save profile"
+    "Save profile",
+    "Зберегти профіль"
   ],
   [
     "Опубликовать задание",
     "Publicēt uzdevumu",
-    "Publish task"
+    "Publish task",
+    "Опублікувати завдання"
   ],
   [
     "Хранилище временно недоступно",
     "Datu glabātuve īslaicīgi nav pieejama",
-    "Storage is temporarily unavailable"
+    "Storage is temporarily unavailable",
+    "Сховище тимчасово недоступне"
   ],
   [
     "Не удалось загрузить данные. Попробуйте ещё раз.",
     "Neizdevās ielādēt datus. Mēģiniet vēlreiz.",
-    "Could not load data. Please try again."
+    "Could not load data. Please try again.",
+    "Не вдалося завантажити дані. Спробуйте ще раз."
   ],
   [
     "Недопустимый источник запроса",
     "Nederīgs pieprasījuma avots",
-    "Invalid request origin"
+    "Invalid request origin",
+    "Недопустиме джерело запиту"
   ],
   [
     "Войдите, чтобы сохранить данные.",
     "Pierakstieties, lai saglabātu datus.",
-    "Sign in to save data."
+    "Sign in to save data.",
+    "Увійдіть, щоб зберегти дані."
   ],
   [
     "Слишком большой запрос",
     "Pieprasījums ir pārāk liels",
-    "Request is too large"
+    "Request is too large",
+    "Завеликий запит"
   ],
   [
     "Заполните корректно:",
     "Aizpildiet pareizi:",
-    "Please check:"
+    "Please check:",
+    "Заповніть коректно:"
   ],
   [
     "Выберите роль",
     "Izvēlieties lomu",
-    "Choose a role"
+    "Choose a role",
+    "Оберіть роль"
   ],
   [
     "Сначала завершите регистрацию в личном кабинете",
     "Vispirms pabeidziet reģistrāciju savā kontā",
-    "Finish registration in your account first"
+    "Finish registration in your account first",
+    "Спочатку завершіть реєстрацію в особистому кабінеті"
   ],
   [
     "Переключитесь на роль заказчика в кабинете",
     "Savā kontā izvēlieties pasūtītāja lomu",
-    "Switch to the customer role in your account"
+    "Switch to the customer role in your account",
+    "Перейдіть до ролі замовника в кабінеті"
   ],
   [
     "Переключитесь на роль исполнителя в кабинете",
     "Savā kontā izvēlieties izpildītāja lomu",
-    "Switch to the provider role in your account"
+    "Switch to the provider role in your account",
+    "Перейдіть до ролі виконавця в кабінеті"
   ],
   [
     "Выберите населённый пункт Латвии",
     "Izvēlieties vietu Latvijā",
-    "Choose a location in Latvia"
+    "Choose a location in Latvia",
+    "Оберіть населений пункт Латвії"
   ],
   [
     "Выберите категорию",
     "Izvēlieties kategoriju",
-    "Choose a category"
+    "Choose a category",
+    "Оберіть категорію"
   ],
   [
     "Не более 1500 символов для портфолио",
     "Darbu piemēriem atļautas līdz 1500 rakstzīmēm",
-    "Portfolio must be no longer than 1,500 characters"
+    "Portfolio must be no longer than 1,500 characters",
+    "Не більше 1500 символів для портфоліо"
   ],
   [
     "Портфолио: используйте ссылки https://",
     "Darbu piemēriem izmantojiet https:// saites",
-    "Portfolio: use https:// links"
+    "Portfolio: use https:// links",
+    "Портфоліо: використовуйте посилання https://"
   ],
   [
     "Отклики доступны исполнителям",
     "Piedāvājumus var sūtīt izpildītāji",
-    "Only providers can send offers"
+    "Only providers can send offers",
+    "Пропозиції можуть надсилати виконавці"
   ],
   [
     "Это задание недоступно для отклика",
     "Šim uzdevumam nevar nosūtīt piedāvājumu",
-    "This task is not open for offers"
+    "This task is not open for offers",
+    "На це завдання не можна надіслати пропозицію"
   ],
   [
     "Сначала заполните профиль исполнителя",
     "Vispirms aizpildiet izpildītāja profilu",
-    "Complete your provider profile first"
+    "Complete your provider profile first",
+    "Спочатку заповніть профіль виконавця"
   ],
   [
     "Отклик не найден",
     "Piedāvājums nav atrasts",
-    "Offer not found"
+    "Offer not found",
+    "Пропозицію не знайдено"
   ],
   [
     "Выбор исполнителя недоступен",
     "Izpildītāju pašlaik nevar izvēlēties",
-    "Provider selection is unavailable"
+    "Provider selection is unavailable",
+    "Вибір виконавця недоступний"
   ],
   [
     "Завершение недоступно",
     "Uzdevumu nevar atzīmēt kā pabeigtu",
-    "Cannot mark this task as completed"
+    "Cannot mark this task as completed",
+    "Завершення недоступне"
   ],
   [
     "Диалог не найден",
     "Sarakste nav atrasta",
-    "Conversation not found"
+    "Conversation not found",
+    "Діалог не знайдено"
   ],
   [
     "Нет доступа к диалогу",
     "Nav piekļuves sarakstei",
-    "You cannot access this conversation"
+    "You cannot access this conversation",
+    "Немає доступу до діалогу"
   ],
   [
     "Отзыв доступен заказчику после выполнения",
     "Pasūtītājs var atstāt atsauksmi pēc darba pabeigšanas",
-    "The customer can leave a review after completion"
+    "The customer can leave a review after completion",
+    "Відгук доступний замовнику після виконання"
   ],
   [
     "Исполнитель не найден",
     "Izpildītājs nav atrasts",
-    "Provider not found"
+    "Provider not found",
+    "Виконавця не знайдено"
   ],
   [
     "Неизвестное действие",
     "Nezināma darbība",
-    "Unknown action"
+    "Unknown action",
+    "Невідома дія"
   ],
   [
     "Вы уже отправили отклик или отзыв.",
     "Jūs jau nosūtījāt piedāvājumu vai atsauksmi.",
-    "You have already submitted an offer or review."
+    "You have already submitted an offer or review.",
+    "Ви вже надіслали пропозицію або відгук."
   ],
   [
     "Не удалось сохранить. Попробуйте ещё раз.",
     "Neizdevās saglabāt. Mēģiniet vēlreiz.",
-    "Could not save. Please try again."
+    "Could not save. Please try again.",
+    "Не вдалося зберегти. Спробуйте ще раз."
   ],
   [
     "Не удалось сохранить.",
     "Neizdevās saglabāt.",
-    "Could not save."
+    "Could not save.",
+    "Не вдалося зберегти."
   ],
   [
     "Закрыть",
     "Aizvērt",
-    "Close"
+    "Close",
+    "Закрити"
   ],
   [
     "Язык",
     "Valoda",
-    "Language"
+    "Language",
+    "Мова"
   ],
   [
     "Пожалуйста, заполните это поле.",
     "Lūdzu, aizpildiet šo lauku.",
-    "Please fill in this field."
+    "Please fill in this field.",
+    "Будь ласка, заповніть це поле."
   ],
   [
     "Проверьте значение поля.",
     "Pārbaudiet lauka vērtību.",
-    "Please check this field."
+    "Please check this field.",
+    "Перевірте значення поля."
   ],
   [
     "SHABASHKA — услуги в Латвии",
     "SHABASHKA — pakalpojumi Latvijā",
-    "SHABASHKA — services in Latvia"
+    "SHABASHKA — services in Latvia",
+    "SHABASHKA — послуги в Латвії"
   ],
   [
     "Специалисты и задания по всей Латвии. Договаривайтесь напрямую.",
     "Speciālisti un uzdevumi visā Latvijā. Vienojieties tieši.",
-    "Specialists and tasks across Latvia. Agree directly."
+    "Specialists and tasks across Latvia. Agree directly.",
+    "Фахівці та завдання по всій Латвії. Домовляйтеся напряму."
   ],
   [
     "Правовая информация",
     "Juridiskā informācija",
-    "Legal information"
+    "Legal information",
+    "Правова інформація"
   ],
   [
     "Условия использования",
     "Lietošanas noteikumi",
-    "Terms & Conditions"
+    "Terms & Conditions",
+    "Умови використання"
   ],
   [
     "Конфиденциальность",
     "Privātums",
-    "Privacy"
+    "Privacy",
+    "Конфіденційність"
   ],
   [
     "Cookie",
     "Sīkdatnes",
-    "Cookies"
+    "Cookies",
+    "Cookie"
   ],
   [
     "Настройки cookie",
     "Sīkdatņu iestatījumi",
-    "Cookie settings"
+    "Cookie settings",
+    "Налаштування cookie"
   ],
   [
     "Мои данные",
     "Mani dati",
-    "My data"
+    "My data",
+    "Мої дані"
   ],
   [
     "Связаться с оператором",
     "Sazināties ar operatoru",
-    "Contact the operator"
+    "Contact the operator",
+    "Зв’язатися з оператором"
   ],
   [
     "Только необходимые cookie",
     "Tikai nepieciešamās sīkdatnes",
-    "Only necessary cookies"
+    "Only necessary cookies",
+    "Лише необхідні cookie"
   ],
   [
     "Мы используем cookie для входа, выбранного языка и сохранения этого уведомления. Аналитика и рекламные cookie не подключены.",
     "Sīkdatnes nodrošina pieslēgšanos, valodas izvēli un šī paziņojuma saglabāšanu. Analītikas un reklāmas sīkdatnes nav pieslēgtas.",
-    "We use cookies for sign-in, your chosen language and this notice. Analytics and advertising cookies are not enabled."
+    "We use cookies for sign-in, your chosen language and this notice. Analytics and advertising cookies are not enabled.",
+    "Ми використовуємо cookie для входу, обраної мови та збереження цього повідомлення. Аналітичні та рекламні cookie не підключено."
   ],
   [
     "Подробнее",
     "Uzzināt vairāk",
-    "Learn more"
+    "Learn more",
+    "Докладніше"
   ],
   [
     "Понятно",
     "Sapratu",
-    "Understood"
+    "Understood",
+    "Зрозуміло"
   ],
   [
     "Пожаловаться / незаконный контент",
     "Ziņot / nelikumīgs saturs",
-    "Report / illegal content"
+    "Report / illegal content",
+    "Поскаржитися / незаконний контент"
   ],
   [
     "Управляйте данными своего аккаунта. Удаление не затрагивает ваш аккаунт ChatGPT.",
     "Pārvaldiet sava konta datus. Dzēšana neietekmē jūsu ChatGPT kontu.",
-    "Manage your account data. Deletion does not affect your ChatGPT account."
+    "Manage your account data. Deletion does not affect your ChatGPT account.",
+    "Керуйте даними свого облікового запису. Видалення не зачіпає ваш обліковий запис ChatGPT."
   ],
   [
     "Загрузка…",
     "Ielādē…",
-    "Loading…"
+    "Loading…",
+    "Завантаження…"
   ],
   [
     "Экспорт данных",
     "Datu eksports",
-    "Data export"
+    "Data export",
+    "Експорт даних"
   ],
   [
     "Скачайте JSON: профиль, задания, отклики, доступную переписку, отзывы и ваши обращения. Файл содержит персональные данные — храните его безопасно.",
     "Lejupielādējiet JSON: profilu, uzdevumus, piedāvājumus, pieejamo saraksti, atsauksmes un savus ziņojumus. Failā ir personas dati — glabājiet to droši.",
-    "Download JSON with your profile, tasks, offers, accessible conversations, reviews and reports. It contains personal data; store it securely."
+    "Download JSON with your profile, tasks, offers, accessible conversations, reviews and reports. It contains personal data; store it securely.",
+    "Завантажте JSON: профіль, завдання, пропозиції, доступне листування, відгуки та ваші звернення. Файл містить персональні дані — зберігайте його безпечно."
   ],
   [
     "Скачать мои данные",
     "Lejupielādēt manus datus",
-    "Download my data"
+    "Download my data",
+    "Завантажити мої дані"
   ],
   [
     "Аккаунт деактивирован",
     "Konts deaktivizēts",
-    "Account deactivated"
+    "Account deactivated",
+    "Обліковий запис деактивовано"
   ],
   [
     "Деактивация аккаунта",
     "Konta deaktivizēšana",
-    "Deactivate account"
+    "Deactivate account",
+    "Деактивація облікового запису"
   ],
   [
     "Публикации скрываются, новые действия недоступны. Данные сохраняются; аккаунт можно активировать снова.",
     "Publikācijas tiek paslēptas, jaunas darbības nav pieejamas. Dati tiek saglabāti; kontu var atkal aktivizēt.",
-    "Listings are hidden and new actions are disabled. Data is retained; you can reactivate the account."
+    "Listings are hidden and new actions are disabled. Data is retained; you can reactivate the account.",
+    "Публікації приховуються, нові дії недоступні. Дані зберігаються; обліковий запис можна активувати знову."
   ],
   [
     "Активировать аккаунт",
     "Aktivizēt kontu",
-    "Reactivate account"
+    "Reactivate account",
+    "Активувати обліковий запис"
   ],
   [
     "Деактивировать аккаунт",
     "Deaktivizēt kontu",
-    "Deactivate account"
+    "Deactivate account",
+    "Деактивувати обліковий запис"
   ],
   [
     "Удалить аккаунт и данные",
     "Dzēst kontu un datus",
-    "Delete account and data"
+    "Delete account and data",
+    "Видалити обліковий запис і дані"
   ],
   [
     "Данные аккаунта удалены.",
     "Konta dati ir dzēsti.",
-    "Account data has been deleted."
+    "Account data has been deleted.",
+    "Дані облікового запису видалено."
   ],
   [
     "На главную",
     "Uz sākumlapu",
-    "Back to home"
+    "Back to home",
+    "На головну"
   ],
   [
     "Будут удалены профиль, публикации, отзывы, обращения и связанные диалоги, включая сообщения собеседников. Восстановление невозможно. Сначала скачайте экспорт.",
     "Tiks dzēsts profils, publikācijas, atsauksmes, ziņojumi un saistītie dialogi, tostarp sarunas partneru ziņas. Atjaunošana nav iespējama. Vispirms lejupielādējiet eksportu.",
-    "Your profile, listings, reviews, reports and related conversations, including other participants’ messages, will be deleted. This cannot be undone. Download your export first."
+    "Your profile, listings, reviews, reports and related conversations, including other participants’ messages, will be deleted. This cannot be undone. Download your export first.",
+    "Буде видалено профіль, публікації, відгуки, звернення та пов’язані діалоги, включно з повідомленнями співрозмовників. Відновлення неможливе. Спочатку завантажте експорт."
   ],
   [
     "Сохранится только техническая отметка удаления без имени и контактов, чтобы открытая сессия не восстановила данные. Копии у собеседников и резервные копии хостинга требуют отдельного обращения к оператору.",
     "Paliks tikai tehniska dzēšanas atzīme bez vārda un kontaktiem, lai atvērta sesija neatjaunotu datus. Par sarunas partneru kopijām un hostinga rezerves kopijām atsevišķi sazinieties ar operatoru.",
-    "Only a technical deletion marker without your name or contacts remains to prevent an open session from restoring data. Contact the operator separately about copies held by others or hosting backups."
+    "Only a technical deletion marker without your name or contacts remains to prevent an open session from restoring data. Contact the operator separately about copies held by others or hosting backups.",
+    "Залишиться лише технічна позначка видалення без імені та контактів, щоб відкрита сесія не відновила дані. Копії у співрозмовників і резервні копії хостингу потребують окремого звернення до оператора."
   ],
   [
     "Введите DELETE для подтверждения удаления.",
     "Lai apstiprinātu dzēšanu, ievadiet DELETE.",
-    "Type DELETE to confirm deletion."
+    "Type DELETE to confirm deletion.",
+    "Введіть DELETE для підтвердження видалення."
   ],
   [
     "Отмена",
     "Atcelt",
-    "Cancel"
+    "Cancel",
+    "Скасувати"
   ],
   [
     "Удалить без восстановления",
     "Dzēst neatgriezeniski",
-    "Delete permanently"
+    "Delete permanently",
+    "Видалити без можливості відновлення"
   ],
   [
     "Исправление, ограничение обработки, возражения и вопросы о данных:",
     "Datu labošana, apstrādes ierobežošana, iebildumi un jautājumi par datiem:",
-    "For correction, restriction, objections or questions about data:"
+    "For correction, restriction, objections or questions about data:",
+    "Виправлення, обмеження обробки, заперечення та запитання щодо даних:"
   ],
   [
     "Сообщить о нарушении",
     "Ziņot par pārkāpumu",
-    "Report a violation"
+    "Report a violation",
+    "Повідомити про порушення"
   ],
   [
     "Регистрация не требуется. Опишите, какой контент нарушает закон или правила и почему. Не прикладывайте незаконные материалы.",
     "Reģistrācija nav nepieciešama. Aprakstiet, kurš saturs pārkāpj likumu vai noteikumus un kāpēc. Nepievienojiet nelikumīgus materiālus.",
-    "No registration required. Explain which content violates the law or rules and why. Do not attach illegal material."
+    "No registration required. Explain which content violates the law or rules and why. Do not attach illegal material.",
+    "Реєстрація не потрібна. Опишіть, який контент порушує закон або правила і чому. Не додавайте незаконні матеріали."
   ],
   [
     "Обращение получено",
     "Ziņojums saņemts",
-    "Report received"
+    "Report received",
+    "Звернення отримано"
   ],
   [
     "Сохраните закрытую ссылку: по ней доступны статус и решение. Не передавайте её другим. Уведомления по email отправляет оператор вручную.",
     "Saglabājiet privāto saiti statusa un lēmuma apskatei. Nedalieties ar to. Operators e-pasta paziņojumus nosūta manuāli.",
-    "Save the private link to view the status and decision. Do not share it. The operator sends email notifications manually."
+    "Save the private link to view the status and decision. Do not share it. The operator sends email notifications manually.",
+    "Збережіть закрите посилання: за ним доступні статус і рішення. Не передавайте його іншим. Повідомлення електронною поштою оператор надсилає вручну."
   ],
   [
     "Открыть статус обращения",
     "Atvērt ziņojuma statusu",
-    "View report status"
+    "View report status",
+    "Відкрити статус звернення"
   ],
   [
     "Публикация",
     "Publikācija",
-    "Listing"
+    "Listing",
+    "Публікація"
   ],
   [
     "Причина",
     "Iemesls",
-    "Reason"
+    "Reason",
+    "Причина"
   ],
   [
     "Предположительно незаконный контент",
     "Iespējami nelikumīgs saturs",
-    "Suspected illegal content"
+    "Suspected illegal content",
+    "Імовірно незаконний контент"
   ],
   [
     "Нарушение правил площадки",
     "Platformas noteikumu pārkāpums",
-    "Platform rules violation"
+    "Platform rules violation",
+    "Порушення правил платформи"
   ],
   [
     "Сексуальная эксплуатация детей",
     "Bērnu seksuāla izmantošana",
-    "Child sexual exploitation"
+    "Child sexual exploitation",
+    "Сексуальна експлуатація дітей"
   ],
   [
     "Подробное обоснование",
     "Detalizēts pamatojums",
-    "Detailed explanation"
+    "Detailed explanation",
+    "Докладне обґрунтування"
   ],
   [
     "Для этой категории имя и email необязательны.",
     "Šai kategorijai vārds un e-pasts nav obligāts.",
-    "Name and email are optional for this category."
+    "Name and email are optional for this category.",
+    "Для цієї категорії ім’я та email необов’язкові."
   ],
   [
     "Добросовестно считаю сведения в обращении точными и полными.",
     "Labticīgi uzskatu, ka ziņojumā sniegtā informācija ir precīza un pilnīga.",
-    "I believe in good faith that this report is accurate and complete."
+    "I believe in good faith that this report is accurate and complete.",
+    "Добросовісно вважаю відомості у зверненні точними та повними."
   ],
   [
     "Контакты заявителя доступны только оператору. Обработка обращения описана в политике конфиденциальности.",
     "Ziņotāja kontakti pieejami tikai operatoram. Ziņojuma apstrāde aprakstīta privātuma politikā.",
-    "Reporter contacts are available only to the operator. Report processing is explained in the privacy policy."
+    "Reporter contacts are available only to the operator. Report processing is explained in the privacy policy.",
+    "Контакти заявника доступні лише оператору. Обробку звернення описано в політиці конфіденційності."
   ],
   [
     "Сохранение…",
     "Saglabā…",
-    "Saving…"
+    "Saving…",
+    "Збереження…"
   ],
   [
     "Отправить обращение",
     "Nosūtīt ziņojumu",
-    "Submit report"
+    "Submit report",
+    "Надіслати звернення"
   ],
   [
     "Статус обращения",
     "Ziņojuma statuss",
-    "Report status"
+    "Report status",
+    "Статус звернення"
   ],
   [
     "Номер обращения",
     "Ziņojuma numurs",
-    "Report number"
+    "Report number",
+    "Номер звернення"
   ],
   [
     "Основание",
     "Pamats",
-    "Basis"
+    "Basis",
+    "Підстава"
   ],
   [
     "Решение принято человеком. Если вы не согласны, отправьте оператору номер обращения и обоснование пересмотра.",
     "Lēmumu pieņēmis cilvēks. Ja nepiekrītat, nosūtiet operatoram ziņojuma numuru un pārskatīšanas pamatojumu.",
-    "A human made this decision. If you disagree, send the operator the report reference and your reasons for reconsideration."
+    "A human made this decision. If you disagree, send the operator the report reference and your reasons for reconsideration.",
+    "Рішення ухвалила людина. Якщо ви не згодні, надішліть оператору номер звернення та обґрунтування перегляду."
   ],
   [
     "Аккаунт неактивен. Откройте настройки данных.",
     "Konts nav aktīvs. Atveriet datu iestatījumus.",
-    "Account inactive. Open your data settings."
+    "Account inactive. Open your data settings.",
+    "Обліковий запис неактивний. Відкрийте налаштування даних."
   ],
   [
     "Решение по публикации",
     "Lēmums par publikāciju",
-    "Listing decision"
+    "Listing decision",
+    "Рішення щодо публікації"
   ],
   [
     "Я принимаю условия использования и ознакомился с политикой конфиденциальности.",
     "Es pieņemu lietošanas noteikumus un esmu iepazinies ar privātuma politiku.",
-    "I accept the Terms & Conditions and have read the privacy policy."
+    "I accept the Terms & Conditions and have read the privacy policy.",
+    "Я приймаю умови використання та ознайомився з політикою конфіденційності."
   ],
   [
     "На рассмотрении",
     "Tiek izskatīts",
-    "Under review"
+    "Under review",
+    "На розгляді"
   ],
   [
     "Публикация скрыта",
     "Publikācija paslēpta",
-    "Listing hidden"
+    "Listing hidden",
+    "Публікацію приховано"
   ],
   [
     "Ограничение не применено",
     "Ierobežojums nav piemērots",
-    "No restriction applied"
+    "No restriction applied",
+    "Обмеження не застосовано"
   ],
   [
     "Обращение не найдено.",
     "Ziņojums nav atrasts.",
-    "Report not found."
+    "Report not found.",
+    "Звернення не знайдено."
   ],
   [
     "Опишите нарушение и подтвердите добросовестность обращения.",
     "Aprakstiet pārkāpumu un aplieciniet ziņojuma labticību.",
-    "Describe the violation and confirm your good-faith statement."
+    "Describe the violation and confirm your good-faith statement.",
+    "Опишіть порушення та підтвердьте добросовісність звернення."
   ],
   [
     "Укажите имя и корректный email.",
     "Norādiet vārdu un derīgu e-pastu.",
-    "Provide your name and a valid email."
+    "Provide your name and a valid email.",
+    "Укажіть ім’я та коректний email."
   ],
   [
     "Публикация недоступна.",
     "Publikācija nav pieejama.",
-    "Listing unavailable."
+    "Listing unavailable.",
+    "Публікація недоступна."
   ],
   [
     "Слишком много обращений. Попробуйте позже.",
     "Pārāk daudz ziņojumu. Mēģiniet vēlāk.",
-    "Too many reports. Try again later."
+    "Too many reports. Try again later.",
+    "Забагато звернень. Спробуйте пізніше."
   ],
   [
     "Примите условия использования.",
     "Pieņemiet lietošanas noteikumus.",
-    "Accept the Terms & Conditions."
+    "Accept the Terms & Conditions.",
+    "Прийміть умови використання."
   ],
   [
     "Примите обновлённые условия в кабинете.",
     "Pieņemiet atjauninātos noteikumus savā kontā.",
-    "Accept the updated terms in your account."
+    "Accept the updated terms in your account.",
+    "Прийміть оновлені умови в кабінеті."
   ]
 ]

@@ -1,21 +1,23 @@
 import messages from "./messages.json";
-export const locales = ["lv", "en", "ru"] as const;
+export const locales = ["lv", "en", "ru", "uk"] as const;
 export type Locale = (typeof locales)[number];
 export const localeTags: Record<Locale, string> = {
   lv: "lv-LV",
   en: "en-GB",
   ru: "ru-RU",
+  uk: "uk-UA",
 };
 export const languageNames: Record<Locale, string> = {
   lv: "Latviešu",
   en: "English",
   ru: "Русский",
+  uk: "Українська",
 };
 export function parseLocale(value: unknown): Locale {
   return locales.includes(value as Locale) ? (value as Locale) : "lv";
 }
 const dictionary = new Map(
-  messages.map(([ru, lv, en]) => [ru, { ru, lv, en }]),
+  messages.map(([ru, lv, en, uk]) => [ru, { ru, lv, en, uk }]),
 );
 export function translate(
   locale: Locale,
