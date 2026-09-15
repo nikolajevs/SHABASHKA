@@ -11,7 +11,7 @@ export async function GET(request:Request){
   if(new URL(request.url).searchParams.get('export')!=='1')return reply({state});
   const rows=await db.prepare("SELECT id,kind,parent,data,created FROM records WHERE (owner=? AND kind IN ('account','profile','task','bid','review','report','notice')) OR (kind='message' AND parent IN (SELECT id FROM records WHERE kind='bid' AND (owner=? OR parent IN (SELECT id FROM records WHERE kind='task' AND owner=?)))) ORDER BY created,id").bind(user.userId,user.userId,user.userId).all<{id:string;kind:string;parent:string|null;data:string;created:string}>();
   const records=rows.results.map(r=>{const data=JSON.parse(r.data);delete data.tokenHash;delete data.quota;delete data.emailDelivery;return {...r,data};});
-  return Response.json({format:'shabashka-personal-data-v1',exportedAt:new Date().toISOString(),identity:{email:user.email,name:user.fullName},records},{headers:{'Cache-Control':'private, no-store','Content-Disposition':'attachment; filename="shabashka-data.json"','X-Content-Type-Options':'nosniff'}});
+  return Response.json({format:'shabashka-personal-data-v1',exportedAt:new Date().toISOString(),identity:{email:user.email,name:user.fullName},records},{headers:{'Cache-Control':'private, no-store','Content-Disposition':'attachment; filename="gigs-data.json"','X-Content-Type-Options':'nosniff'}});
  }catch(e){console.error(e);return reply({error:"Не удалось загрузить данные. Попробуйте ещё раз."},{status:503});}
 }
 export async function POST(request:Request){

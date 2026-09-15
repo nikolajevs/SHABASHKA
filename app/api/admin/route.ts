@@ -54,7 +54,7 @@ export async function POST(request: Request) {
       const statements=[db.prepare("UPDATE records SET data=json_patch(data,?) WHERE id=? AND json_extract(data,'$.status')='pending'").bind(JSON.stringify(data),report.id)];
       if(target){
         if(b.outcome==='removed')statements.push(db.prepare("INSERT INTO records(id,kind,owner,parent,data,created) VALUES (?,'hidden',?,?,?,?) ON CONFLICT(id) DO NOTHING").bind('hidden:'+target.id,user.userId,target.id,JSON.stringify({reason:b.reason}),now));
-        statements.push(db.prepare("INSERT INTO records(id,kind,owner,parent,data,created) VALUES (?,'notice',?,?,?,?)").bind(crypto.randomUUID(),target.owner,target.id,JSON.stringify({...data,target:target.id,name:'SHABASHKA',description:b.reason,basis:b.basis}),now));
+        statements.push(db.prepare("INSERT INTO records(id,kind,owner,parent,data,created) VALUES (?,'notice',?,?,?,?)").bind(crypto.randomUUID(),target.owner,target.id,JSON.stringify({...data,target:target.id,name:'Gigs',description:b.reason,basis:b.basis}),now));
       }
       statements.push(db.prepare("INSERT INTO records(id,kind,owner,parent,data,created) VALUES (?,'audit',?,?,?,?)").bind('decision:'+report.id,user.userId,report.parent,JSON.stringify({action:'report-decision',target:report.parent,targetKind:'report',reason:b.reason,basis:b.basis,outcome:b.outcome,actor:user.email}),now));
       await db.batch(statements);return reply({ok:true});
@@ -78,7 +78,7 @@ export async function POST(request: Request) {
         ? db.prepare("INSERT INTO records (id,kind,owner,parent,data,created) VALUES (?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET data=excluded.data,created=excluded.created").bind(marker,kind,user.userId,target.id,JSON.stringify({reason:detail.reason}),now)
         : db.prepare("DELETE FROM records WHERE id=? AND kind=?").bind(marker,kind),
       db.prepare("INSERT INTO records (id,kind,owner,parent,data,created) VALUES (?,'audit',?,?,?,?)").bind(crypto.randomUUID(),user.userId,target.id,JSON.stringify(detail),now),
-      db.prepare("INSERT INTO records(id,kind,owner,parent,data,created) VALUES (?,'notice',?,?,?,?)").bind(crypto.randomUUID(),target.owner,target.id,JSON.stringify({name:'SHABASHKA',description:detail.reason,basis:detail.basis,status:b.action,target:target.id}),now),
+      db.prepare("INSERT INTO records(id,kind,owner,parent,data,created) VALUES (?,'notice',?,?,?,?)").bind(crypto.randomUUID(),target.owner,target.id,JSON.stringify({name:'Gigs',description:detail.reason,basis:detail.basis,status:b.action,target:target.id}),now),
     ]);
     return reply({ok:true});
   } catch(e) { console.error(e); return reply({error:"Не удалось сохранить действие. Попробуйте ещё раз."},503); }

@@ -405,7 +405,7 @@ export default function Home() {
     <>
       <header>
         <a className="logo brand" href="/">
-          shabashka<span>✳</span>
+          Gigs<span>✳</span>
         </a>
         <nav>
           <button
@@ -735,14 +735,14 @@ export default function Home() {
             </div>
             <p className="direct-note">
               {t(
-                "Договаривайтесь напрямую. SHABASHKA не принимает оплату за работы. Стоимость и условия вы согласовываете друг с другом. ",
+                "Договаривайтесь напрямую. Gigs не принимает оплату за работы. Стоимость и условия вы согласовываете друг с другом. ",
               )}
             </p>
           </aside>
         </div>
       </main>
       <footer>
-        <span className="logo brand">shabashka✳</span>
+        <span className="logo brand">Gigs✳</span>
         <span>{t("Услуги по всей Латвии ")}</span>
         <span>{t("Примеры профилей отмечены ")}</span>
       </footer>

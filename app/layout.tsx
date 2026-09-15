@@ -5,7 +5,7 @@ import "./globals.css";
 export async function generateMetadata(): Promise<Metadata> {
   const locale = parseLocale((await cookies()).get("shabashka_locale")?.value);
   return {
-    title: translate(locale, "SHABASHKA — услуги в Латвии"),
+    title: translate(locale, "Gigs — услуги в Латвии"),
     description: translate(
       locale,
       "Специалисты и задания по всей Латвии. Договаривайтесь напрямую.",

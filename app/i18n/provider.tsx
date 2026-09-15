@@ -48,7 +48,7 @@ export function LanguageProvider({
   }
   useEffect(() => {
     document.documentElement.lang = locale;
-    document.title = t("SHABASHKA — услуги в Латвии");
+    document.title = t("Gigs — услуги в Латвии");
     document
       .querySelector('meta[name="description"]')
       ?.setAttribute(

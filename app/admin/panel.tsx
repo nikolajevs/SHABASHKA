@@ -29,7 +29,7 @@ export default function AdminPanel(){
     catch(e){setActionError(e instanceof Error?e.message:"Не удалось сохранить.");}finally{setSaving(false);}
   }
   return <main className="admin-shell" lang="ru">
-    <header className="admin-header"><a className="admin-brand" href="/">SHABASHKA<span>Управление площадкой</span></a><a href="/">На сайт ↗</a></header>
+    <header className="admin-header"><a className="admin-brand" href="/">Gigs<span>Управление площадкой</span></a><a href="/">На сайт ↗</a></header>
     <div className="admin-heading"><div><p className="admin-eyebrow"><ShieldCheck size={18}/> Доступ администратора</p><h1>Панель управления</h1></div><button className="outline" onClick={reload} disabled={loading}><RefreshCw size={17}/>Обновить</button></div>
     <div className="admin-stats">{sections.filter(s=>["account","task","profile","review"].includes(s.key)).map(s=><div key={s.key}><s.icon size={20}/><strong>{data ? (data.counts[s.key]??0) : "—"}</strong><span>{s.label}</span></div>)}</div>
     <nav className="admin-tabs" aria-label="Разделы админки">{sections.map(s=><button key={s.key} aria-current={kind===s.key?"page":undefined} onClick={()=>{setKind(s.key);setPage(1);setQuery("");setSearch("");setNotice("");}}><s.icon size={18}/>{s.label}</button>)}</nav>
