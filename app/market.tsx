@@ -83,6 +83,8 @@ type Item = {
 type User = {
   name: string;
   role: "customer" | "provider" | null;
+  isAdmin?: boolean;
+  blocked?: boolean;
 };
 const examples: Item[] = [
   [
@@ -537,6 +539,8 @@ export default function Home() {
                       : t("Войдите, чтобы публиковать задания и откликаться.")}
                 </p>
                 <div className="account-actions">
+                  {user?.isAdmin && <a className="outline" href="/admin">{t("Админка")}</a>}
+                  {user?.blocked && <p role="alert">{t("Ваш аккаунт заблокирован администратором.")}</p>}
                   {!user ? (
                     <a
                       className="dark"

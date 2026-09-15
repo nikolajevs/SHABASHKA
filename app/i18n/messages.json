@@ -1,4 +1,7 @@
 [
+  ["Админка", "Administrēšana", "Admin"],
+  ["Ваш аккаунт заблокирован администратором.", "Administrators ir bloķējis jūsu kontu.", "Your account has been blocked by an administrator."],
+  ["Эта запись ограничена администратором.", "Administrators ir ierobežojis šo ierakstu.", "This record has been restricted by an administrator."],
   ["Все услуги", "Visi pakalpojumi", "All services"],
   ["Ремонт", "Remonts", "Repairs"],
   ["Уборка", "Uzkopšana", "Cleaning"],

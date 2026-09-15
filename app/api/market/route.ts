@@ -1,6 +1,7 @@
 import { localizedJson } from "../../i18n/shared";
 import { env } from "cloudflare:workers";
 import { getChatGPTUser } from "../../chatgpt-auth";
+import { isAdmin, blocked, unavailable } from "../../admin-access";
 export const dynamic = "force-dynamic";
 type Row = {
   id: string;
@@ -49,7 +50,7 @@ export async function GET(request: Request) {
     const uid = u?.userId || "";
     const rows = await db
       .prepare(
-        "SELECT * FROM records WHERE kind IN ('profile','task','review') OR owner=? OR (kind='bid' AND parent IN (SELECT id FROM records WHERE kind='task' AND owner=?)) OR (kind='message' AND parent IN (SELECT id FROM records WHERE kind='bid' AND (owner=? OR parent IN (SELECT id FROM records WHERE kind='task' AND owner=?)))) ORDER BY created DESC",
+        "SELECT * FROM records r WHERE (kind IN ('profile','task','review') AND NOT EXISTS (SELECT 1 FROM records m WHERE m.id='hidden:'||r.id AND m.kind='hidden') AND NOT EXISTS (SELECT 1 FROM records b WHERE b.id='block:'||r.owner AND b.kind='block')) OR (owner=? AND kind IN ('account','bid','message')) OR (kind='bid' AND parent IN (SELECT id FROM records WHERE kind='task' AND owner=?)) OR (kind='message' AND parent IN (SELECT id FROM records WHERE kind='bid' AND (owner=? OR parent IN (SELECT id FROM records WHERE kind='task' AND owner=?)))) ORDER BY created DESC",
       )
       .bind(uid, uid, uid, uid)
       .all<Row>();
@@ -62,6 +63,8 @@ export async function GET(request: Request) {
           ? {
               name: account ? JSON.parse(account.data).name : u.fullName || "",
               role: account ? JSON.parse(account.data).role : null,
+              isAdmin: isAdmin(u),
+              blocked: await blocked(uid),
             }
           : null,
         records: rows.results
@@ -91,10 +94,18 @@ export async function POST(request: Request) {
       );
     const db = database();
     const raw = await request.text();
+    if (await blocked(u.userId)) return reply({error:"Ваш аккаунт заблокирован администратором."}, {status:403});
     if (raw.length > 16000)
       return reply({ error: "Слишком большой запрос" }, { status: 413 });
     const b = JSON.parse(raw) as Record<string, unknown>;
     const action = b.action;
+    // Validate related records on the server, even when a stale page still shows them.
+    const related = action === "bid" || action === "message" || action === "review" ? b.parent : b.id;
+    if (typeof related === "string" && ["bid","message","review","choose","complete"].includes(String(action))) {
+      const target = await db.prepare("SELECT id,kind,parent FROM records WHERE id=?").bind(related).first<Row>();
+      if (target && (await unavailable(target.id) || (target.kind === "bid" && target.parent && await unavailable(target.parent))))
+        return reply({error:"Эта запись ограничена администратором."},{status:403});
+    }
     const value = (key: string, max = 2000) => {
       const v = b[key];
       if (typeof v !== "string" || !v.trim() || v.length > max)
