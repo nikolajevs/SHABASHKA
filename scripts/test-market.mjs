@@ -8,6 +8,7 @@ const customer = prefix + "-customer",
   stranger = prefix + "-stranger";
 let checks = 0;
 async function request(user, data, expected = 200) {
+  if (data?.action === 'register') data.acceptTerms = true;
   const headers = user
     ? {
         "oai-authenticated-user-id": user,

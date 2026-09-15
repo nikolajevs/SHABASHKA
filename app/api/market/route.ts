@@ -2,6 +2,7 @@ import { localizedJson } from "../../i18n/shared";
 import { env } from "cloudflare:workers";
 import { getChatGPTUser } from "../../chatgpt-auth";
 import { isAdmin, blocked, unavailable } from "../../admin-access";
+import { accountState, inactive, TERMS_VERSION } from "../../privacy-store";
 export const dynamic = "force-dynamic";
 type Row = {
   id: string;
@@ -48,9 +49,10 @@ export async function GET(request: Request) {
     const u = await getChatGPTUser();
     const db = database();
     const uid = u?.userId || "";
+    const state = u ? await accountState(uid) : null;
     const rows = await db
       .prepare(
-        "SELECT * FROM records r WHERE (kind IN ('profile','task','review') AND NOT EXISTS (SELECT 1 FROM records m WHERE m.id='hidden:'||r.id AND m.kind='hidden') AND NOT EXISTS (SELECT 1 FROM records b WHERE b.id='block:'||r.owner AND b.kind='block')) OR (owner=? AND kind IN ('account','bid','message')) OR (kind='bid' AND parent IN (SELECT id FROM records WHERE kind='task' AND owner=?)) OR (kind='message' AND parent IN (SELECT id FROM records WHERE kind='bid' AND (owner=? OR parent IN (SELECT id FROM records WHERE kind='task' AND owner=?)))) ORDER BY created DESC",
+        "SELECT * FROM records r WHERE ((kind IN ('profile','task','review') AND NOT EXISTS (SELECT 1 FROM records m WHERE m.id='hidden:'||r.id AND m.kind='hidden') AND NOT EXISTS (SELECT 1 FROM records b WHERE b.id='block:'||r.owner AND b.kind='block') AND NOT EXISTS (SELECT 1 FROM records a WHERE a.id='account:'||r.owner AND json_extract(a.data,'$.inactive')=1)) OR (owner=? AND kind IN ('account','bid','message','notice')) OR (kind='bid' AND parent IN (SELECT id FROM records WHERE kind='task' AND owner=?)) OR (kind='message' AND parent IN (SELECT id FROM records WHERE kind='bid' AND (owner=? OR parent IN (SELECT id FROM records WHERE kind='task' AND owner=?))))) ORDER BY created DESC",
       )
       .bind(uid, uid, uid, uid)
       .all<Row>();
@@ -61,10 +63,13 @@ export async function GET(request: Request) {
       {
         user: u
           ? {
-              name: account ? JSON.parse(account.data).name : u.fullName || "",
+              name: account ? JSON.parse(account.data).name || "" : u.fullName || "",
               role: account ? JSON.parse(account.data).role : null,
               isAdmin: isAdmin(u),
               blocked: await blocked(uid),
+              inactive: !!state?.inactive,
+              erased: !!state?.erased,
+              requiresTerms: !!state?.role && state.termsVersion!==TERMS_VERSION,
             }
           : null,
         records: rows.results
@@ -84,6 +89,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   const reply = localizedJson(request);
   try {
+    const raw = await request.text();
     if (request.headers.get("origin") !== new URL(request.url).origin)
       return reply({ error: "Недопустимый источник запроса" }, { status: 403 });
     const u = await getChatGPTUser();
@@ -93,17 +99,20 @@ export async function POST(request: Request) {
         { status: 401 },
       );
     const db = database();
-    const raw = await request.text();
     if (await blocked(u.userId)) return reply({error:"Ваш аккаунт заблокирован администратором."}, {status:403});
     if (raw.length > 16000)
       return reply({ error: "Слишком большой запрос" }, { status: 413 });
     const b = JSON.parse(raw) as Record<string, unknown>;
     const action = b.action;
+    const currentState = await accountState(u.userId);
+    if (currentState?.inactive && !(currentState.erased && action==='register' && b.reopen===true))
+      return reply({error:"Аккаунт неактивен. Откройте настройки данных."},{status:403});
+    if(currentState?.role && currentState.termsVersion!==TERMS_VERSION && action!=='register')return reply({error:"Примите обновлённые условия в кабинете."},{status:403});
     // Validate related records on the server, even when a stale page still shows them.
     const related = action === "bid" || action === "message" || action === "review" ? b.parent : b.id;
     if (typeof related === "string" && ["bid","message","review","choose","complete"].includes(String(action))) {
-      const target = await db.prepare("SELECT id,kind,parent FROM records WHERE id=?").bind(related).first<Row>();
-      if (target && (await unavailable(target.id) || (target.kind === "bid" && target.parent && await unavailable(target.parent))))
+      const target = await db.prepare("SELECT id,kind,parent,owner FROM records WHERE id=?").bind(related).first<Row>();
+      if (target && (await inactive(target.owner) || await unavailable(target.id) || (target.kind === "bid" && target.parent && await unavailable(target.parent))))
         return reply({error:"Эта запись ограничена администратором."},{status:403});
     }
     const value = (key: string, max = 2000) => {
@@ -127,20 +136,21 @@ export async function POST(request: Request) {
     ) =>
       db
         .prepare(
-          "INSERT INTO records (id,kind,owner,parent,data,created) VALUES (?,?,?,?,?,?)",
+          "INSERT INTO records (id,kind,owner,parent,data,created) SELECT ?,?,?,?,?,? WHERE NOT EXISTS (SELECT 1 FROM records WHERE id=? AND json_extract(data,'$.inactive')=1)",
         )
-        .bind(recordId, kind, u.userId, parent, JSON.stringify(data), now)
+        .bind(recordId, kind, u.userId, parent, JSON.stringify(data), now, 'account:'+u.userId)
         .run();
     if (action === "register") {
+      if(b.acceptTerms!==true && b.acceptTerms!=='on')return reply({error:"Примите условия использования."},{status:400});
       const role = value("role", 20);
       if (!["customer", "provider"].includes(role))
         throw Error("Выберите роль");
-      const data = { name: value("name", 80), role };
+      const data = { name: value("name", 80), role, termsVersion:TERMS_VERSION, acceptedAt:now };
       await db
         .prepare(
-          "INSERT INTO records (id,kind,owner,parent,data,created) VALUES (?,'account',?,NULL,?,?) ON CONFLICT(id) DO UPDATE SET data=excluded.data",
+          "INSERT INTO records (id,kind,owner,parent,data,created) VALUES (?,'account',?,NULL,?,?) ON CONFLICT(id) DO UPDATE SET data=excluded.data WHERE coalesce(json_extract(records.data,'$.inactive'),0)=0 OR ?=1",
         )
-        .bind("account:" + u.userId, u.userId, JSON.stringify(data), now)
+        .bind("account:" + u.userId, u.userId, JSON.stringify(data), now,b.reopen===true?1:0)
         .run();
       return reply({ ok: true });
     }
@@ -193,9 +203,9 @@ export async function POST(request: Request) {
         data.portfolio = portfolio;
         await db
           .prepare(
-            "INSERT INTO records (id,kind,owner,parent,data,created) VALUES (?,'profile',?,NULL,?,?) ON CONFLICT(id) DO UPDATE SET data=excluded.data",
+            "INSERT INTO records (id,kind,owner,parent,data,created) SELECT ?,'profile',?,NULL,?,? WHERE NOT EXISTS (SELECT 1 FROM records WHERE id=? AND json_extract(data,'$.inactive')=1) ON CONFLICT(id) DO UPDATE SET data=excluded.data",
           )
-          .bind("profile:" + u.userId, u.userId, JSON.stringify(data), now)
+          .bind("profile:" + u.userId, u.userId, JSON.stringify(data), now,'account:'+u.userId)
           .run();
       } else await insert("task", data);
     } else if (action === "bid") {

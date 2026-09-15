@@ -17,5 +17,5 @@ export async function blocked(owner: string): Promise<boolean> {
 }
 
 export async function unavailable(id: string): Promise<boolean> {
-  return !!await marketDatabase().prepare("SELECT r.id FROM records r WHERE r.id=? AND (EXISTS (SELECT 1 FROM records m WHERE m.id='hidden:'||r.id AND m.kind='hidden') OR EXISTS (SELECT 1 FROM records b WHERE b.id='block:'||r.owner AND b.kind='block'))").bind(id).first();
+  return !!await marketDatabase().prepare("SELECT r.id FROM records r WHERE r.id=? AND (EXISTS (SELECT 1 FROM records m WHERE m.id='hidden:'||r.id AND m.kind='hidden') OR EXISTS (SELECT 1 FROM records b WHERE b.id='block:'||r.owner AND b.kind='block') OR EXISTS(SELECT 1 FROM records a WHERE a.id='account:'||r.owner AND json_extract(a.data,'$.inactive')=1))").bind(id).first();
 }

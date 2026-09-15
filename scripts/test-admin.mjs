@@ -6,6 +6,8 @@ const admin={id:prefix+'-admin',email:process.env.TEST_ADMIN_EMAIL||'seedy@sites
 const customer={id:prefix+'-customer',email:'customer@example.test'},provider={id:prefix+'-provider',email:'provider@example.test'};
 let checks=0;
 async function req(path,user,body,status=200,extra={}){
+ if(body?.action==='register')body.acceptTerms=true;
+ if(['restrict','restore'].includes(body?.action))body.basis='Terms section 3';
  const headers={Connection:'close',...(user?{'oai-authenticated-user-id':user.id,'oai-authenticated-user-email':user.email}:{}),...(body?{Origin:origin,'Content-Type':'application/json'}:{}),...extra};
  const r=await fetch(origin+path,{method:body?'POST':'GET',headers,body:body?JSON.stringify(body):undefined});
  const result=await r.json();assert.equal(r.status,status,JSON.stringify(result));checks++;return result;

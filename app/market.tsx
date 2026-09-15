@@ -1,5 +1,6 @@
 "use client";
 import { useLanguage, LanguageSwitcher, localeTags } from "./i18n/provider";
+import {ReportLink} from './compliance-ui';
 import { useState, useEffect, useCallback } from "react";
 import {
   Search,
@@ -79,12 +80,16 @@ type Item = {
   rating?: number;
   profile?: string;
   created?: string;
+  basis?: string;
 };
 type User = {
   name: string;
   role: "customer" | "provider" | null;
   isAdmin?: boolean;
   blocked?: boolean;
+  inactive?: boolean;
+  erased?: boolean;
+  requiresTerms?: boolean;
 };
 const examples: Item[] = [
   [
@@ -163,6 +168,7 @@ function Picker({
   );
 }
 export default function Home() {
+  const [deepLinkHandled,setDeepLinkHandled]=useState(false);
   const { locale, t, errorText } = useLanguage();
   const [view, setView] = useState("profile"),
     [category, setCategory] = useState("Все услуги"),
@@ -213,6 +219,7 @@ export default function Home() {
   useEffect(() => {
     refresh();
   }, [refresh]);
+  useEffect(()=>{if(loading||deepLinkHandled)return;const id=new URLSearchParams(location.search).get('item');if(id){const item=records.find(r=>r.id===id);if(item){setSelected(item);setModal('detail');}}setDeepLinkHandled(true);},[records,loading,deepLinkHandled]);
   useEffect(() => {
     if (modal !== "chat") return;
     const timer = setInterval(() => refresh(true), 5000);
@@ -318,6 +325,7 @@ export default function Home() {
           category: formCategory,
           city: formCity,
           role,
+          reopen:!!user?.erased,
           rating,
           parent: selected?.id,
         },
@@ -539,6 +547,9 @@ export default function Home() {
                       : t("Войдите, чтобы публиковать задания и откликаться.")}
                 </p>
                 <div className="account-actions">
+                  {user && <a className="outline" href="/privacy">{t('Мои данные')}</a>}
+                  {user?.requiresTerms && <button className="outline" onClick={()=>open('register')}>{t('Примите обновлённые условия в кабинете.')}</button>}
+                  {user?.inactive && <p>{t('Аккаунт неактивен. Откройте настройки данных.')}</p>}
                   {user?.isAdmin && <a className="outline" href="/admin">{t("Админка")}</a>}
                   {user?.blocked && <p role="alert">{t("Ваш аккаунт заблокирован администратором.")}</p>}
                   {!user ? (
@@ -588,6 +599,7 @@ export default function Home() {
                 </div>
               </div>
             )}
+            {view==='mine' && records.filter(r=>r.kind==='notice'&&r.mine).map(r=><div className="feedback" key={r.id}><strong>{t('Решение по публикации')}</strong><p>{r.description}</p><p>{t('Основание')}: {r.basis}</p><p>{t('Решение принято человеком. Если вы не согласны, отправьте оператору номер обращения и обоснование пересмотра.')} {r.parent}</p><a href="mailto:igors.nikos@gmail.com">igors.nikos@gmail.com</a></div>)}
             {loading && <p role="status">{t("Загружаем данные\u2026 ")}</p>}
             <div className="cards">
               {items.map((item, i) => (
@@ -651,6 +663,7 @@ export default function Home() {
                         <ArrowUpRight size={20} />
                       </button>
                     </div>
+                    {!item.example && ['task','profile'].includes(item.kind) && <ReportLink id={item.id}/>}
                   </div>
                 </article>
               ))}
@@ -789,6 +802,7 @@ export default function Home() {
           )}
           {modal === "detail" && detail ? (
             <div className="details">
+              {!detail.example && ['task','profile','review'].includes(detail.kind) && <ReportLink id={detail.id}/>}
               <b>{detail.name}</b>
               <p>{detail.description}</p>
               <p>
@@ -1050,6 +1064,8 @@ export default function Home() {
                         </SelectContent>
                       </Select>
                     </label>
+                    <label className="check-label"><input type="checkbox" name="acceptTerms" required/>{t('Я принимаю условия использования и ознакомился с политикой конфиденциальности.')}</label>
+                    <p><a href="/legal/terms" target="_blank" rel="noreferrer">{t('Условия использования')}</a> · <a href="/legal/privacy" target="_blank" rel="noreferrer">{t('Конфиденциальность')}</a></p>
                   </>
                 ) : (
                   <>

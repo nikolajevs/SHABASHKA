@@ -1,8 +1,10 @@
 "use client";
+import AdminReports from './reports';
+import '../compliance.css';
 import {useCallback,useEffect,useState} from "react";
 import {ShieldCheck,Users,ClipboardList,BriefcaseBusiness,Star,History,Search,RefreshCw} from "lucide-react";
 import {Dialog,DialogContent,DialogTitle,DialogDescription} from "@/components/ui/dialog";
-const sections=[{key:"account",label:"Пользователи",icon:Users},{key:"task",label:"Задания",icon:ClipboardList},{key:"profile",label:"Профили",icon:BriefcaseBusiness},{key:"review",label:"Отзывы",icon:Star},{key:"audit",label:"Журнал действий",icon:History}];
+const sections=[{key:"report",label:"Жалобы",icon:ShieldCheck},{key:"account",label:"Пользователи",icon:Users},{key:"task",label:"Задания",icon:ClipboardList},{key:"profile",label:"Профили",icon:BriefcaseBusiness},{key:"review",label:"Отзывы",icon:Star},{key:"audit",label:"Журнал действий",icon:History}];
 type Entry={id:string;kind:string;owner:string;created:string;restricted:boolean;self:boolean;name?:string;title?:string;description?:string;role?:string;city?:string;status?:string;price?:string;skills?:string;portfolio?:string;rating?:number;reason?:string;actor?:string;action?:string;target?:string;targetKind?:string};
 type Result={rows:Entry[];total:number;counts:Record<string,number>;page:number};
 const date=(value:string)=>new Date(value).toLocaleString("ru-LV",{dateStyle:"medium",timeStyle:"short"});
@@ -10,7 +12,7 @@ const state=(value?:string)=>({open:"Принимает отклики",active:"
 export default function AdminPanel(){
   const [kind,setKind]=useState("account"),[query,setQuery]=useState(""),[search,setSearch]=useState(""),[page,setPage]=useState(1);
   const [data,setData]=useState<Result|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState(""),[notice,setNotice]=useState("");
-  const [selected,setSelected]=useState<Entry|null>(null),[reason,setReason]=useState(""),[saving,setSaving]=useState(false),[actionError,setActionError]=useState("");
+  const [selected,setSelected]=useState<Entry|null>(null),[reason,setReason]=useState(""),[basis,setBasis]=useState(""),[saving,setSaving]=useState(false),[actionError,setActionError]=useState("");
   const [revision,setRevision]=useState(0);
   const reload=useCallback(()=>setRevision(v=>v+1),[]);
   useEffect(()=>{document.documentElement.lang="ru";},[]);
@@ -23,15 +25,15 @@ export default function AdminPanel(){
     return()=>controller.abort();
   },[kind,search,page,revision]);
   async function save(e:React.FormEvent){e.preventDefault();if(!selected||saving)return;setSaving(true);setActionError("");
-    try{const r=await fetch("/api/admin",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:selected.id,action:selected.restricted?"restore":"restrict",reason})});const b=await r.json() as Result & {error?:string};if(!r.ok)throw Error(b.error);setNotice("Изменение сохранено в журнале.");setSelected(null);reload();}
+    try{const r=await fetch("/api/admin",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:selected.id,action:selected.restricted?"restore":"restrict",reason,basis})});const b=await r.json() as Result & {error?:string};if(!r.ok)throw Error(b.error);setNotice("Изменение сохранено в журнале.");setSelected(null);reload();}
     catch(e){setActionError(e instanceof Error?e.message:"Не удалось сохранить.");}finally{setSaving(false);}
   }
   return <main className="admin-shell" lang="ru">
     <header className="admin-header"><a className="admin-brand" href="/">SHABASHKA<span>Управление площадкой</span></a><a href="/">На сайт ↗</a></header>
     <div className="admin-heading"><div><p className="admin-eyebrow"><ShieldCheck size={18}/> Доступ администратора</p><h1>Панель управления</h1></div><button className="outline" onClick={reload} disabled={loading}><RefreshCw size={17}/>Обновить</button></div>
-    <div className="admin-stats">{sections.slice(0,4).map(s=><div key={s.key}><s.icon size={20}/><strong>{data?.counts[s.key]??"—"}</strong><span>{s.label}</span></div>)}</div>
+    <div className="admin-stats">{sections.filter(s=>["account","task","profile","review"].includes(s.key)).map(s=><div key={s.key}><s.icon size={20}/><strong>{data ? (data.counts[s.key]??0) : "—"}</strong><span>{s.label}</span></div>)}</div>
     <nav className="admin-tabs" aria-label="Разделы админки">{sections.map(s=><button key={s.key} aria-current={kind===s.key?"page":undefined} onClick={()=>{setKind(s.key);setPage(1);setQuery("");setSearch("");setNotice("");}}><s.icon size={18}/>{s.label}</button>)}</nav>
-    <section className="admin-content" aria-busy={loading}>
+    {kind==="report" && <AdminReports/>}<section hidden={kind==="report"} className="admin-content" aria-busy={loading}>
       <div className="admin-toolbar"><h2>{sections.find(s=>s.key===kind)?.label}</h2><form onSubmit={e=>{e.preventDefault();setSearch(query.trim());setPage(1);}} className="admin-search"><Search size={18}/><input aria-label="Поиск по разделу" placeholder="Имя, название или текст" value={query} onChange={e=>setQuery(e.target.value)} maxLength={120}/><button type="submit">Найти</button></form></div>
       {notice&&<p role="status" className="admin-notice">{notice}</p>}{error&&<p role="alert" className="admin-error">{error}</p>}
       {loading?<p className="admin-empty" role="status">Загрузка…</p>:!error&&<>
@@ -41,11 +43,11 @@ export default function AdminPanel(){
             {row.description&&<p className="admin-description">{row.description}</p>}{row.skills&&<p>Навыки: {row.skills}</p>}{row.portfolio&&<p className="admin-description">Портфолио: {row.portfolio}</p>}
             {kind==="audit"&&<><p><strong>{row.action==="restore"?"Восстановление":"Ограничение"}</strong> · {sections.find(s=>s.key===row.targetKind)?.label}</p><p className="admin-description">Причина: {row.reason}</p><p className="admin-meta">Администратор: {row.actor}</p></>}
             <details><summary>Идентификатор записи</summary><code>{row.target||row.id}</code></details>
-          </div>{kind!=="audit"&&<button className={row.restricted?"outline":"admin-restrict"} disabled={row.self&&kind==="account"} onClick={()=>{setSelected(row);setReason("");setActionError("");}}>{row.restricted?"Восстановить":kind==="account"?"Заблокировать":"Скрыть"}</button>}
+          </div>{kind!=="audit"&&<button className={row.restricted?"outline":"admin-restrict"} disabled={row.self&&kind==="account"} onClick={()=>{setSelected(row);setReason("");setBasis("");setActionError("");}}>{row.restricted?"Восстановить":kind==="account"?"Заблокировать":"Скрыть"}</button>}
         </article>)}</div>}
         <div className="admin-pagination"><span>Всего: {data?.total??0}</span><div><button className="outline" disabled={page<=1} onClick={()=>setPage(p=>p-1)}>Назад</button><span>Страница {page} из {Math.max(1,Math.ceil((data?.total??0)/30))}</span><button className="outline" disabled={page*30>=(data?.total??0)} onClick={()=>setPage(p=>p+1)}>Далее</button></div></div>
       </>}
     </section>
-    <Dialog open={!!selected} onOpenChange={open=>{if(!open&&!saving)setSelected(null);}}><DialogContent showCloseButton={false} lang="ru" className="admin-dialog"><DialogTitle>{selected?.restricted?"Восстановить доступ":selected?.kind==="account"?"Заблокировать пользователя":"Скрыть публикацию"}</DialogTitle><DialogDescription>{selected?.restricted?"Запись снова станет доступна, если на неё не действуют другие ограничения.":selected?.kind==="account"?"Пользователь не сможет публиковать, откликаться и писать сообщения. Его публикации исчезнут из общего каталога.":"Публикация исчезнет из общего каталога. Запись сохранится, и её можно будет восстановить."}</DialogDescription><p><strong>{selected?.title||selected?.name}</strong></p><form onSubmit={save}><label htmlFor="admin-reason">Причина действия</label><textarea id="admin-reason" required minLength={3} maxLength={500} value={reason} onChange={e=>setReason(e.target.value)} placeholder="Укажите причину для журнала"/>{actionError&&<p role="alert" className="admin-error">{actionError}</p>}<div className="admin-dialog-actions"><button className="outline" type="button" disabled={saving} onClick={()=>setSelected(null)}>Отмена</button><button className="dark" type="submit" disabled={saving||reason.trim().length<3}>{saving?"Сохранение…":"Подтвердить"}</button></div></form></DialogContent></Dialog>
+    <Dialog open={!!selected} onOpenChange={open=>{if(!open&&!saving)setSelected(null);}}><DialogContent showCloseButton={false} lang="ru" className="admin-dialog"><DialogTitle>{selected?.restricted?"Восстановить доступ":selected?.kind==="account"?"Заблокировать пользователя":"Скрыть публикацию"}</DialogTitle><DialogDescription>{selected?.restricted?"Запись снова станет доступна, если на неё не действуют другие ограничения.":selected?.kind==="account"?"Пользователь не сможет публиковать, откликаться и писать сообщения. Его публикации исчезнут из общего каталога.":"Публикация исчезнет из общего каталога. Запись сохранится, и её можно будет восстановить."}</DialogDescription><p><strong>{selected?.title||selected?.name}</strong></p><form onSubmit={save}><label htmlFor="admin-reason">Причина действия</label><textarea id="admin-reason" required minLength={3} maxLength={500} value={reason} onChange={e=>setReason(e.target.value)} placeholder="Укажите причину для журнала"/>{actionError&&<p role="alert" className="admin-error">{actionError}</p>}<label htmlFor="admin-basis">Правовое основание или пункт правил</label><input id="admin-basis" required minLength={5} maxLength={500} value={basis} onChange={e=>setBasis(e.target.value)}/><div className="admin-dialog-actions"><button className="outline" type="button" disabled={saving} onClick={()=>setSelected(null)}>Отмена</button><button className="dark" type="submit" disabled={saving||reason.trim().length<3||basis.trim().length<5}>{saving?"Сохранение…":"Подтвердить"}</button></div></form></DialogContent></Dialog>
   </main>;
 }
