@@ -371,31 +371,12 @@ export default function Home() {
         </nav>
         <div className="header-right">
           <LanguageSwitcher />
-          <span>
-            <MapPin size={16} />
-            {t("Латвия ")}
-          </span>
           <button className="outline" onClick={() => navigate("mine")}>
             {t("Мой кабинет ")}
           </button>
         </div>
       </header>
       <main>
-        <div className="intro">
-          <div>
-            <div className="eyebrow">{t("УСЛУГИ И ЛЮДИ РЯДОМ · ЛАТВИЯ ")}</div>
-            <h1>
-              {t("Для каждого дела ")}
-              <br />
-              {t("найдётся ")}
-              <em>{t("свой человек. ")}</em>
-            </h1>
-          </div>
-          <button className="primary" onClick={() => open("task")}>
-            {t("Создать задание ")}
-            <Plus size={19} />
-          </button>
-        </div>
         <form
           className="search"
           onSubmit={(e) => {
