@@ -74,7 +74,6 @@ type Item = {
   parent?: string;
   status?: string;
   chosen?: string;
-  example?: boolean;
   skills?: string;
   portfolio?: string;
   rating?: number;
@@ -92,46 +91,6 @@ type User = {
   erased?: boolean;
   requiresTerms?: boolean;
 };
-const examples: Item[] = [
-  [
-    "Мастер по ремонту",
-    "Александр Р.",
-    "Ремонт",
-    "Сборка мебели и мелкий ремонт. Помогу довести домашние дела до конца.",
-    "Рига",
-  ],
-  [
-    "Уборка квартир",
-    "Мария К.",
-    "Уборка",
-    "Поддерживающая и генеральная уборка. Обсудим объём и удобное время.",
-    "Юрмала",
-  ],
-  [
-    "Разработка сайтов",
-    "Дмитрий С.",
-    "IT и дизайн",
-    "Сайты для небольших компаний: от структуры до запуска. Работаю удалённо.",
-    "Удалённо · Латвия",
-  ],
-  [
-    "Английский язык",
-    "Елена В.",
-    "Обучение",
-    "Индивидуальные занятия для взрослых. Разговорная практика и понятная грамматика.",
-    "Рига",
-  ],
-].map(([title, name, category, description, city], i) => ({
-  id: "example" + i,
-  kind: "profile",
-  title,
-  name,
-  category,
-  description,
-  price: "По договорённости",
-  city,
-  example: true,
-}));
 const statusText = (s?: string) =>
   s === "active"
     ? "В работе"
@@ -341,18 +300,9 @@ export default function Home() {
     }
   }
   const profiles = records.filter((r) => r.kind === "profile");
-  const localizedExamples = examples.map((item) => ({
-    ...item,
-    title: t(item.title),
-    name: t(item.name),
-    description: t(item.description),
-    price: t(item.price),
-  }));
   const source =
     view === "profile"
-      ? profiles.length
-        ? profiles
-        : localizedExamples
+      ? profiles
       : view === "task"
         ? records.filter((r) => r.kind === "task" && !r.deleted)
         : records.filter(
@@ -379,9 +329,7 @@ export default function Home() {
       (city === "Все города" || r.city === city),
   );
   const detail = selected
-    ? selected.example
-      ? localizedExamples.find((r) => r.id === selected.id) || selected
-      : records.find((r) => r.id === selected.id) || selected
+    ? records.find((r) => r.id === selected.id) || selected
     : null;
   const reviews = (id: string) =>
     records.filter((r) => r.kind === "review" && r.profile === id);
@@ -616,9 +564,7 @@ export default function Home() {
                   </div>
                   <div>
                     <small>
-                      {item.example
-                        ? t("Пример профиля")
-                        : item.kind === "bid"
+                      {item.kind === "bid"
                           ? t("Ваш отклик")
                           : t(item.category)}
                     </small>
@@ -635,7 +581,7 @@ export default function Home() {
                       <MapPin size={14} />
                       {t(item.city || taskFor(item)?.city || "Латвия")}
                     </div>
-                    {item.kind === "profile" && !item.example && (
+                    {item.kind === "profile" && (
                       <div className="rating">
                         <Star size={14} />
                         {ratingText(item.id)}
@@ -666,7 +612,7 @@ export default function Home() {
                         <ArrowUpRight size={20} />
                       </button>
                     </div>
-                    {!item.example && ['task','profile'].includes(item.kind) && <ReportLink id={item.id}/>}
+                    {['task','profile'].includes(item.kind) && <ReportLink id={item.id}/>}
                   </div>
                 </article>
               ))}
@@ -744,7 +690,6 @@ export default function Home() {
       <footer>
         <span className="logo brand">Gigs✳</span>
         <span>{t("Услуги по всей Латвии ")}</span>
-        <span>{t("Примеры профилей отмечены ")}</span>
       </footer>
       <Dialog
         open={!!modal}
@@ -806,19 +751,13 @@ export default function Home() {
           {modal === "detail" && detail ? (
             <div className="details">
               {((detail.kind === "task" && detail.deleted) || (detail.kind === "bid" && taskFor(detail)?.deleted)) && <p className="feedback">{t("Задание удалено из каталога. История доступна только участникам.")}</p>}
-              {!detail.example && ['task','profile','review'].includes(detail.kind) && <ReportLink id={detail.id}/>}
+              {['task','profile','review'].includes(detail.kind) && <ReportLink id={detail.id}/>}
               <b>{detail.name}</b>
               <p>{detail.description}</p>
               <p>
                 {t(detail.city)} · {detail.price}
               </p>
-              {detail.example ? (
-                <div className="feedback">
-                  {t(
-                    "Это пример, а не действующий специалист. Создайте задание, чтобы получить реальные отклики. ",
-                  )}
-                </div>
-              ) : detail.kind === "profile" ? (
+              {detail.kind === "profile" ? (
                 <>
                   <h3>{t("Навыки ")}</h3>
                   <p>{detail.skills}</p>
