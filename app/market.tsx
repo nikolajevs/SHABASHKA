@@ -518,7 +518,6 @@ export default function Home() {
                       : t("Войдите, чтобы публиковать задания и откликаться.")}
                 </p>
                 <div className="account-actions">
-                  {user && <a className="outline" href="/privacy">{t('Мои данные')}</a>}
                   {user?.requiresTerms && <button className="outline" onClick={()=>open('register')}>{t('Примите обновлённые условия в кабинете.')}</button>}
                   {user?.inactive && <p>{t('Аккаунт неактивен. Откройте настройки данных.')}</p>}
                   {user?.isAdmin && <a className="outline" href="/admin">{t("Админка")}</a>}
@@ -556,6 +555,7 @@ export default function Home() {
                           {t("Создать задание ")}
                         </button>
                       )}
+                      {user && <a className="outline" href="/privacy">{t('Мои данные')}</a>}
                       <AuthLogout/>
                     </>
                   )}
