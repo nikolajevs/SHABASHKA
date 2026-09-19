@@ -484,7 +484,7 @@ export default function Home() {
                 <TabsList>
                   <TabsTrigger value="profile">{t("Специалисты ")}</TabsTrigger>
                   <TabsTrigger value="task">{t("Задания ")}</TabsTrigger>
-                  <TabsTrigger value="mine">{t("Мои ")}</TabsTrigger>
+                  <TabsTrigger value="mine">{t("Мой кабинет")}</TabsTrigger>
                 </TabsList>
               </Tabs>
               <Select value={city} onValueChange={setCity}>
