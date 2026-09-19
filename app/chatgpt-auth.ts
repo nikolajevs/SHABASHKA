@@ -1,11 +1,14 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { SESSION_COOKIE, sessionUser } from './auth-store';
 
 export type ChatGPTUser = {
   userId: string;
   displayName: string;
   email: string;
   fullName: string | null;
+  emailVerified?: boolean;
+  authProvider?: 'chatgpt'|'password'|'google';
 };
 
 const USER_ID_HEADER = "oai-authenticated-user-id";
@@ -20,6 +23,8 @@ const CALLBACK_PATH = "/callback";
 
 export async function getChatGPTUser(): Promise<ChatGPTUser | null> {
   const requestHeaders = await headers();
+  const localCookie=requestHeaders.get('cookie')?.split(';').map(v=>v.trim()).find(v=>v.startsWith(SESSION_COOKIE+'='));
+  if(localCookie) return sessionUser(localCookie.slice(SESSION_COOKIE.length+1));
   const userId = requestHeaders.get(USER_ID_HEADER);
   const email = requestHeaders.get(USER_EMAIL_HEADER);
   if (!userId || !email) return null;
@@ -36,6 +41,8 @@ export async function getChatGPTUser(): Promise<ChatGPTUser | null> {
     displayName: fullName ?? email,
     email,
     fullName,
+    emailVerified: true,
+    authProvider: 'chatgpt',
   };
 }
 
@@ -45,7 +52,7 @@ export async function requireChatGPTUser(
   const user = await getChatGPTUser();
   if (user) return user;
 
-  redirect(chatGPTSignInPath(returnTo));
+  redirect('/?auth=login&returnTo='+encodeURIComponent(safeRelativeReturnPath(returnTo)));
 }
 
 export function chatGPTSignInPath(returnTo: string): string {

@@ -1,6 +1,7 @@
 "use client";
 import { useLanguage, LanguageSwitcher, localeTags } from "./i18n/provider";
 import {ReportLink} from './compliance-ui';
+import {AuthDialog,AuthLogout,AuthPanel,EmailVerification} from './auth-ui';
 import { useState, useEffect, useCallback } from "react";
 import {
   Search,
@@ -128,6 +129,7 @@ function Picker({
   );
 }
 export default function Home() {
+  const [authOpen,setAuthOpen]=useState(false),[authQueryHandled,setAuthQueryHandled]=useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [deepLinkHandled,setDeepLinkHandled]=useState(false);
   const { locale, t, errorText } = useLanguage();
@@ -180,6 +182,7 @@ export default function Home() {
   useEffect(() => {
     refresh();
   }, [refresh]);
+  useEffect(()=>{if(loading||authQueryHandled)return;const params=new URLSearchParams(location.search);if(params.get('auth')==='login'){setAuthOpen(true);}else if(params.get('auth')==='complete'&&user){setView('mine');if(!user.role)setModal('register');history.replaceState(null,'','/');}setAuthQueryHandled(true);},[loading,user,authQueryHandled]);
   useEffect(()=>{if(loading||deepLinkHandled)return;const id=new URLSearchParams(location.search).get('item');if(id){const item=records.find(r=>r.id===id);if(item){setSelected(item);setModal('detail');}}setDeepLinkHandled(true);},[records,loading,deepLinkHandled]);
   useEffect(() => {
     if (modal !== "chat") return;
@@ -225,6 +228,7 @@ export default function Home() {
     return () => lifecycle.abort();
   }, [t]);
   function open(kind: string, item?: Item) {
+    if(!user&&kind!=='detail'){setModal('');setAuthOpen(true);return;}
     setDeleteConfirmation(false);
     setError("");
     setNotice("");
@@ -371,8 +375,8 @@ export default function Home() {
         </nav>
         <div className="header-right">
           <LanguageSwitcher />
-          <button className="outline" onClick={() => navigate("mine")}>
-            {t("Мой кабинет ")}
+          <button className="outline" onClick={() => user?navigate("mine"):setAuthOpen(true)}>
+            {t(user?"Мой кабинет ":"Войти")}
           </button>
         </div>
       </header>
@@ -466,7 +470,7 @@ export default function Home() {
             </div>
             {view === "mine" && (
               <div className="account">
-                <h3>{user?.name || t("Ваши задания и предложения")}</h3>
+                <h3>{user?.name || t("Ваши задания и предложения")}</h3><EmailVerification/>
                 <p>
                   {user?.role
                     ? t("Ваша роль: {role}", {
@@ -485,13 +489,7 @@ export default function Home() {
                   {user?.isAdmin && <a className="outline" href="/admin">{t("Админка")}</a>}
                   {user?.blocked && <p role="alert">{t("Ваш аккаунт заблокирован администратором.")}</p>}
                   {!user ? (
-                    <a
-                      className="dark"
-                      href="/signin-with-chatgpt?return_to=/"
-                      target="_top"
-                    >
-                      {t("Войти через ChatGPT ")}
-                    </a>
+                    <button className="dark" onClick={()=>setAuthOpen(true)}>{t("Войти")}</button>
                   ) : (
                     <>
                       <button
@@ -523,9 +521,7 @@ export default function Home() {
                           {t("Создать задание ")}
                         </button>
                       )}
-                      <a href="/signout-with-chatgpt?return_to=/" target="_top">
-                        {t("Выйти ")}
-                      </a>
+                      <AuthLogout/>
                     </>
                   )}
                 </div>
@@ -672,6 +668,7 @@ export default function Home() {
         <span className="logo brand">Gigs✳</span>
         <span>{t("Услуги по всей Латвии ")}</span>
       </footer>
+      <AuthDialog open={authOpen} onClose={()=>setAuthOpen(false)}/>
       <Dialog
         open={!!modal}
         onOpenChange={(v) => {
@@ -890,16 +887,7 @@ export default function Home() {
               )}
             </div>
           ) : !user ? (
-            <div className="account">
-              <p>{t("Войдите и выберите роль, чтобы продолжить. ")}</p>
-              <a
-                className="dark"
-                target="_top"
-                href="/signin-with-chatgpt?return_to=/"
-              >
-                {t("Войти через ChatGPT ")}
-              </a>
-            </div>
+            <AuthPanel/>
           ) : modal !== "register" && !user.role ? (
             <button className="primary" onClick={() => open("register")}>
               {t("Завершить регистрацию ")}

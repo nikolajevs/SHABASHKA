@@ -1,6 +1,7 @@
 import { getChatGPTUser } from "../../chatgpt-auth";
 import { isAdmin, marketDatabase } from "../../admin-access";
 import { expireReports } from "../../report-store";
+import { eraseAccount } from '../../privacy-store';
 export const dynamic = "force-dynamic";
 const kinds = ["account", "task", "profile", "review", "audit", "report"];
 const reply = (body: unknown, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "private, no-store", "Content-Language": "ru" } });
@@ -63,10 +64,29 @@ export async function POST(request: Request) {
       if(typeof b.id!=='string'||!['receiptEmailSent','decisionEmailSent'].includes(b.field))return reply({error:"Неверное действие."},400);
       await marketDatabase().prepare("UPDATE records SET data=json_set(data,?,json('true')) WHERE id=? AND kind='report'").bind('$.'+b.field,b.id).run();return reply({ok:true});
     }
-    if (!b || !["restrict","restore"].includes(b.action) || typeof b.id!=="string" || b.id.length>300 || typeof b.reason!=="string" || b.reason.trim().length<3 || b.reason.length>500 || typeof b.basis!=='string' || b.basis.trim().length<5 || b.basis.length>500) return reply({error:"Укажите запись, причину действия (3–500 символов) и правовое основание или пункт правил."},400);
+    if (!b || !["restrict","restore","delete"].includes(b.action) || typeof b.id!=="string" || b.id.length>300 || typeof b.reason!=="string" || b.reason.trim().length<3 || b.reason.length>500 || typeof b.basis!=='string' || b.basis.trim().length<5 || b.basis.length>500) return reply({error:"Укажите запись, причину действия (3–500 символов) и правовое основание или пункт правил."},400);
     const db=marketDatabase();
     const target=await db.prepare("SELECT * FROM records WHERE id=? AND kind IN ('account','task','profile','review')").bind(b.id).first<Row>();
     if(!target) return reply({error:"Запись не найдена."},404);
+    if(b.action==='delete') {
+      if(b.confirm!=='DELETE')return reply({error:'Введите DELETE для подтверждения удаления.'},400);
+      if(!['account','task'].includes(target.kind))return reply({error:'Удалять можно только задания и пользователей.'},400);
+      if(target.kind==='account') {
+        if(target.owner===user.userId)return reply({error:'Нельзя удалить собственный аккаунт администратора.'},400);
+        if(JSON.parse(target.data).erased)return reply({error:'Аккаунт уже удалён.'},409);
+        await eraseAccount(target.owner,{id:user.userId,email:user.email,reason:b.reason.trim(),basis:b.basis.trim()});
+      } else {
+        if(JSON.parse(target.data).deleted)return reply({error:'Задание уже удалено.'},409);
+        const now=new Date().toISOString();
+        await db.batch([
+          db.prepare("UPDATE records SET data=json_set(data,'$.deleted',1,'$.deletedAt',?) WHERE id=? AND kind='task'").bind(now,target.id),
+          db.prepare("INSERT INTO records(id,kind,owner,parent,data,created) VALUES (?,'audit',?,?,?,?)").bind(crypto.randomUUID(),user.userId,target.id,JSON.stringify({action:'delete',target:target.id,targetKind:'task',actor:user.email,reason:b.reason.trim(),basis:b.basis.trim()}),now),
+          db.prepare("INSERT INTO records(id,kind,owner,parent,data,created) VALUES (?,'notice',?,?,?,?)").bind(crypto.randomUUID(),target.owner,target.id,JSON.stringify({name:'Gigs',status:'delete',description:b.reason.trim(),basis:b.basis.trim(),target:target.id}),now),
+        ]);
+      }
+      return reply({ok:true});
+    }
+    if(target.kind==='account'&&JSON.parse(target.data).adminErased)return reply({error:'Удалённый аккаунт восстановить нельзя.'},409);
     if(target.kind==='account' && target.owner===user.userId) return reply({error:"Нельзя заблокировать собственный аккаунт."},400);
     const kind=target.kind==='account'?'block':'hidden';
     const marker=kind+':'+(kind==='block'?target.owner:target.id);

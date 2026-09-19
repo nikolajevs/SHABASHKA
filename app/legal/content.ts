@@ -1,4 +1,5 @@
 import { ukrainianLegalCopy } from './uk';
+import { authLegal } from './auth-copy';
 export const legalCopy={
  uk: ukrainianLegalCopy,
  ru:{draft:'Проект документов. До публичного запуска оператор должен заполнить реквизиты и подтвердить условия обработки данных у поставщиков.',operator:'Оператор: [ЮРИДИЧЕСКОЕ НАЗВАНИЕ / ИМЯ]. Регистрационный номер: [НОМЕР, ЕСЛИ ПРИМЕНИМО]. Адрес: [УЛИЦА, ГОРОД, ИНДЕКС, ЛАТВИЯ]. Контакт: igors.nikos@gmail.com.',updated:'Редакция от 15 сентября 2026 года.',
@@ -34,3 +35,8 @@ export const legalCopy={
  cookies:{title:'Sīkdatnes un iestatījumi',sections:[['Nepieciešamās sīkdatnes','ChatGPT / Sites nodrošina pieslēgšanos un sesijas drošību. Precīzi tā sīkdatņu nosaukumi un termiņi: [JĀPĀRBAUDA PIRMS DARBĪBAS SĀKŠANAS]. Lietotne saglabā shabashka_locale uz vienu gadu tikai pēc valodas maiņas. shabashka_cookie_notice atceras paziņojuma aizvēršanu 180 dienas. Šos datus neizmanto reklāmai.'],['Jūsu izvēle','Analītikas un reklāmas sīkdatnes nav pieslēgtas, tāpēc paziņojums neprasa šķietamu piekrišanu. “Sapratu” aizver paziņojumu, nepieņem noteikumus un neieslēdz izsekošanu. Atvērt to var ar “Sīkdatņu iestatījumi” lapas apakšā. Dzēšot sīkdatnes pārlūkā, var būt jāautentificējas un jāizvēlas valoda vēlreiz. Ja tiks pievienotas neobligātas sīkdatnes, tās paliks izslēgtas līdz atsevišķai piekrišanai, ar iespēju atteikties un to atsaukt.']]}
  }
 };
+for (const locale of ['ru','en','lv','uk'] as const) {
+ const [title,body,cookies]=authLegal[locale];
+ legalCopy[locale].privacy.sections.push([title,body]);
+ legalCopy[locale].cookies.sections[0][1]+=cookies;
+}

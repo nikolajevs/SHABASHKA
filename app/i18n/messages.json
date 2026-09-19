@@ -1654,5 +1654,227 @@
     "Dzēst uzdevumu no kataloga? Tas paliks dalībnieku kontos kopā ar piedāvājumiem un saraksti. Atsauksmes tiks saglabātas. Sludinājuma dzēšana neatceļ jūsu vienošanos.",
     "Delete this task from the catalogue? It will remain in participants’ accounts with offers and messages. Reviews will be preserved. Deleting the listing does not cancel your agreements.",
     "Видалити завдання з каталогу? Воно залишиться в кабінетах учасників разом із пропозиціями та листуванням. Відгуки збережуться. Видалення оголошення не скасовує ваших домовленостей."
+  ],
+  [
+    "Войти",
+    "Ieiet",
+    "Sign in",
+    "Увійти"
+  ],
+  [
+    "Вход",
+    "Pieslēgšanās",
+    "Sign in",
+    "Вхід"
+  ],
+  [
+    "Регистрация",
+    "Reģistrācija",
+    "Register",
+    "Реєстрація"
+  ],
+  [
+    "Email",
+    "E-pasts",
+    "Email",
+    "Email"
+  ],
+  [
+    "Пароль",
+    "Parole",
+    "Password",
+    "Пароль"
+  ],
+  [
+    "Новый пароль",
+    "Jauna parole",
+    "New password",
+    "Новий пароль"
+  ],
+  [
+    "Повторите пароль",
+    "Atkārtojiet paroli",
+    "Repeat password",
+    "Повторіть пароль"
+  ],
+  [
+    "Восстановление пароля",
+    "Paroles atjaunošana",
+    "Reset password",
+    "Відновлення пароля"
+  ],
+  [
+    "Подтверждение email",
+    "E-pasta apstiprināšana",
+    "Email verification",
+    "Підтвердження email"
+  ],
+  [
+    "Подтвердить email",
+    "Apstiprināt e-pastu",
+    "Verify email",
+    "Підтвердити email"
+  ],
+  [
+    "Зарегистрироваться",
+    "Reģistrēties",
+    "Create account",
+    "Зареєструватися"
+  ],
+  [
+    "Отправить ссылку",
+    "Nosūtīt saiti",
+    "Send link",
+    "Надіслати посилання"
+  ],
+  [
+    "Сохранить пароль",
+    "Saglabāt paroli",
+    "Save password",
+    "Зберегти пароль"
+  ],
+  [
+    "Забыли пароль?",
+    "Aizmirsāt paroli?",
+    "Forgot password?",
+    "Забули пароль?"
+  ],
+  [
+    "Вернуться ко входу",
+    "Atgriezties pie pieslēgšanās",
+    "Back to sign in",
+    "Повернутися до входу"
+  ],
+  [
+    "Войти через Google",
+    "Ieiet ar Google",
+    "Continue with Google",
+    "Увійти через Google"
+  ],
+  [
+    "Вход через Google скоро появится.",
+    "Pieslēgšanās ar Google drīzumā būs pieejama.",
+    "Google sign-in is coming soon.",
+    "Вхід через Google незабаром з’явиться."
+  ],
+  [
+    "или",
+    "vai",
+    "or",
+    "або"
+  ],
+  [
+    "Добро пожаловать в Gigs",
+    "Laipni lūdzam Gigs",
+    "Welcome to Gigs",
+    "Ласкаво просимо до Gigs"
+  ],
+  [
+    "Войдите или создайте аккаунт, чтобы продолжить.",
+    "Lai turpinātu, pieslēdzieties vai izveidojiet kontu.",
+    "Sign in or create an account to continue.",
+    "Увійдіть або створіть обліковий запис, щоб продовжити."
+  ],
+  [
+    "От 12 до 128 символов. Используйте уникальный пароль.",
+    "No 12 līdz 128 rakstzīmēm. Izmantojiet unikālu paroli.",
+    "12–128 characters. Use a unique password.",
+    "Від 12 до 128 символів. Використовуйте унікальний пароль."
+  ],
+  [
+    "Email используется как логин. Роль и условия использования вы выберете на следующем шаге.",
+    "E-pasts tiek izmantots kā lietotājvārds. Nākamajā solī izvēlieties lomu un pieņemiet lietošanas noteikumus.",
+    "Your email is your login. Choose your role and accept the terms in the next step.",
+    "Email використовується як логін. Роль та умови використання ви оберете на наступному кроці."
+  ],
+  [
+    "Укажите корректный email.",
+    "Norādiet derīgu e-pastu.",
+    "Enter a valid email address.",
+    "Укажіть коректний email."
+  ],
+  [
+    "Пароль должен содержать от 12 до 128 символов.",
+    "Parolei jābūt no 12 līdz 128 rakstzīmēm.",
+    "Password must contain 12–128 characters.",
+    "Пароль має містити від 12 до 128 символів."
+  ],
+  [
+    "Пароли не совпадают.",
+    "Paroles nesakrīt.",
+    "Passwords do not match.",
+    "Паролі не збігаються."
+  ],
+  [
+    "Регистрация недоступна для этого email. Войдите или восстановите пароль.",
+    "Šim e-pastam reģistrācija nav pieejama. Pieslēdzieties vai atjaunojiet paroli.",
+    "Registration is unavailable for this email. Sign in or reset your password.",
+    "Реєстрація недоступна для цього email. Увійдіть або відновіть пароль."
+  ],
+  [
+    "Неверный email или пароль.",
+    "Nepareizs e-pasts vai parole.",
+    "Incorrect email or password.",
+    "Неправильний email або пароль."
+  ],
+  [
+    "Ссылка недействительна или устарела.",
+    "Saite nav derīga vai ir beidzies tās termiņš.",
+    "This link is invalid or has expired.",
+    "Посилання недійсне або застаріло."
+  ],
+  [
+    "Слишком много попыток. Попробуйте через 15 минут.",
+    "Pārāk daudz mēģinājumu. Mēģiniet pēc 15 minūtēm.",
+    "Too many attempts. Try again in 15 minutes.",
+    "Забагато спроб. Спробуйте через 15 хвилин."
+  ],
+  [
+    "Отправка писем пока недоступна.",
+    "E-pasta nosūtīšana pašlaik nav pieejama.",
+    "Email delivery is not available yet.",
+    "Надсилання листів поки недоступне."
+  ],
+  [
+    "Не удалось войти. Попробуйте ещё раз.",
+    "Neizdevās pieslēgties. Mēģiniet vēlreiz.",
+    "Could not sign in. Please try again.",
+    "Не вдалося увійти. Спробуйте ще раз."
+  ],
+  [
+    "Если аккаунт существует, письмо со ссылкой придёт на указанный email.",
+    "Ja konts pastāv, uz norādīto e-pastu tiks nosūtīta saite.",
+    "If an account exists, a link will be sent to this email address.",
+    "Якщо обліковий запис існує, лист із посиланням надійде на вказаний email."
+  ],
+  [
+    "Письмо подтверждения отправлено.",
+    "Apstiprinājuma e-pasts nosūtīts.",
+    "Verification email sent.",
+    "Лист підтвердження надіслано."
+  ],
+  [
+    "Пароль изменён. Войдите с новым паролем.",
+    "Parole nomainīta. Pieslēdzieties ar jauno paroli.",
+    "Password changed. Sign in with your new password.",
+    "Пароль змінено. Увійдіть із новим паролем."
+  ],
+  [
+    "Email подтверждён.",
+    "E-pasts apstiprināts.",
+    "Email verified.",
+    "Email підтверджено."
+  ],
+  [
+    "Подтвердите email, чтобы защитить свой аккаунт.",
+    "Apstipriniet e-pastu, lai aizsargātu savu kontu.",
+    "Verify your email to protect your account.",
+    "Підтвердьте email, щоб захистити свій обліковий запис."
+  ],
+  [
+    "Отправить письмо подтверждения",
+    "Nosūtīt apstiprinājuma e-pastu",
+    "Send verification email",
+    "Надіслати лист підтвердження"
   ]
 ]

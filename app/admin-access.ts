@@ -1,11 +1,11 @@
 import { env } from "cloudflare:workers";
 import type { ChatGPTUser } from "./chatgpt-auth";
 
-// Identity comes only from the trusted Sites authentication gateway.
+// Identity comes from the trusted Sites gateway or a validated server session.
 // No default administrator and no role supplied by the browser is trusted.
 export function isAdmin(user: ChatGPTUser | null): boolean {
   const email = (env as unknown as { SHABASHKA_ADMIN_EMAIL?: string }).SHABASHKA_ADMIN_EMAIL;
-  return !!user && !!email?.trim() && user.email.toLowerCase() === email.trim().toLowerCase();
+  return !!user && user.emailVerified === true && !!email?.trim() && user.email.toLowerCase() === email.trim().toLowerCase();
 }
 
 export function marketDatabase() {
