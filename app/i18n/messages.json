@@ -1882,5 +1882,10 @@
     "Paslēpt lēmumu",
     "Hide decision",
     "Приховати рішення"
-  ]
+  ],
+  ["Разделы кабинета","Kabineta sadaļas","Cabinet sections","Розділи кабінету"],
+  ["Мои задания","Mani uzdevumi","My tasks","Мої завдання"],
+  ["Мои отклики","Mani piedāvājumi","My offers","Мої відгуки"],
+  ["Мой профиль","Mans profils","My profile","Мій профіль"],
+  ["Решения по публикациям","Lēmumi par publikācijām","Listing decisions","Рішення щодо публікацій"]
 ]

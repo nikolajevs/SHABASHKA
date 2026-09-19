@@ -702,6 +702,7 @@ button:disabled {
   font-size: 14px;
   text-decoration: underline;
 }
+.mine-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}.mine-tabs button{border:1px solid #cdd8c8;background:#fff;border-radius:9px;padding:10px 14px;font-size:14px}.mine-tabs button[aria-selected=true]{background:#e7f3cb;border-color:#b8cd8c;font-weight:700}
 .rating {
   display: flex;
   gap: 5px;

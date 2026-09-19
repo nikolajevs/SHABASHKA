@@ -129,7 +129,7 @@ function Picker({
   );
 }
 export default function Home() {
-  const [authOpen,setAuthOpen]=useState(false),[authQueryHandled,setAuthQueryHandled]=useState(false),[hiddenDecisions,setHiddenDecisions]=useState<string[]>([]);
+  const [authOpen,setAuthOpen]=useState(false),[authQueryHandled,setAuthQueryHandled]=useState(false),[hiddenDecisions,setHiddenDecisions]=useState<string[]>([]),[mineTab,setMineTab]=useState('tasks');
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [deepLinkHandled,setDeepLinkHandled]=useState(false);
   const { locale, t, errorText } = useLanguage();
@@ -311,9 +311,11 @@ export default function Home() {
       ? profiles
       : view === "task"
         ? records.filter((r) => r.kind === "task" && !r.deleted)
-        : records.filter(
-            (r) => r.mine && ["task", "bid", "profile"].includes(r.kind),
-          );
+        : records.filter((r) => r.mine && (
+            mineTab === 'tasks' ? r.kind === 'task' :
+            mineTab === 'bids' ? r.kind === 'bid' :
+            mineTab === 'profile' ? r.kind === 'profile' : false
+          ));
   const items = source.filter(
     (r) =>
       (category === "Все услуги" || r.category === category) &&
@@ -377,9 +379,6 @@ export default function Home() {
         </nav>
         <div className="header-right">
           <LanguageSwitcher />
-          <button className="outline" onClick={() => user?navigate("mine"):setAuthOpen(true)}>
-            {t(user?"Мой кабинет ":"Войти")}
-          </button>
         </div>
       </header>
       <main>
@@ -470,6 +469,9 @@ export default function Home() {
                 </SelectContent>
               </Select>
             </div>
+            {view === 'mine' && <div className="mine-tabs" role="tablist" aria-label={t('Разделы кабинета')}>
+              {([['tasks','Мои задания'],['bids','Мои отклики'],['profile','Мой профиль'],['decisions','Решения по публикациям']] as const).map(([value,label])=><button key={value} type="button" role="tab" aria-selected={mineTab===value} onClick={()=>setMineTab(value)}>{t(label)}</button>)}
+            </div>}
             {view === "mine" && (
               <div className="account">
                 <h3>{user?.name || t("Ваши задания и предложения")}</h3><EmailVerification/>
@@ -529,9 +531,9 @@ export default function Home() {
                 </div>
               </div>
             )}
-            {view==='mine' && records.filter(r=>r.kind==='notice'&&r.mine&&!hiddenDecisions.includes(r.id)).map(r=><div className="feedback" key={r.id}><div className="feedback-heading"><strong>{t('Решение по публикации')}</strong><button type="button" className="auth-link" onClick={()=>hideDecision(r.id)}>{t('Скрыть решение')}</button></div><p>{r.description}</p><p>{t('Основание')}: {r.basis}</p><p>{t('Решение принято человеком. Если вы не согласны, отправьте оператору номер обращения и обоснование пересмотра.')} {r.parent}</p><a href="mailto:igors.nikos@gmail.com">igors.nikos@gmail.com</a></div>)}
+            {view==='mine' && mineTab==='decisions' && records.filter(r=>r.kind==='notice'&&r.mine&&!hiddenDecisions.includes(r.id)).map(r=><div className="feedback" key={r.id}><div className="feedback-heading"><strong>{t('Решение по публикации')}</strong><button type="button" className="auth-link" onClick={()=>hideDecision(r.id)}>{t('Скрыть решение')}</button></div><p>{r.description}</p><p>{t('Основание')}: {r.basis}</p><p>{t('Решение принято человеком. Если вы не согласны, отправьте оператору номер обращения и обоснование пересмотра.')} {r.parent}</p><a href="mailto:igors.nikos@gmail.com">igors.nikos@gmail.com</a></div>)}
             {loading && <p role="status">{t("Загружаем данные\u2026 ")}</p>}
-            <div className="cards">
+            {mineTab !== 'decisions' && <div className="cards">
               {items.map((item, i) => (
                 <article className="card" key={item.id}>
                   <div className={"avatar color" + (i % 4)}>
@@ -595,7 +597,7 @@ export default function Home() {
                   </div>
                 </article>
               ))}
-            </div>
+            </div>}
             {!loading && !items.length && (
               <div className="empty">
                 <Search size={28} />
