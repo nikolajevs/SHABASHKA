@@ -14,7 +14,6 @@ import {
   PawPrint,
   Grid2X2,
   MapPin,
-  Plus,
   ChevronRight,
   ArrowUpRight,
   RefreshCw,
@@ -430,12 +429,6 @@ export default function Home() {
             </button>
           ))}
         </section>
-        <div className="mobile-create">
-          <button className="primary" onClick={() => open("task")}>
-            {t("Создать задание ")}
-            <Plus size={18} />
-          </button>
-        </div>
         {notice && (
           <div className="feedback" role="status">
             {t(notice)}

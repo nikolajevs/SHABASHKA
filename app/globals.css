@@ -644,9 +644,6 @@ nav button {
   border-radius: 10px;
   margin: 14px 0;
 }
-.mobile-create {
-  display: none;
-}
 .card p {
   font-size: 16px;
 }
@@ -664,10 +661,6 @@ button:disabled {
   cursor: wait;
 }
 @media (max-width: 700px) {
-  .mobile-create {
-    display: block;
-    margin-bottom: 24px;
-  }
   .filters {
     flex-wrap: wrap;
   }
