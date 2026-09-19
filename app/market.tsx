@@ -700,7 +700,6 @@ export default function Home() {
       </main>
       <footer>
         <span className="logo brand">Gigs✳</span>
-        <span>{t("Услуги по всей Латвии ")}</span>
       </footer>
       <AuthDialog open={authOpen} onClose={()=>setAuthOpen(false)}/>
       <Dialog

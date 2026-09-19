@@ -410,7 +410,7 @@ footer {
   padding: 26px 5%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 16px;
   color: #7a8372;
   font-size: 13px;
