@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "Gigs Worker",
+    "slug": "gigs-worker",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "android": { "package": "lv.gigs.worker" },
+    "ios": { "bundleIdentifier": "lv.gigs.worker" }
+  }
+}
