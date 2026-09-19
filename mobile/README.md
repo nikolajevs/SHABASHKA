@@ -10,11 +10,17 @@ employee accounts are created by the administrator after the employment contract
 
 ## Local setup
 
-Install Expo and run each app from its directory:
+Both apps use Expo SDK 57. Use Expo Go for SDK 57 on the phone.
+From the repository root, update and run the client in PowerShell:
 
 ```bash
-npx expo start
+git pull --ff-only
+cd mobile/client
+npm ci
+npx expo start --clear
 ```
 
 Set `EXPO_PUBLIC_API_URL` to the deployed Gigs API before connecting the apps to a backend.
+For the worker app, use `mobile/worker` instead. Run each app in its own terminal.
+The mobile API routes are still pending; launching the interface does not yet enable real orders.
 The current web application and admin panel remain in the repository root.

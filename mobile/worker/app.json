@@ -5,7 +5,14 @@
     "version": "0.1.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
-    "android": { "package": "lv.gigs.worker" },
-    "ios": { "bundleIdentifier": "lv.gigs.worker" }
+    "android": {
+      "package": "lv.gigs.worker"
+    },
+    "ios": {
+      "bundleIdentifier": "lv.gigs.worker"
+    },
+    "plugins": [
+      "expo-status-bar"
+    ]
   }
 }
