@@ -695,6 +695,17 @@ button:disabled {
   font-size: 14px;
   text-decoration: underline;
 }
+.card-profile-photo{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.card-bottom{flex-wrap:wrap;align-items:center}
+.card-bottom .card-open{width:auto;height:auto;padding:10px 14px;border-radius:9px;font-size:14px;white-space:normal;text-align:center}
+.portfolio-thumbnail{padding:0;border:0;background:transparent;cursor:zoom-in;border-radius:10px;overflow:hidden}
+.portfolio-thumbnail:focus-visible{outline:3px solid #718f3d;outline-offset:3px}
+.portfolio-viewer{width:calc(100vw - 24px)!important;max-width:1100px!important;max-height:94dvh;display:flex;flex-direction:column;background:#fff;padding:18px!important;border-radius:16px!important;gap:14px}
+.portfolio-viewer-heading,.portfolio-viewer-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;flex-shrink:0}
+.portfolio-viewer-image{min-height:0;overflow:auto;background:#17201b;border-radius:10px;text-align:center}
+.portfolio-viewer-image img{display:block;width:100%;height:65dvh;object-fit:contain;margin:auto}
+.portfolio-viewer-image.zoomed img{width:200%;max-width:none;height:auto;max-height:none}
+.portfolio-viewer-controls button,.portfolio-viewer-heading button{padding:10px 14px;font-size:14px}
 .mine-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}.mine-tabs button{border:1px solid #cdd8c8;background:#fff;border-radius:9px;padding:10px 14px;font-size:14px}.mine-tabs button[aria-selected=true]{background:#e7f3cb;border-color:#b8cd8c;font-weight:700}
 .rating {
   display: flex;

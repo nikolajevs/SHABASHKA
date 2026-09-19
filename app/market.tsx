@@ -1,5 +1,6 @@
 "use client";
 import {prepareProfileImage} from './profile-image';
+import {PortfolioGallery} from './portfolio-gallery';
 import { useLanguage, LanguageSwitcher, localeTags } from "./i18n/provider";
 import {ReportLink} from './compliance-ui';
 import {AuthDialog,AuthLogout,AuthPanel,EmailVerification} from './auth-ui';
@@ -551,11 +552,12 @@ export default function Home() {
               {items.map((item, i) => (
                 <article className="card" key={item.id}>
                   <div className={"avatar color" + (i % 4)}>
+                    {item.kind==='profile'&&item.photo ? <img className="card-profile-photo" src={item.photo} alt={item.name} loading="lazy"/> : <>
                     {item.name
                       .split(" ")
                       .map((s) => s[0])
                       .slice(0, 2)
-                      .join("")}
+                      .join("")}</>}
                   </div>
                   <div>
                     <small>
@@ -599,12 +601,10 @@ export default function Home() {
                     <div className="card-bottom">
                       <strong>{priceText(item.price)}</strong>
                       <button
-                        aria-label={
-                          t("Подробнее: ") + (item.title || item.name)
-                        }
+                        className="outline card-open"
                         onClick={() => open("detail", item)}
                       >
-                        <ArrowUpRight size={20} />
+                        {t(item.kind==='profile'?'Посмотреть профиль':item.kind==='task'?'Подробнее о задании':'Посмотреть отклик')}
                       </button>
                     </div>
                     {['task','profile'].includes(item.kind) && <ReportLink id={item.id}/>}
@@ -762,7 +762,7 @@ export default function Home() {
                   <p>{detail.skills}</p>
                   <h3>{t("Портфолио ")}</h3>
                   {(detail.portfolioImages?.length || detail.portfolio) ? (
-                    <div className="portfolio-gallery">{detail.portfolioImages?.map((image,i)=><img key={i} src={image} alt={`${t('Работа')} ${i+1}`} />)}
+                    <div>{!!detail.portfolioImages?.length&&<PortfolioGallery images={detail.portfolioImages}/>}
                     {(detail.portfolio||'')
                       .split("\n")
                       .filter(Boolean)
