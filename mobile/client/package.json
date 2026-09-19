@@ -9,8 +9,11 @@
     "ios": "expo start --ios"
   },
   "dependencies": {
+    "@react-native-community/datetimepicker": "9.1.0",
     "expo": "~57.0.24",
     "expo-crypto": "~57.0.3",
+    "expo-image-manipulator": "~57.0.19",
+    "expo-image-picker": "~57.0.19",
     "expo-secure-store": "~57.0.4",
     "expo-status-bar": "~57.0.1",
     "react": "19.2.3",

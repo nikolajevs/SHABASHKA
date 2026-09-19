@@ -12,6 +12,9 @@ export type Order = {
   description: string;
   address: string;
   scheduledAt: string;
+  dateFrom?: string;
+  dateTo?: string;
+  photos?: string[];
   price?: number;
   status: OrderStatus;
   customerName?: string;
