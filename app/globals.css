@@ -722,6 +722,7 @@ button:disabled {
   margin: 10px 0;
   color: #49612b;
 }
+.profile-photo{display:block;width:104px;height:104px;object-fit:cover;border-radius:50%;margin:12px 0 18px;border:3px solid #e7f3cb}.profile-feature{color:#315b3d;font-weight:650}.profile-cities{color:#66735e}.portfolio-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}.portfolio-gallery img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;border:1px solid #dce4d1}.city-picker{border:1px solid #dce4d1;border-radius:10px;padding:12px;display:grid;gap:8px;max-height:190px;overflow:auto}.city-picker legend{padding:0 5px;font-weight:650}.check-label{display:flex;gap:8px;align-items:flex-start}.check-label input{width:auto}
 .details h3 {
   display: flex;
   align-items: center;

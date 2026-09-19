@@ -77,6 +77,10 @@ type Item = {
   chosen?: string;
   skills?: string;
   portfolio?: string;
+  photo?: string;
+  portfolioImages?: string[];
+  cities?: string[];
+  transport?: boolean;
   rating?: number;
   profile?: string;
   created?: string;
@@ -98,6 +102,7 @@ const statusText = (s?: string) =>
     : s === "complete"
       ? "Завершено"
       : "Принимает отклики";
+const priceText = (value?: string) => value && /€|eur|евро/i.test(value) ? value : value ? `${value} €` : "";
 function Picker({
   label,
   value,
@@ -283,7 +288,15 @@ export default function Home() {
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
-    const values = Object.fromEntries(new FormData(form));
+    const values: Record<string, any> = Object.fromEntries(new FormData(form));
+    if (modal === 'profile') {
+      const photo = form.querySelector<HTMLInputElement>('input[name="photo"]')?.files?.[0];
+      const images = Array.from(form.querySelector<HTMLInputElement>('input[name="portfolioImages"]')?.files || []).slice(0, 8);
+      const read = (file: File) => new Promise<string>((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result));reader.onerror=reject;reader.readAsDataURL(file);});
+      if (photo) values.photo = await read(photo);
+      if (images.length) values.portfolioImages = await Promise.all(images.map(read));
+      values.cities = Array.from(form.querySelectorAll<HTMLInputElement>('input[name="cities"]:checked')).map(input=>input.value);
+    }
     const kind = modal === "chat" ? "message" : modal;
     if (
       await action(
@@ -583,7 +596,7 @@ export default function Home() {
                       </span>
                     )}
                     <div className="card-bottom">
-                      <strong>{item.price}</strong>
+                      <strong>{priceText(item.price)}</strong>
                       <button
                         aria-label={
                           t("Подробнее: ") + (item.title || item.name)
@@ -737,15 +750,19 @@ export default function Home() {
               <b>{detail.name}</b>
               <p>{detail.description}</p>
               <p>
-                {t(detail.city)} · {detail.price}
+                {detail.cities?.length ? detail.cities.map(city=>t(city)).join(' · ') : t(detail.city)} · {priceText(detail.price)}
               </p>
               {detail.kind === "profile" ? (
                 <>
+                  {detail.photo && <img className="profile-photo" src={detail.photo} alt={detail.name} />}
+                  {detail.transport && <p className="profile-feature">✓ {t('Собственный транспорт')}</p>}
+                  {detail.cities?.length ? <p className="profile-cities">{detail.cities.map(city=>t(city)).join(' · ')}</p> : null}
                   <h3>{t("Навыки ")}</h3>
                   <p>{detail.skills}</p>
                   <h3>{t("Портфолио ")}</h3>
-                  {detail.portfolio ? (
-                    detail.portfolio
+                  {(detail.portfolioImages?.length || detail.portfolio) ? (
+                    <div className="portfolio-gallery">{detail.portfolioImages?.map((image,i)=><img key={i} src={image} alt={`${t('Работа')} ${i+1}`} />)}
+                    {(detail.portfolio||'')
                       .split("\n")
                       .filter(Boolean)
                       .map((link, i) => (
@@ -759,8 +776,8 @@ export default function Home() {
                           {t("Работа ")}
                           {i + 1} <ArrowUpRight size={16} />
                         </a>
-                      ))
-                  ) : (
+                      ))}
+                    </div>) : (
                     <p>{t("Работы ещё не добавлены. ")}</p>
                   )}
                   <h3>
@@ -1032,6 +1049,12 @@ export default function Home() {
                     {modal === "profile" && (
                       <>
                         <label>
+                          {t("Фото профиля")}
+                          <input name="photo" type="file" accept="image/jpeg,image/png,image/webp" />
+                        </label>
+                        <label className="check-label"><input type="checkbox" name="transport" defaultChecked={selected?.transport}/>{t("Собственный транспорт")}</label>
+                        <fieldset className="city-picker"><legend>{t("Города работы")}</legend>{cities.map(city=><label key={city} className="check-label"><input type="checkbox" name="cities" value={city} defaultChecked={(selected?.cities||[selected?.city]).includes(city)}/>{t(city)}</label>)}</fieldset>
+                        <label>
                           {t("Навыки ")}
                           <input
                             name="skills"
@@ -1054,6 +1077,9 @@ export default function Home() {
                               "Каждая ссылка https:// с новой строки",
                             )}
                           />
+                        </label>
+                        <label>{t("Фото в портфолио")}
+                          <input name="portfolioImages" type="file" accept="image/jpeg,image/png,image/webp" multiple />
                         </label>
                       </>
                     )}
@@ -1126,3 +1152,4 @@ export default function Home() {
     </>
   );
 }
+

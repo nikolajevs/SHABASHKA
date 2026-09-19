@@ -195,6 +195,16 @@ export async function POST(request: Request) {
       )
         throw Error("Выберите категорию");
       if (action === "profile") {
+        const selectedCities = Array.isArray(b.cities) ? b.cities.filter((v: unknown): v is string => typeof v === "string" && cities.includes(v)).slice(0, cities.length) : [data.city as string];
+        if (!selectedCities.length) throw Error("Выберите населённый пункт Латвии");
+        data.city = selectedCities[0];
+        data.cities = selectedCities;
+        data.transport = b.transport === true || b.transport === "true";
+        for (const [key,max] of [["photo",500000],...["portfolioImages"].map(k=>[k,2000000])] as [string,number][]) {
+          if (b[key] && (typeof b[key] !== "string" || !b[key].startsWith("data:image/") || b[key].length > max)) throw Error("Изображение слишком большое или имеет неподдерживаемый формат");
+        }
+        data.photo = typeof b.photo === "string" ? b.photo : "";
+        data.portfolioImages = Array.isArray(b.portfolioImages) ? b.portfolioImages.filter((v: unknown): v is string => typeof v === "string" && v.startsWith("data:image/") && v.length <= 2000000).slice(0,8) : [];
         data.skills = value("skills", 500);
         const portfolio =
           typeof b.portfolio === "string" ? b.portfolio.trim() : "";
