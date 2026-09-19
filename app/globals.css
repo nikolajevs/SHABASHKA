@@ -695,8 +695,9 @@ button:disabled {
   font-size: 14px;
   text-decoration: underline;
 }
-.card-profile-photo{width:100%;height:100%;object-fit:cover;border-radius:50%}
-.card-bottom{flex-wrap:wrap;align-items:center}
+.card .avatar{overflow:hidden;aspect-ratio:1;min-width:54px;min-height:54px}
+.card-profile-photo{display:block;width:54px;height:54px;object-fit:cover;border-radius:50%}
+.card-bottom{flex-direction:column;align-items:flex-start;gap:12px}
 .card-bottom .card-open{width:auto;height:auto;padding:10px 14px;border-radius:9px;font-size:14px;white-space:normal;text-align:center}
 .portfolio-thumbnail{padding:0;border:0;background:transparent;cursor:zoom-in;border-radius:10px;overflow:hidden}
 .portfolio-thumbnail:focus-visible{outline:3px solid #718f3d;outline-offset:3px}
