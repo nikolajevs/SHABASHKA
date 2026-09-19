@@ -137,21 +137,96 @@
     "Sigulda",
     "Сігулда"
   ],
-  ["Марупе","Mārupe","Mārupe","Марупе"],
-  ["Адажи","Ādaži","Ādaži","Адажі"],
-  ["Саласпилс","Salaspils","Salaspils","Саласпілс"],
-  ["Бауска","Bauska","Bauska","Бауска"],
-  ["Тукумс","Tukums","Tukums","Тукумс"],
-  ["Кулдига","Kuldīga","Kuldīga","Кулдіга"],
-  ["Талси","Talsi","Talsi","Талсі"],
-  ["Салдус","Saldus","Saldus","Салдус"],
-  ["Добеле","Dobele","Dobele","Добеле"],
-  ["Гулбене","Gulbene","Gulbene","Гулбене"],
-  ["Мадона","Madona","Madona","Мадона"],
-  ["Алуксне","Alūksne","Alūksne","Алуксне"],
-  ["Лимбажи","Limbaži","Limbaži","Лімбажі"],
-  ["Прейли","Preiļi","Preiļi","Прейлі"],
-  ["Ливаны","Līvāni","Līvāni","Лівани"],
+  [
+    "Марупе",
+    "Mārupe",
+    "Mārupe",
+    "Марупе"
+  ],
+  [
+    "Адажи",
+    "Ādaži",
+    "Ādaži",
+    "Адажі"
+  ],
+  [
+    "Саласпилс",
+    "Salaspils",
+    "Salaspils",
+    "Саласпілс"
+  ],
+  [
+    "Бауска",
+    "Bauska",
+    "Bauska",
+    "Бауска"
+  ],
+  [
+    "Тукумс",
+    "Tukums",
+    "Tukums",
+    "Тукумс"
+  ],
+  [
+    "Кулдига",
+    "Kuldīga",
+    "Kuldīga",
+    "Кулдіга"
+  ],
+  [
+    "Талси",
+    "Talsi",
+    "Talsi",
+    "Талсі"
+  ],
+  [
+    "Салдус",
+    "Saldus",
+    "Saldus",
+    "Салдус"
+  ],
+  [
+    "Добеле",
+    "Dobele",
+    "Dobele",
+    "Добеле"
+  ],
+  [
+    "Гулбене",
+    "Gulbene",
+    "Gulbene",
+    "Гулбене"
+  ],
+  [
+    "Мадона",
+    "Madona",
+    "Madona",
+    "Мадона"
+  ],
+  [
+    "Алуксне",
+    "Alūksne",
+    "Alūksne",
+    "Алуксне"
+  ],
+  [
+    "Лимбажи",
+    "Limbaži",
+    "Limbaži",
+    "Лімбажі"
+  ],
+  [
+    "Прейли",
+    "Preiļi",
+    "Preiļi",
+    "Прейлі"
+  ],
+  [
+    "Ливаны",
+    "Līvāni",
+    "Līvāni",
+    "Лівани"
+  ],
   [
     "Другой населённый пункт Латвии",
     "Cita vieta Latvijā",
@@ -1891,31 +1966,455 @@
     "Nosūtīt apstiprinājuma e-pastu",
     "Send verification email",
     "Надіслати лист підтвердження"
-  ]
-  ,[
+  ],
+  [
     "Скрыть решение",
     "Paslēpt lēmumu",
     "Hide decision",
     "Приховати рішення"
   ],
-  ["Разделы кабинета","Kabineta sadaļas","Cabinet sections","Розділи кабінету"],
-  ["Мои задания","Mani uzdevumi","My tasks","Мої завдання"],
-  ["Мои отклики","Mani piedāvājumi","My offers","Мої відгуки"],
-  ["Мой профиль","Mans profils","My profile","Мій профіль"],
-  ["Решения по публикациям","Lēmumi par publikācijām","Listing decisions","Рішення щодо публікацій"]
-  ,["Фото профиля","Profila foto","Profile photo","Фото профілю"]
-  ,["Собственный транспорт","Paša transports","Own transport","Власний транспорт"]
-  ,["Города работы","Darba pilsētas","Work cities","Міста роботи"]
-  ,["Фото в портфолио","Portfolio foto","Portfolio photos","Фото в портфоліо"]
-  ,["Изображение слишком большое или имеет неподдерживаемый формат","Attēls ir pārāk liels vai tā formāts netiek atbalstīts","The image is too large or its format is unsupported","Зображення завелике або має непідтримуваний формат"]
-  ,["Не более 8 фотографий портфолио.","Ne vairāk kā 8 portfolio foto.","Up to 8 portfolio photos.","Не більше 8 фотографій портфоліо."]
-  ,["Посмотреть профиль","Skatīt profilu","View profile","Переглянути профіль"]
-  ,["Подробнее о задании","Par uzdevumu","View task","Докладніше про завдання"]
-  ,["Посмотреть отклик","Skatīt piedāvājumu","View offer","Переглянути пропозицію"]
-  ,["Увеличить фото {number}","Palielināt foto {number}","Enlarge photo {number}","Збільшити фото {number}"]
-  ,["Предыдущее фото","Iepriekšējais foto","Previous photo","Попереднє фото"]
-  ,["Следующее фото","Nākamais foto","Next photo","Наступне фото"]
-  ,["Увеличить","Palielināt","Zoom in","Збільшити"]
-  ,["Уменьшить","Samazināt","Zoom out","Зменшити"]
-  ,["Айзкраукле","Aizkraukle","Aizkraukle","Айзкраукле"],["Айзпуте","Aizpute","Aizpute","Айзпуте"],["Айнажи","Ainaži","Ainaži","Айнажі"],["Акнисте","Aknīste","Aknīste","Акністе"],["Алоя","Aloja","Aloja","Алоя"],["Апе","Ape","Ape","Апе"],["Ауце","Auce","Auce","Ауце"],["Балви","Balvi","Balvi","Балві"],["Балдоне","Baldone","Baldone","Балдоне"],["Баложи","Baloži","Baloži","Баложі"],["Броцены","Brocēni","Brocēni","Броцени"],["Валдемарпилс","Valdemārpils","Valdemārpils","Валдемарпілс"],["Валка","Valka","Valka","Валка"],["Вангажи","Vangaži","Vangaži","Вангажі"],["Варакляны","Varakļāni","Varakļāni","Варакляни"],["Виесите","Viesīte","Viesīte","Віесіте"],["Виляка","Viļaka","Viļaka","Віляка"],["Виляны","Viļāni","Viļāni","Віляни"],["Гробиня","Grobiņa","Grobiņa","Гробіня"],["Дагда","Dagda","Dagda","Дагда"],["Зилупе","Zilupe","Zilupe","Зілу́пе"],["Иецава","Iecava","Iecava","Іецава"],["Икшкиле","Ikšķile","Ikšķile","Ікшкіле"],["Илуксте","Ilūkste","Ilūkste","Ілуксте"],["Кандава","Kandava","Kandava","Кандава"],["Карсава","Kārsava","Kārsava","Карсава"],["Кегумс","Ķegums","Ķegums","Кегумс"],["Кекава","Ķekava","Ķekava","Кекава"],["Кокнесе","Koknese","Koknese","Кокнесе"],["Краслава","Krāslava","Krāslava","Краслава"],["Лигатне","Līgatne","Līgatne","Лігатне"],["Лиелварде","Lielvārde","Lielvārde","Ліелварде"],["Лубана","Lubāna","Lubāna","Лубана"],["Лудза","Ludza","Ludza","Лудза"],["Мазсалаца","Mazsalaca","Mazsalaca","Мазсалаца"],["Олайне","Olaine","Olaine","Олайне"],["Павилоста","Pāvilosta","Pāvilosta","Павілоста"],["Пилтене","Piltene","Piltene","Пілтене"],["Плявиняс","Pļaviņas","Pļaviņas","Плявіняс"],["Приекуле","Priekule","Priekule","Пріекуле"],["Руйиена","Rūjiena","Rūjiena","Руйієна"],["Сабиле","Sabile","Sabile","Сабіле"],["Салацгрива","Salacgrīva","Salacgrīva","Салацгріва"],["Саулкрасты","Saulkrasti","Saulkrasti","Саулкрасти"],["Седа","Seda","Seda","Седа"],["Скрунда","Skrunda","Skrunda","Скрунда"],["Смилтене","Smiltene","Smiltene","Смілтене"],["Стайцеле","Staicele","Staicele","Стайцеле"],["Стенде","Stende","Stende","Стенде"],["Стренчи","Strenči","Strenči","Стренчі"],["Субате","Subate","Subate","Субате"],["Царникава","Carnikava","Carnikava","Царнікава"],["Цесвайне","Cesvaine","Cesvaine","Цесвайне"],["Яунелгава","Jaunjelgava","Jaunjelgava","Яунелгава"]
+  [
+    "Разделы кабинета",
+    "Kabineta sadaļas",
+    "Cabinet sections",
+    "Розділи кабінету"
+  ],
+  [
+    "Мои задания",
+    "Mani uzdevumi",
+    "My tasks",
+    "Мої завдання"
+  ],
+  [
+    "Мои отклики",
+    "Mani piedāvājumi",
+    "My offers",
+    "Мої відгуки"
+  ],
+  [
+    "Мой профиль",
+    "Mans profils",
+    "My profile",
+    "Мій профіль"
+  ],
+  [
+    "Решения по публикациям",
+    "Lēmumi par publikācijām",
+    "Listing decisions",
+    "Рішення щодо публікацій"
+  ],
+  [
+    "Фото профиля",
+    "Profila foto",
+    "Profile photo",
+    "Фото профілю"
+  ],
+  [
+    "Собственный транспорт",
+    "Paša transports",
+    "Own transport",
+    "Власний транспорт"
+  ],
+  [
+    "Города работы",
+    "Darba pilsētas",
+    "Work cities",
+    "Міста роботи"
+  ],
+  [
+    "Фото в портфолио",
+    "Portfolio foto",
+    "Portfolio photos",
+    "Фото в портфоліо"
+  ],
+  [
+    "Изображение слишком большое или имеет неподдерживаемый формат",
+    "Attēls ir pārāk liels vai tā formāts netiek atbalstīts",
+    "The image is too large or its format is unsupported",
+    "Зображення завелике або має непідтримуваний формат"
+  ],
+  [
+    "Не более 8 фотографий портфолио.",
+    "Ne vairāk kā 8 portfolio foto.",
+    "Up to 8 portfolio photos.",
+    "Не більше 8 фотографій портфоліо."
+  ],
+  [
+    "Посмотреть профиль",
+    "Skatīt profilu",
+    "View profile",
+    "Переглянути профіль"
+  ],
+  [
+    "Подробнее о задании",
+    "Par uzdevumu",
+    "View task",
+    "Докладніше про завдання"
+  ],
+  [
+    "Посмотреть отклик",
+    "Skatīt piedāvājumu",
+    "View offer",
+    "Переглянути пропозицію"
+  ],
+  [
+    "Увеличить фото {number}",
+    "Palielināt foto {number}",
+    "Enlarge photo {number}",
+    "Збільшити фото {number}"
+  ],
+  [
+    "Предыдущее фото",
+    "Iepriekšējais foto",
+    "Previous photo",
+    "Попереднє фото"
+  ],
+  [
+    "Следующее фото",
+    "Nākamais foto",
+    "Next photo",
+    "Наступне фото"
+  ],
+  [
+    "Увеличить",
+    "Palielināt",
+    "Zoom in",
+    "Збільшити"
+  ],
+  [
+    "Уменьшить",
+    "Samazināt",
+    "Zoom out",
+    "Зменшити"
+  ],
+  [
+    "Айзкраукле",
+    "Aizkraukle",
+    "Aizkraukle",
+    "Айзкраукле"
+  ],
+  [
+    "Айзпуте",
+    "Aizpute",
+    "Aizpute",
+    "Айзпуте"
+  ],
+  [
+    "Айнажи",
+    "Ainaži",
+    "Ainaži",
+    "Айнажі"
+  ],
+  [
+    "Акнисте",
+    "Aknīste",
+    "Aknīste",
+    "Акністе"
+  ],
+  [
+    "Алоя",
+    "Aloja",
+    "Aloja",
+    "Алоя"
+  ],
+  [
+    "Апе",
+    "Ape",
+    "Ape",
+    "Апе"
+  ],
+  [
+    "Ауце",
+    "Auce",
+    "Auce",
+    "Ауце"
+  ],
+  [
+    "Балви",
+    "Balvi",
+    "Balvi",
+    "Балві"
+  ],
+  [
+    "Балдоне",
+    "Baldone",
+    "Baldone",
+    "Балдоне"
+  ],
+  [
+    "Баложи",
+    "Baloži",
+    "Baloži",
+    "Баложі"
+  ],
+  [
+    "Броцены",
+    "Brocēni",
+    "Brocēni",
+    "Броцени"
+  ],
+  [
+    "Валдемарпилс",
+    "Valdemārpils",
+    "Valdemārpils",
+    "Валдемарпілс"
+  ],
+  [
+    "Валка",
+    "Valka",
+    "Valka",
+    "Валка"
+  ],
+  [
+    "Вангажи",
+    "Vangaži",
+    "Vangaži",
+    "Вангажі"
+  ],
+  [
+    "Варакляны",
+    "Varakļāni",
+    "Varakļāni",
+    "Варакляни"
+  ],
+  [
+    "Виесите",
+    "Viesīte",
+    "Viesīte",
+    "Віесіте"
+  ],
+  [
+    "Виляка",
+    "Viļaka",
+    "Viļaka",
+    "Віляка"
+  ],
+  [
+    "Виляны",
+    "Viļāni",
+    "Viļāni",
+    "Віляни"
+  ],
+  [
+    "Гробиня",
+    "Grobiņa",
+    "Grobiņa",
+    "Гробіня"
+  ],
+  [
+    "Дагда",
+    "Dagda",
+    "Dagda",
+    "Дагда"
+  ],
+  [
+    "Зилупе",
+    "Zilupe",
+    "Zilupe",
+    "Зілу́пе"
+  ],
+  [
+    "Иецава",
+    "Iecava",
+    "Iecava",
+    "Іецава"
+  ],
+  [
+    "Икшкиле",
+    "Ikšķile",
+    "Ikšķile",
+    "Ікшкіле"
+  ],
+  [
+    "Илуксте",
+    "Ilūkste",
+    "Ilūkste",
+    "Ілуксте"
+  ],
+  [
+    "Кандава",
+    "Kandava",
+    "Kandava",
+    "Кандава"
+  ],
+  [
+    "Карсава",
+    "Kārsava",
+    "Kārsava",
+    "Карсава"
+  ],
+  [
+    "Кегумс",
+    "Ķegums",
+    "Ķegums",
+    "Кегумс"
+  ],
+  [
+    "Кекава",
+    "Ķekava",
+    "Ķekava",
+    "Кекава"
+  ],
+  [
+    "Кокнесе",
+    "Koknese",
+    "Koknese",
+    "Кокнесе"
+  ],
+  [
+    "Краслава",
+    "Krāslava",
+    "Krāslava",
+    "Краслава"
+  ],
+  [
+    "Лигатне",
+    "Līgatne",
+    "Līgatne",
+    "Лігатне"
+  ],
+  [
+    "Лиелварде",
+    "Lielvārde",
+    "Lielvārde",
+    "Ліелварде"
+  ],
+  [
+    "Лубана",
+    "Lubāna",
+    "Lubāna",
+    "Лубана"
+  ],
+  [
+    "Лудза",
+    "Ludza",
+    "Ludza",
+    "Лудза"
+  ],
+  [
+    "Мазсалаца",
+    "Mazsalaca",
+    "Mazsalaca",
+    "Мазсалаца"
+  ],
+  [
+    "Олайне",
+    "Olaine",
+    "Olaine",
+    "Олайне"
+  ],
+  [
+    "Павилоста",
+    "Pāvilosta",
+    "Pāvilosta",
+    "Павілоста"
+  ],
+  [
+    "Пилтене",
+    "Piltene",
+    "Piltene",
+    "Пілтене"
+  ],
+  [
+    "Плявиняс",
+    "Pļaviņas",
+    "Pļaviņas",
+    "Плявіняс"
+  ],
+  [
+    "Приекуле",
+    "Priekule",
+    "Priekule",
+    "Пріекуле"
+  ],
+  [
+    "Руйиена",
+    "Rūjiena",
+    "Rūjiena",
+    "Руйієна"
+  ],
+  [
+    "Сабиле",
+    "Sabile",
+    "Sabile",
+    "Сабіле"
+  ],
+  [
+    "Салацгрива",
+    "Salacgrīva",
+    "Salacgrīva",
+    "Салацгріва"
+  ],
+  [
+    "Саулкрасты",
+    "Saulkrasti",
+    "Saulkrasti",
+    "Саулкрасти"
+  ],
+  [
+    "Седа",
+    "Seda",
+    "Seda",
+    "Седа"
+  ],
+  [
+    "Скрунда",
+    "Skrunda",
+    "Skrunda",
+    "Скрунда"
+  ],
+  [
+    "Смилтене",
+    "Smiltene",
+    "Smiltene",
+    "Смілтене"
+  ],
+  [
+    "Стайцеле",
+    "Staicele",
+    "Staicele",
+    "Стайцеле"
+  ],
+  [
+    "Стенде",
+    "Stende",
+    "Stende",
+    "Стенде"
+  ],
+  [
+    "Стренчи",
+    "Strenči",
+    "Strenči",
+    "Стренчі"
+  ],
+  [
+    "Субате",
+    "Subate",
+    "Subate",
+    "Субате"
+  ],
+  [
+    "Царникава",
+    "Carnikava",
+    "Carnikava",
+    "Царнікава"
+  ],
+  [
+    "Цесвайне",
+    "Cesvaine",
+    "Cesvaine",
+    "Цесвайне"
+  ],
+  [
+    "Яунелгава",
+    "Jaunjelgava",
+    "Jaunjelgava",
+    "Яунелгава"
+  ],
+  [
+    "Изменить профиль",
+    "Rediģēt profilu",
+    "Edit profile",
+    "Редагувати профіль"
+  ]
 ]

@@ -616,6 +616,14 @@ export default function Home() {
                     )}
                     <div className="card-bottom">
                       <strong>{priceText(item.price)}</strong>
+                      {view === "mine" && mineTab === "profile" && item.kind === "profile" && item.mine && (
+                        <button
+                          className="outline card-open"
+                          onClick={() => open("profile", item)}
+                        >
+                          {t("Изменить профиль")}
+                        </button>
+                      )}
                       <button
                         className="outline card-open"
                         onClick={() => open("detail", item)}
