@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+const origin=process.env.TEST_ORIGIN || 'http://127.0.0.1:5175';
+if(!['localhost','127.0.0.1'].includes(new URL(origin).hostname))throw Error('Local tests only');
+const email=`mobile-${Date.now()}@example.test`,password='Mobile-test-password-123';
+async function call(path,body,token,status=200){const r=await fetch(origin+path,{method:body===undefined?'GET':'POST',headers:{'Content-Type':'application/json',...(token?{Authorization:'Bearer '+token}:{})},...(body===undefined?{}:{body:JSON.stringify(body)})});const data=await r.json();assert.equal(r.status,status,JSON.stringify(data));return data;}
+await call('/api/mobile/client/orders',undefined,null,401);
+await call('/api/mobile/auth',{action:'register',name:'Mobile Test',email,password,acceptTerms:false},null,400);
+const registered=await call('/api/mobile/auth',{action:'register',name:'Mobile Test',email,password,acceptTerms:true});assert.ok(registered.token);
+await call('/api/mobile/auth',{action:'login',email,password:'incorrect'},null,400);
+const login=await call('/api/mobile/auth',{action:'login',email,password});
+const web=await fetch(origin+'/api/auth',{method:'POST',headers:{origin,'Content-Type':'application/json'},body:JSON.stringify({action:'login',email,password})});assert.equal(web.status,200);
+assert.equal((await call('/api/mobile/auth',undefined,login.token)).user.email,email);
+const payload={requestId:crypto.randomUUID(),title:'Test order',description:'Fix a shelf',address:'Riga, test address',scheduledAt:'Tomorrow 14:00'};
+const order=await call('/api/mobile/client/orders',payload,login.token,201);
+const retry=await call('/api/mobile/client/orders',payload,login.token,201);assert.equal(order.id,retry.id);
+assert.equal((await call('/api/mobile/client/orders',undefined,login.token)).length,1);
+await call('/api/mobile/client/orders',{...payload,title:''},login.token,400);
+const second=await call('/api/mobile/auth',{action:'register',name:'Second',email:'other-'+email,password,acceptTerms:true});
+assert.equal((await call('/api/mobile/client/orders',undefined,second.token)).length,0);
+await call('/api/mobile/auth',{action:'logout'},login.token);
+await call('/api/mobile/auth',undefined,login.token,401);
+console.log('PASS registration, shared website login, wrong-password rejection, session, private order creation, retry deduplication, validation, ownership isolation, logout');

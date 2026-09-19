@@ -12,7 +12,8 @@
       "bundleIdentifier": "lv.gigs.client"
     },
     "plugins": [
-      "expo-status-bar"
+      "expo-status-bar",
+      "expo-secure-store"
     ]
   }
 }
