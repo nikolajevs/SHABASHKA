@@ -575,6 +575,18 @@ nav button {
   margin-bottom: 20px;
   border-radius: 12px;
 }
+/* In the personal cabinet the account card is the first element of the right column. */
+.content:has(.account) { grid-template-columns: minmax(0, 1fr); }
+.content:has(.account) > aside { display: none; }
+.content:has(.account) > section { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 0 30px; align-items: start; }
+.content:has(.account) > section > .account { grid-column: 2; grid-row: 1 / span 4; margin: 0; order: -1; }
+.content:has(.account) > section > .section-head,
+.content:has(.account) > section > .filters,
+.content:has(.account) > section > .feedback,
+.content:has(.account) > section > .cards,
+.content:has(.account) > section > [role="status"] { grid-column: 1; }
+.content:has(.account) .account-actions { align-items: stretch; flex-direction: column; }
+.content:has(.account) .account-actions > * { width: 100%; }
 .market-dialog {
   max-height: 90vh;
   overflow-y: auto;
@@ -666,6 +678,10 @@ button:disabled {
     padding: 10px;
     font-size: 14px;
   }
+  .content:has(.account) > section { display: block; }
+  .content:has(.account) > section > .account { margin-bottom: 20px; }
+  .content:has(.account) .account-actions { flex-direction: row; }
+  .content:has(.account) .account-actions > * { width: auto; }
 }
 .brand {
   font-size: 28px;
