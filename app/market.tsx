@@ -129,7 +129,7 @@ function Picker({
   );
 }
 export default function Home() {
-  const [authOpen,setAuthOpen]=useState(false),[authQueryHandled,setAuthQueryHandled]=useState(false);
+  const [authOpen,setAuthOpen]=useState(false),[authQueryHandled,setAuthQueryHandled]=useState(false),[hiddenDecisions,setHiddenDecisions]=useState<string[]>([]);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [deepLinkHandled,setDeepLinkHandled]=useState(false);
   const { locale, t, errorText } = useLanguage();
@@ -150,6 +150,8 @@ export default function Home() {
     [formCity, setFormCity] = useState("Рига"),
     [role, setRole] = useState("customer"),
     [rating, setRating] = useState("5");
+  useEffect(()=>{try{setHiddenDecisions(JSON.parse(localStorage.getItem('gigs_hidden_decisions')||'[]'));}catch{}} ,[]);
+  function hideDecision(id:string){const next=[...hiddenDecisions,id];setHiddenDecisions(next);try{localStorage.setItem('gigs_hidden_decisions',JSON.stringify(next));}catch{}}
   const refresh = useCallback(
     async (quiet = false) => {
       if (!quiet) setLoading(true);
@@ -527,7 +529,7 @@ export default function Home() {
                 </div>
               </div>
             )}
-            {view==='mine' && records.filter(r=>r.kind==='notice'&&r.mine).map(r=><div className="feedback" key={r.id}><strong>{t('Решение по публикации')}</strong><p>{r.description}</p><p>{t('Основание')}: {r.basis}</p><p>{t('Решение принято человеком. Если вы не согласны, отправьте оператору номер обращения и обоснование пересмотра.')} {r.parent}</p><a href="mailto:igors.nikos@gmail.com">igors.nikos@gmail.com</a></div>)}
+            {view==='mine' && records.filter(r=>r.kind==='notice'&&r.mine&&!hiddenDecisions.includes(r.id)).map(r=><div className="feedback" key={r.id}><div className="feedback-heading"><strong>{t('Решение по публикации')}</strong><button type="button" className="auth-link" onClick={()=>hideDecision(r.id)}>{t('Скрыть решение')}</button></div><p>{r.description}</p><p>{t('Основание')}: {r.basis}</p><p>{t('Решение принято человеком. Если вы не согласны, отправьте оператору номер обращения и обоснование пересмотра.')} {r.parent}</p><a href="mailto:igors.nikos@gmail.com">igors.nikos@gmail.com</a></div>)}
             {loading && <p role="status">{t("Загружаем данные\u2026 ")}</p>}
             <div className="cards">
               {items.map((item, i) => (
