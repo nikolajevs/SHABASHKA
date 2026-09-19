@@ -1,4 +1,5 @@
 "use client";
+import {prepareProfileImage} from './profile-image';
 import { useLanguage, LanguageSwitcher, localeTags } from "./i18n/provider";
 import {ReportLink} from './compliance-ui';
 import {AuthDialog,AuthLogout,AuthPanel,EmailVerification} from './auth-ui';
@@ -287,14 +288,21 @@ export default function Home() {
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
-    const values: Record<string, any> = Object.fromEntries(new FormData(form));
+    if(busy)return;
+    const values: Record<string, unknown> = Object.fromEntries(new FormData(form));
     if (modal === 'profile') {
+      setBusy(true);setError('');
+      try {
+      delete values.photo;delete values.portfolioImages;
       const photo = form.querySelector<HTMLInputElement>('input[name="photo"]')?.files?.[0];
-      const images = Array.from(form.querySelector<HTMLInputElement>('input[name="portfolioImages"]')?.files || []).slice(0, 8);
-      const read = (file: File) => new Promise<string>((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(String(reader.result));reader.onerror=reject;reader.readAsDataURL(file);});
-      if (photo) values.photo = await read(photo);
-      if (images.length) values.portfolioImages = await Promise.all(images.map(read));
+      const images = Array.from(form.querySelector<HTMLInputElement>('input[name="portfolioImages"]')?.files || []);
+      if(images.length>8)throw Error('Не более 8 фотографий портфолио.');
+      if (photo) values.photo = await prepareProfileImage(photo);
+      if (images.length) {values.portfolioImages=[];for(const file of images)(values.portfolioImages as string[]).push(await prepareProfileImage(file));}
+      values.transport=new FormData(form).get('transport')==='on';
       values.cities = Array.from(form.querySelectorAll<HTMLInputElement>('input[name="cities"]:checked')).map(input=>input.value);
+      if(!(values.cities as string[]).length)throw Error('Выберите населённый пункт Латвии');
+      }catch(e){setError(e instanceof Error?e.message:'Не удалось сохранить');setBusy(false);return;}
     }
     const kind = modal === "chat" ? "message" : modal;
     if (
@@ -1046,7 +1054,7 @@ export default function Home() {
                           <input name="photo" type="file" accept="image/jpeg,image/png,image/webp" />
                         </label>
                         <label className="check-label"><input type="checkbox" name="transport" defaultChecked={selected?.transport}/>{t("Собственный транспорт")}</label>
-                        <fieldset className="city-picker"><legend>{t("Города работы")}</legend>{cities.map(city=><label key={city} className="check-label"><input type="checkbox" name="cities" value={city} defaultChecked={(selected?.cities||[selected?.city]).includes(city)}/>{t(city)}</label>)}</fieldset>
+                        <fieldset className="city-picker"><legend>{t("Города работы")}</legend>{cities.map(city=><label key={city} className="check-label"><input type="checkbox" name="cities" value={city} defaultChecked={(selected?.cities||[selected?.city||formCity]).includes(city)}/>{t(city)}</label>)}</fieldset>
                         <label>
                           {t("Навыки ")}
                           <input

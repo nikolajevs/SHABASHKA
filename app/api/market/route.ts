@@ -100,10 +100,11 @@ export async function POST(request: Request) {
       );
     const db = database();
     if (await blocked(u.userId)) return reply({error:"Ваш аккаунт заблокирован администратором."}, {status:403});
-    if (raw.length > 16000)
+    if (raw.length > 1400000)
       return reply({ error: "Слишком большой запрос" }, { status: 413 });
     const b = JSON.parse(raw) as Record<string, unknown>;
     const action = b.action;
+    if(action!=='profile'&&raw.length>16000)return reply({error:'Слишком большой запрос'},{status:413});
     const currentState = await accountState(u.userId);
     if (currentState?.inactive && !(currentState.erased && action==='register' && b.reopen===true))
       return reply({error:"Аккаунт неактивен. Откройте настройки данных."},{status:403});
@@ -200,11 +201,13 @@ export async function POST(request: Request) {
         data.city = selectedCities[0];
         data.cities = selectedCities;
         data.transport = b.transport === true || b.transport === "true";
-        for (const [key,max] of [["photo",500000],...["portfolioImages"].map(k=>[k,2000000])] as [string,number][]) {
-          if (b[key] && (typeof b[key] !== "string" || !b[key].startsWith("data:image/") || b[key].length > max)) throw Error("Изображение слишком большое или имеет неподдерживаемый формат");
-        }
-        data.photo = typeof b.photo === "string" ? b.photo : "";
-        data.portfolioImages = Array.isArray(b.portfolioImages) ? b.portfolioImages.filter((v: unknown): v is string => typeof v === "string" && v.startsWith("data:image/") && v.length <= 2000000).slice(0,8) : [];
+        const previous=await db.prepare("SELECT data FROM records WHERE id=? AND owner=? AND kind='profile'").bind('profile:'+u.userId,u.userId).first<{data:string}>();
+        const old=previous?JSON.parse(previous.data):{};
+        const validImage=(v:unknown)=>typeof v==='string'&&v.length<=140000&&/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(v);
+        if(b.photo!==undefined&&b.photo!==''&&!validImage(b.photo))throw Error('Изображение слишком большое или имеет неподдерживаемый формат');
+        if(b.portfolioImages!==undefined&&(!Array.isArray(b.portfolioImages)||b.portfolioImages.length>8||!b.portfolioImages.every(validImage)))throw Error('Изображение слишком большое или имеет неподдерживаемый формат');
+        data.photo=b.photo===undefined?(old.photo||''):b.photo;
+        data.portfolioImages=b.portfolioImages===undefined?(old.portfolioImages||[]):b.portfolioImages;
         data.skills = value("skills", 500);
         const portfolio =
           typeof b.portfolio === "string" ? b.portfolio.trim() : "";
