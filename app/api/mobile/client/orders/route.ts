@@ -1,5 +1,6 @@
 import { marketDatabase } from '../../../../admin-access';
 import { mobileJson, mobileUser } from '../../../../mobile-auth';
+import { ORDER_CATEGORIES } from '../../../../../mobile/shared/order-catalog';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
@@ -16,6 +17,21 @@ export async function POST(request: Request) {
     const raw = await request.text();
     if (raw.length > 950000) return mobileJson({ error: 'Фотографии слишком большие.' }, 413);
     const body = JSON.parse(raw);
+    // New fields are optional only for older installed clients. Validate every supplied value.
+    if (body.category !== undefined && !(ORDER_CATEGORIES as readonly unknown[]).includes(body.category)) return mobileJson({ error: 'Выберите категорию из списка.' }, 400);
+    if (body.budgetCents !== undefined && (!Number.isSafeInteger(body.budgetCents) || body.budgetCents < 1 || body.budgetCents > 10000000 || body.currency !== 'EUR')) return mobileJson({ error: 'Укажите корректный бюджет в евро.' }, 400);
+    if (body.currency !== undefined && (body.currency !== 'EUR' || body.budgetCents === undefined)) return mobileJson({ error: 'Укажите корректный бюджет в евро.' }, 400);
+    for (const [key,max] of [['city',100],['street',300]] as const) if (body[key] !== undefined && (typeof body[key] !== 'string' || body[key].length > max || (key==='city'&&!body[key].trim()))) return mobileJson({ error: 'Проверьте город и адрес.' }, 400);
+    const point = body.location;
+    if (point !== undefined && point !== null && (typeof point !== 'object' || !Number.isFinite(point.latitude) || !Number.isFinite(point.longitude) || point.latitude < -90 || point.latitude > 90 || point.longitude < -180 || point.longitude > 180)) return mobileJson({ error: 'Некорректная точка на карте.' }, 400);
+    if (body.city !== undefined && !body.street?.trim() && !point) return mobileJson({ error: 'Укажите улицу и дом или точку на карте.' }, 400);
+    const details = {
+      ...(body.category !== undefined ? { category: body.category } : {}),
+      ...(body.budgetCents !== undefined ? { budgetCents: body.budgetCents, currency: 'EUR' } : {}),
+      ...(body.city !== undefined ? { city: body.city.trim() } : {}),
+      ...(body.street !== undefined ? { street: body.street.trim() } : {}),
+      ...(point ? { location: { latitude: point.latitude, longitude: point.longitude } } : {}),
+    };
     const limits: Record<string, number> = { title: 120, description: 4000, address: 500 };
     for (const [key, max] of Object.entries(limits)) {
       if (typeof body[key] !== 'string' || !body[key].trim() || body[key].length > max) return mobileJson({ error: 'Заполните название, описание, адрес и желаемое время.' }, 400);
@@ -32,7 +48,7 @@ export async function POST(request: Request) {
     })) return mobileJson({ error: 'Можно приложить не более 5 фотографий JPEG допустимого размера.' }, 400);
     if (typeof body.requestId !== 'string' || !/^[a-f0-9-]{36}$/.test(body.requestId)) return mobileJson({ error: 'Некорректный номер запроса.' }, 400);
     const id = 'mobile-order:' + user.userId + ':' + body.requestId;
-    const data = { title: body.title.trim(), description: body.description.trim(), address: body.address.trim(), scheduledAt: hasRange ? `${body.dateFrom} — ${body.dateTo}` : body.scheduledAt.trim(), ...(hasRange ? { dateFrom: body.dateFrom, dateTo: body.dateTo } : {}), photos, status: 'new', customerName: user.displayName };
+    const data = { ...details, title: body.title.trim(), description: body.description.trim(), address: body.address.trim(), scheduledAt: hasRange ? `${body.dateFrom} — ${body.dateTo}` : body.scheduledAt.trim(), ...(hasRange ? { dateFrom: body.dateFrom, dateTo: body.dateTo } : {}), photos, status: 'new', customerName: user.displayName };
     const db = marketDatabase();
     await db.prepare("INSERT INTO records(id,kind,owner,data,created) VALUES (?,'mobile-order',?,?,?) ON CONFLICT(id) DO NOTHING").bind(id, user.userId, JSON.stringify(data), new Date().toISOString()).run();
     const row = await db.prepare("SELECT data,created FROM records WHERE id=? AND owner=? AND kind='mobile-order'").bind(id, user.userId).first<{ data: string; created: string }>();

@@ -4,13 +4,16 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, KeyboardAvoidingView, Linking, Platform, Pressable, SafeAreaView, ScrollView, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { api, ApiError, restoreToken, saveToken } from './api';
 import { DateRange, Photos, pickOrderPhotos, dateKey, dateLabel } from './order-fields';
+import { CategoryField, AddressFields } from './address-fields';
+import type { OrderPoint } from '../shared/order-catalog';
 import type { Order } from '../shared/types';
 type User={name:string;email:string};
 export default function App(){
  const [user,setUser]=useState<User|null>(null),[ready,setReady]=useState(false),[busy,setBusy]=useState(false);
  const [mode,setMode]=useState<'login'|'register'|'forgot'>('login'),[tab,setTab]=useState<'create'|'orders'>('create');
  const [name,setName]=useState(''),[email,setEmail]=useState(''),[password,setPassword]=useState(''),[confirmation,setConfirmation]=useState(''),[accepted,setAccepted]=useState(false);
- const [title,setTitle]=useState(''),[description,setDescription]=useState(''),[address,setAddress]=useState(''),[dateFrom,setDateFrom]=useState(''),[dateTo,setDateTo]=useState('');
+ const [title,setTitle]=useState(''),[description,setDescription]=useState(''),[city,setCity]=useState(''),[street,setStreet]=useState(''),[category,setCategory]=useState(''),[budget,setBudget]=useState(''),[dateFrom,setDateFrom]=useState(''),[dateTo,setDateTo]=useState('');
+ const [point,setPoint]=useState<OrderPoint|null>(null);
  const [photos,setPhotos]=useState<string[]>([]);
  const [requestId,setRequestId]=useState(()=>Crypto.randomUUID()),[orders,setOrders]=useState<Order[]>([]),[error,setError]=useState(''),[notice,setNotice]=useState('');
  useEffect(()=>{(async()=>{try{if(await restoreToken())setUser((await api<{user:User}>('/mobile/auth')).user);}catch(e){if(e instanceof ApiError&&e.status===401)await saveToken(null);else setError(e instanceof Error?e.message:'Не удалось восстановить вход.');}finally{setReady(true);}})();},[]);
@@ -23,11 +26,16 @@ export default function App(){
   await saveToken(result.token);setUser(result.user);setPassword('');setConfirmation('');
  });}
  async function loadOrders(){setOrders(await api<Order[]>('/mobile/client/orders'));}
- function clearOrder(){setTitle('');setDescription('');setAddress('');setDateFrom('');setDateTo('');setPhotos([]);setRequestId(Crypto.randomUUID());}
+ function clearOrder(){setTitle('');setDescription('');setCity('');setStreet('');setCategory('');setBudget('');setPoint(null);setDateFrom('');setDateTo('');setPhotos([]);setRequestId(Crypto.randomUUID());}
  async function submit(){await run(async()=>{
-  if(![title,description,address,dateFrom,dateTo].every(v=>v.trim()))throw Error('Заполните все поля заказа.');
+  if(![title,description,city,category,budget,dateFrom,dateTo].every(v=>v.trim()))throw Error('Заполните все поля заказа.');
   if(dateTo<dateFrom||dateFrom<dateKey(new Date()))throw Error('Выберите корректный диапазон дат, начиная с сегодняшнего дня.');
-  const order=await api<Order>('/mobile/client/orders',{title,description,address,dateFrom,dateTo,photos,requestId});
+  if(!street.trim()&&!point)throw Error('Укажите улицу и дом или отметьте место на карте.');
+  const normalizedBudget=budget.trim().replace(',','.');
+  if(!/^\d{1,6}(\.\d{1,2})?$/.test(normalizedBudget)||Number(normalizedBudget)<=0||Number(normalizedBudget)>100000)throw Error('Укажите бюджет от 0,01 до 100 000 евро, не более двух знаков после запятой.');
+  const budgetCents=Math.round(Number(normalizedBudget)*100);
+  const address=[city.trim(),street.trim()||'Точка на карте'].join(', ');
+  const order=await api<Order>('/mobile/client/orders',{title,category,description,address,city:city.trim(),street:street.trim(),location:point,budgetCents,currency:'EUR',dateFrom,dateTo,photos,requestId});
   setOrders(current=>[order,...current.filter(item=>item.id!==order.id)]);clearOrder();setTab('orders');setNotice('Заказ создан.');
  });}
  const button=(label:string,onPress:()=>void,secondary=false)=><Pressable accessibilityRole="button" disabled={busy} onPress={onPress} style={[styles.button,secondary&&styles.secondary,busy&&{opacity:0.5}]}><Text style={styles.buttonText}>{label}</Text></Pressable>;
@@ -49,8 +57,8 @@ export default function App(){
  <Text style={styles.heading}>Здравствуйте, {user.name}</Text>
  <View style={styles.row}>{button('Новый заказ',()=>{setTab('create');setError('');},tab!=='create')}{button('Мои заказы',()=>{setTab('orders');void run(loadOrders);},tab!=='orders')}</View>
  {tab==='create'?<><Text style={styles.heading}>Что нужно сделать?</Text>
- {field('Название заказа',title,setTitle,{maxLength:120})}{field('Описание',description,setDescription,{multiline:true,maxLength:4000})}<Text style={styles.label}>Фото к заказу ({photos.length}/5)</Text><Photos photos={photos} disabled={busy} onRemove={index=>setPhotos(current=>current.filter((_,i)=>i!==index))}/>{photos.length<5&&button('Добавить фото',()=>void run(async()=>{const added=await pickOrderPhotos(5-photos.length);setPhotos(current=>[...current,...added].slice(0,5));}),true)}{field('Адрес в Латвии',address,setAddress,{maxLength:500})}<DateRange from={dateFrom} to={dateTo} disabled={busy} onChange={(from,to)=>{setDateFrom(from);setDateTo(to);}}/>{button('Создать заказ',submit)}
- </>:<>{button('Обновить заказы',()=>void run(loadOrders),true)}{!orders.length&&!busy&&<Text style={styles.muted}>У вас пока нет заказов.</Text>}{orders.map(order=><View key={order.id} style={styles.card}><Text style={styles.title}>{order.title}</Text><Text style={styles.badge}>{({new:'Новый',accepted:'Принят',on_the_way:'В пути',in_progress:'Выполняется',completed:'Завершён',cancelled:'Отменён'})[order.status]||order.status}</Text><Text>{order.description}</Text><Text style={styles.muted}>{order.address}</Text><Text style={styles.muted}>{order.dateFrom&&order.dateTo?dateLabel(order.dateFrom)+' — '+dateLabel(order.dateTo):order.scheduledAt}</Text>{!!order.photos?.length&&<Photos photos={order.photos}/>}</View>)}</>}
+ {field('Название заказа',title,setTitle,{maxLength:120})}<CategoryField value={category} onChange={setCategory} disabled={busy}/>{field('Описание',description,setDescription,{multiline:true,maxLength:4000})}<Text style={styles.label}>Фото к заказу ({photos.length}/5)</Text><Photos photos={photos} disabled={busy} onRemove={index=>setPhotos(current=>current.filter((_,i)=>i!==index))}/>{photos.length<5&&button('Добавить фото',()=>void run(async()=>{const added=await pickOrderPhotos(5-photos.length);setPhotos(current=>[...current,...added].slice(0,5));}),true)}<AddressFields city={city} street={street} point={point} disabled={busy} onChange={(c,s,p)=>{setCity(c);setStreet(s);setPoint(p);}}/><DateRange from={dateFrom} to={dateTo} disabled={busy} onChange={(from,to)=>{setDateFrom(from);setDateTo(to);}}/>{field('Бюджет заказа, €',budget,setBudget,{keyboardType:'decimal-pad',placeholder:'Например: 50,00',maxLength:9})}{button('Создать заказ',submit)}
+ </>:<>{button('Обновить заказы',()=>void run(loadOrders),true)}{!orders.length&&!busy&&<Text style={styles.muted}>У вас пока нет заказов.</Text>}{orders.map(order=><View key={order.id} style={styles.card}><Text style={styles.title}>{order.title}</Text><Text style={styles.badge}>{({new:'Новый',accepted:'Принят',on_the_way:'В пути',in_progress:'Выполняется',completed:'Завершён',cancelled:'Отменён'})[order.status]||order.status}</Text>{order.category&&<Text style={styles.badge}>{order.category}</Text>}{order.budgetCents!==undefined&&<Text style={styles.title}>{(order.budgetCents/100).toFixed(2).replace('.',',')} €</Text>}<Text>{order.description}</Text><Text style={styles.muted}>{order.address}</Text>{order.location&&<Text style={styles.link} onPress={()=>Linking.openURL('https://www.google.com/maps/search/?api=1&query='+order.location!.latitude+','+order.location!.longitude)}>Открыть место на карте</Text>}<Text style={styles.muted}>{order.dateFrom&&order.dateTo?dateLabel(order.dateFrom)+' — '+dateLabel(order.dateTo):order.scheduledAt}</Text>{!!order.photos?.length&&<Photos photos={order.photos}/>}</View>)}</>}
  {button('Выйти',()=>void run(async()=>{await api('/mobile/auth',{action:'logout'});await saveToken(null);setUser(null);setOrders([]);clearOrder();}),true)}
  </>}
  {busy&&<ActivityIndicator/>}{!!error&&<Text accessibilityRole="alert" style={styles.error}>{error}</Text>}{!!notice&&<Text style={styles.notice}>{notice}</Text>}

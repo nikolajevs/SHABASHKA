@@ -26,8 +26,15 @@ await call('/api/mobile/client/orders',{...range,dateTo:'2099-09-30'},login.toke
 await call('/api/mobile/client/orders',{...range,dateFrom:'2099-02-30'},login.token,400);
 await call('/api/mobile/client/orders',{...range,dateTo:undefined},login.token,400);
 await call('/api/mobile/client/orders',{...range,requestId:crypto.randomUUID(),dateTo:range.dateFrom,photos:[]},login.token,201);
+const full={...range,requestId:crypto.randomUUID(),photos:[],category:'Ремонт',city:'Рига',street:'Brīvības iela 10',location:{latitude:56.95,longitude:24.11},budgetCents:5050,currency:'EUR'};
+const enriched=await call('/api/mobile/client/orders',full,login.token,201);
+assert.equal(enriched.budgetCents,5050);assert.equal(enriched.currency,'EUR');assert.equal(enriched.category,'Ремонт');assert.deepEqual(enriched.location,full.location);
+const saved=(await call('/api/mobile/client/orders',undefined,login.token)).find(x=>x.id===enriched.id);assert.equal(saved.budgetCents,5050);assert.equal(saved.city,'Рига');assert.deepEqual(saved.location,full.location);
+for(const invalid of [{category:'invalid'},{budgetCents:-1},{budgetCents:1.5},{currency:'USD'},{location:{latitude:999,longitude:24}},{location:{latitude:'56',longitude:24}},{street:'',location:null}])await call('/api/mobile/client/orders',{...full,...invalid},login.token,400);
+await call('/api/mobile/client/orders',{...full,requestId:crypto.randomUUID(),street:''},login.token,201);
+await call('/api/mobile/client/orders',{...full,requestId:crypto.randomUUID(),location:null},login.token,201);
 const second=await call('/api/mobile/auth',{action:'register',name:'Second',email:'other-'+email,password,acceptTerms:true});
 assert.equal((await call('/api/mobile/client/orders',undefined,second.token)).length,0);
 await call('/api/mobile/auth',{action:'logout'},login.token);
 await call('/api/mobile/auth',undefined,login.token,401);
-console.log('PASS registration, shared website login, wrong-password rejection, session, private order creation, retry deduplication, validation, ownership isolation, logout');
+console.log('PASS registration, shared website login, wrong-password rejection, session, private order creation, retry deduplication, validation, photos, dates, category, EUR budget, map coordinates, ownership isolation, logout');
