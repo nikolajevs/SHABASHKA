@@ -21,6 +21,13 @@ import {
   RefreshCw,
   Star,
   MessageCircle,
+  Camera,
+  Dumbbell,
+  HeartPulse,
+  Shirt,
+  Leaf,
+  HandHelping,
+  BriefcaseBusiness,
 } from "lucide-react";
 import {
   Dialog,
@@ -39,13 +46,20 @@ import {
 } from "@/components/ui/select";
 const categories = [
   ["Все услуги", Grid2X2],
-  ["Ремонт", Wrench],
-  ["Уборка", Sparkles],
-  ["Обучение", GraduationCap],
   ["IT и дизайн", Monitor],
-  ["Доставка", Truck],
-  ["Красота", Scissors],
   ["Для животных", PawPrint],
+  ["Другое", Grid2X2],
+  ["Красота и здоровье", HeartPulse],
+  ["Одежда", Shirt],
+  ["Обучение", GraduationCap],
+  ["Переезд и Доставка", Truck],
+  ["Разовая работа и подработка", BriefcaseBusiness],
+  ["Ремонт", Wrench],
+  ["Сад и двор", Leaf],
+  ["Спорт", Dumbbell],
+  ["Уборка помещений", Sparkles],
+  ["Уход и помощь", HandHelping],
+  ["Фото и видео", Camera],
 ] as const;
 const cities = [
   "Рига",
