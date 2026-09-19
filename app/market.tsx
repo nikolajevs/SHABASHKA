@@ -808,12 +808,6 @@ export default function Home() {
                       <p>{r.description}</p>
                     </div>
                   ))}
-                  <button
-                    className="primary"
-                    onClick={() => open("task", detail)}
-                  >
-                    {t("Создать задание в этой категории ")}
-                  </button>
                 </>
               ) : detail.kind === "bid" ? (
                 <>
