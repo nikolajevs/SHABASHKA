@@ -121,6 +121,7 @@ type Item = {
   portfolio?: string;
   photo?: string;
   portfolioImages?: string[];
+  images?: string[];
   cities?: string[];
   transport?: boolean;
   rating?: number;
@@ -180,6 +181,7 @@ export default function Home() {
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [portfolioToKeep, setPortfolioToKeep] = useState<string[]>([]);
   const [profilePhotoPreview, setProfilePhotoPreview] = useState("");
+  const [taskPhotos, setTaskPhotos] = useState<{ file: File; url: string }[]>([]);
   const [citySearch, setCitySearch] = useState("");
   const [deepLinkHandled,setDeepLinkHandled]=useState(false);
   const { locale, t, errorText } = useLanguage();
@@ -286,10 +288,27 @@ export default function Home() {
     setSelected(item || null);
     setPortfolioToKeep(item?.portfolioImages || []);
     setProfilePhotoPreview(item?.photo || "");
+    setTaskPhotos((current) => {
+      current.forEach((p) => URL.revokeObjectURL(p.url));
+      return [];
+    });
     setCitySearch("");
     setFormCategory(item?.category || "Ремонт");
     setFormCity(item?.city && cities.includes(item.city) ? item.city : "Рига");
     setModal(kind);
+  }
+  function addTaskPhotos(fileList: FileList | null) {
+    if (!fileList || !fileList.length) return;
+    setTaskPhotos((current) =>
+      [...current, ...Array.from(fileList).map((file) => ({ file, url: URL.createObjectURL(file) }))].slice(0, 10),
+    );
+  }
+  function removeTaskPhoto(index: number) {
+    setTaskPhotos((current) => {
+      const removed = current[index];
+      if (removed) URL.revokeObjectURL(removed.url);
+      return current.filter((_, i) => i !== index);
+    });
   }
   function taskDates(item: Item) {
     if (!item.dateFrom || !item.dateTo) return t('Сроки не указаны');
@@ -371,6 +390,16 @@ export default function Home() {
       values.cities = Array.from(form.querySelectorAll<HTMLInputElement>('input[name="cities"]:checked')).map(input=>input.value);
       if(!(values.cities as string[]).length)throw Error('Выберите населённый пункт Латвии');
       }catch(e){setError(e instanceof Error?e.message:'Не удалось сохранить');setBusy(false);return;}
+    }
+    if (modal === 'task') {
+      setBusy(true);setError('');
+      try {
+        values.transport = new FormData(form).get('transport') === 'on';
+        if (taskPhotos.length > 10) throw Error('Не более 10 фотографий.');
+        const images: string[] = [];
+        for (const { file } of taskPhotos) images.push(await prepareProfileImage(file));
+        values.images = images;
+      } catch (e) { setError(e instanceof Error ? e.message : 'Не удалось сохранить'); setBusy(false); return; }
     }
     const kind = modal === "chat" ? "message" : modal;
     if (
@@ -1019,6 +1048,12 @@ export default function Home() {
                       <CalendarDays size={18} />
                       <div><span className="fact-label">{t("Срок выполнения")}</span><span className="fact-value">{taskDates(detail)}</span></div>
                     </div>
+                    {detail.transport && (
+                      <div className="fact-card fact-card-col">
+                        <Truck size={18} />
+                        <div><span className="fact-label">{t("Транспорт")}</span><span className="fact-value">{t("Нужен свой транспорт")}</span></div>
+                      </div>
+                    )}
                     {detail.mine&&<div className="fact-card fact-card-col">
                       <MessageCircle size={18} />
                       <div><span className="fact-label">{t("Отклики")}</span><span className="fact-value">{records.filter((r) => r.kind === "bid" && r.parent === detail.id).length}</span></div>
@@ -1029,6 +1064,12 @@ export default function Home() {
                     </div>
                   </div>
                   {detail.description&&<section className="task-description-section"><h4 className="profile-view-heading">{t('Описание')}</h4><p className="task-view-lead">{detail.description}</p></section>}
+                  {!!detail.images?.length && (
+                    <section className="task-description-section">
+                      <h4 className="profile-view-heading">{t("Фото задания")}</h4>
+                      <PortfolioGallery images={detail.images} />
+                    </section>
+                  )}
                   <div className="task-view-actions">
                   {!detail.mine && !detail.deleted && detail.status === "open" && (
                     <button
@@ -1224,6 +1265,13 @@ export default function Home() {
                           onChange={setFormCity}
                           values={cities}
                         />
+                        <label className="check-card">
+                          <input type="checkbox" name="transport" />
+                          <span>
+                            <strong>{t("Нужен свой транспорт")}</strong>
+                            <small>{t("Чтобы добраться до места выполнения заказа")}</small>
+                          </span>
+                        </label>
                       </>
                     )}
                     {modal === "profile" && (
@@ -1403,6 +1451,46 @@ export default function Home() {
                           rows={modal === "chat" ? 2 : 4}
                         />
                       </label>
+                    )}
+                    {modal === "task" && (
+                      <section className="form-section">
+                        <h4 className="form-section-title">{t("Фото задания")}</h4>
+                        {!!taskPhotos.length && (
+                          <div className="portfolio-edit-grid">
+                            {taskPhotos.map((photo, index) => (
+                              <div className="portfolio-edit-item" key={photo.url}>
+                                <img src={photo.url} alt={`${t("Фото задания")} ${index + 1}`} />
+                                <button
+                                  type="button"
+                                  className="portfolio-remove"
+                                  aria-label={t("Удалить фото")}
+                                  onClick={() => removeTaskPhoto(index)}
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        {taskPhotos.length < 10 && (
+                          <label className="file-dropzone">
+                            <Camera size={22} />
+                            <span>
+                              <strong>{t("Добавить фото")}</strong>
+                              <small>{t("До 10 фотографий, JPG · PNG · WebP")}</small>
+                            </span>
+                            <input
+                              type="file"
+                              accept="image/jpeg,image/png,image/webp"
+                              multiple
+                              onChange={(e) => {
+                                addTaskPhotos(e.currentTarget.files);
+                                e.currentTarget.value = "";
+                              }}
+                            />
+                          </label>
+                        )}
+                      </section>
                     )}
                     {modal==='task'&&<fieldset className="task-date-fields"><legend>{t('Срок выполнения')}</legend><label>{t('Дата начала')}<input type="date" name="dateFrom" required onChange={e=>{const end=e.currentTarget.form?.elements.namedItem('dateTo') as HTMLInputElement|null;if(end)end.min=e.currentTarget.value;}}/></label><label>{t('Дата окончания')}<input type="date" name="dateTo" required/></label></fieldset>}
                   </>
