@@ -534,7 +534,7 @@ export default function Home() {
                   <TabsTrigger value="mine">{t("Мой кабинет")}</TabsTrigger>
                 </TabsList>
               </Tabs>
-              <Select value={city} onValueChange={setCity}>
+              {view !== 'mine' && <Select value={city} onValueChange={setCity}>
                 <SelectTrigger aria-label={t("Город")}>
                   <SelectValue />
                 </SelectTrigger>
@@ -545,7 +545,7 @@ export default function Home() {
                     </SelectItem>
                   ))}
                 </SelectContent>
-              </Select>
+              </Select>}
             </div>
             {view === "mine" && (
               <div className="account">
@@ -609,6 +609,7 @@ export default function Home() {
             {view === 'mine' && <div className="mine-tabs" role="tablist" aria-label={t('Разделы кабинета')}>
               {([['tasks','Мои задания'],['bids','Мои отклики'],['profile','Мой профиль'],['decisions','Решения по публикациям'],['archive','Архив']] as const).map(([value,label])=><button key={value} type="button" role="tab" aria-selected={mineTab===value} onClick={()=>setMineTab(value)}>{t(label)}</button>)}
             </div>}
+            {view === 'mine' && <div className="cabinet-city-filter"><Select value={city} onValueChange={setCity}><SelectTrigger aria-label={t("Город")}><SelectValue /></SelectTrigger><SelectContent>{["Все города", ...cities].map((c) => <SelectItem key={c} value={c}>{t(c)}</SelectItem>)}</SelectContent></Select></div>}
             {view==='mine' && mineTab==='decisions' && records.filter(r=>r.kind==='notice'&&r.mine&&!hiddenDecisions.includes(r.id)).map(r=><div className="feedback" key={r.id}><div className="feedback-heading"><strong>{t('Решение по публикации')}</strong><button type="button" className="auth-link" onClick={()=>hideDecision(r.id)}>{t('Скрыть решение')}</button></div><p>{r.description}</p><p>{t('Основание')}: {r.basis}</p><p>{t('Решение принято человеком. Если вы не согласны, отправьте оператору номер обращения и обоснование пересмотра.')} {r.parent}</p><a href="mailto:igors.nikos@gmail.com">igors.nikos@gmail.com</a></div>)}
             {loading && <p role="status">{t("Загружаем данные\u2026 ")}</p>}
             {mineTab !== 'decisions' && <div className="cards">

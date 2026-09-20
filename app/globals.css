@@ -916,6 +916,8 @@ button:disabled {
 .portfolio-viewer-image.zoomed img{width:200%;max-width:none;height:auto;max-height:none}
 .portfolio-viewer-controls button,.portfolio-viewer-heading button{padding:10px 14px;font-size:14px}
 .mine-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}.mine-tabs button{border:1px solid #cdd8c8;background:#fff;border-radius:9px;padding:10px 14px;font-size:14px}.mine-tabs button[aria-selected=true]{background:#e7f3cb;border-color:#b8cd8c;font-weight:700}
+.cabinet-city-filter { margin:0 0 20px; }
+.cabinet-city-filter [data-slot="select-trigger"] { min-width:150px; max-width:240px; }
 .rating {
   display: flex;
   gap: 5px;
@@ -989,6 +991,7 @@ header {
   .content:has(.mine-tabs) .filters { flex-direction: column; align-items: stretch; }
   .content:has(.mine-tabs) .filters > [data-slot="tabs"] { width: 100%; }
   .content:has(.mine-tabs) .filters > [data-slot="tabs"] [data-slot="tabs-list"] { width: max-content; max-width: 100%; overflow-x: auto; }
+  .cabinet-city-filter [data-slot="select-trigger"] { width:100%; max-width:none; }
 }
 :root {
   color-scheme: light;
