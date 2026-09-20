@@ -28,7 +28,7 @@ export async function POST(request: Request) {
       const owner='local:'+crypto.randomUUID();
       const saved=await db.batch([
         db.prepare("INSERT INTO records(id,kind,owner,data,created) VALUES (?,'auth-identity',?,?,?) ON CONFLICT(id) DO NOTHING").bind(id,owner,JSON.stringify(data),new Date().toISOString()),
-        db.prepare("INSERT INTO records(id,kind,owner,data,created) SELECT ?,'account',?,?,? WHERE EXISTS(SELECT 1 FROM records WHERE id=? AND owner=? AND kind='auth-identity')").bind('account:'+owner,owner,JSON.stringify({name:data.name,role:null}),new Date().toISOString(),id,owner),
+        db.prepare("INSERT INTO records(id,kind,owner,data,created) SELECT ?,'account',?,?,? WHERE EXISTS(SELECT 1 FROM records WHERE id=? AND owner=? AND kind='auth-identity')").bind('account:'+owner,owner,JSON.stringify({name:data.name}),new Date().toISOString(),id,owner),
       ]);
       if(!saved[0].meta.changes)throw Error('Регистрация недоступна для этого email. Войдите или восстановите пароль.');
       const row={id,owner,data:JSON.stringify(data)},token=await startSession(row);

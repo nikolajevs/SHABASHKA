@@ -1,4 +1,5 @@
 import { localizedJson } from "../../i18n/shared";
+import {sendPush} from '../../push-store';
 import { env } from "cloudflare:workers";
 import { getChatGPTUser } from "../../chatgpt-auth";
 import { isAdmin, blocked, unavailable } from "../../admin-access";
@@ -77,22 +78,24 @@ export async function GET(request: Request) {
     const account = rows.results.find(
       (r) => r.kind === "account" && r.owner === uid,
     );
+    const read = uid ? await database().prepare("SELECT parent FROM records WHERE kind='notification-read' AND owner=?").bind(uid).all<{parent:string}>() : {results:[]};
+    const readIds = new Set(read.results.map(r=>r.parent));
     return reply(
       {
         user: u
           ? {
               name: account ? JSON.parse(account.data).name || "" : u.fullName || "",
-              role: account ? JSON.parse(account.data).role : null,
+              registered: !!state?.name && !!state?.termsVersion,
               isAdmin: isAdmin(u),
               blocked: await blocked(uid),
               inactive: !!state?.inactive,
               erased: !!state?.erased,
-              requiresTerms: !!state?.role && state.termsVersion!==TERMS_VERSION,
+              requiresTerms: !!state && state.termsVersion!==TERMS_VERSION,
             }
           : null,
         records: rows.results
           .filter((r) => r.kind !== "account")
-          .map((r) => unpack(r, uid)),
+          .map((r) => ({...unpack(r, uid), unread: !!uid && r.owner!==uid && ['bid','message'].includes(r.kind) && !readIds.has(r.id)})),
       },
       { headers: { "Cache-Control": "private, no-store" } },
     );
@@ -124,9 +127,20 @@ export async function POST(request: Request) {
     const action = b.action;
     if(action!=='profile'&&action!=='task'&&raw.length>16000)return reply({error:'Слишком большой запрос'},{status:413});
     const currentState = await accountState(u.userId);
+    if(action==='read-notifications') {
+      if(!Array.isArray(b.ids)||b.ids.length>200||!b.ids.every(id=>typeof id==='string'&&id.length<=300))return reply({error:'Неверный запрос'},{status:400});
+      if(!b.ids.length)return reply({ok:true});
+      await db.batch(b.ids.map(id=>db.prepare(`INSERT INTO records(id,kind,owner,parent,data,created)
+        SELECT ?,'notification-read',?,r.id,'{}',? FROM records r
+        WHERE r.id=? AND r.owner<>? AND (
+          (r.kind='bid' AND EXISTS(SELECT 1 FROM records t WHERE t.id=r.parent AND t.kind='task' AND t.owner=?)) OR
+          (r.kind='message' AND EXISTS(SELECT 1 FROM records b JOIN records t ON t.id=b.parent WHERE b.id=r.parent AND b.kind='bid' AND t.kind='task' AND (b.owner=? OR t.owner=?)))
+        ) ON CONFLICT(id) DO NOTHING`).bind('read:'+u.userId+':'+id,u.userId,new Date().toISOString(),id,u.userId,u.userId,u.userId,u.userId)));
+      return reply({ok:true});
+    }
     if (currentState?.inactive && !(currentState.erased && action==='register' && b.reopen===true))
       return reply({error:"Аккаунт неактивен. Откройте настройки данных."},{status:403});
-    if(currentState?.role && currentState.termsVersion!==TERMS_VERSION && action!=='register')return reply({error:"Примите обновлённые условия в кабинете."},{status:403});
+    if(currentState?.termsVersion!==TERMS_VERSION && action!=='register')return reply({error:"Примите обновлённые условия в кабинете."},{status:403});
     // Validate related records on the server, even when a stale page still shows them.
     const related = action === "bid" || action === "message" || action === "review" ? b.parent : b.id;
     if (typeof related === "string" && ["bid","message","review","choose","complete"].includes(String(action))) {
@@ -163,10 +177,7 @@ export async function POST(request: Request) {
         .run();
     if (action === "register") {
       if(b.acceptTerms!==true && b.acceptTerms!=='on')return reply({error:"Примите условия использования."},{status:400});
-      const role = value("role", 20);
-      if (!["customer", "provider"].includes(role))
-        throw Error("Выберите роль");
-      const data = { name: value("name", 80), role, termsVersion:TERMS_VERSION, acceptedAt:now };
+      const data = { name: value("name", 80), termsVersion:TERMS_VERSION, acceptedAt:now };
       await db
         .prepare(
           "INSERT INTO records (id,kind,owner,parent,data,created) VALUES (?,'account',?,NULL,?,?) ON CONFLICT(id) DO UPDATE SET data=excluded.data WHERE coalesce(json_extract(records.data,'$.inactive'),0)=0 OR ?=1",
@@ -185,12 +196,6 @@ export async function POST(request: Request) {
       return reply({ok:true});
     }
     if (action === "task" || action === "profile") {
-      if (identity.role !== (action === "task" ? "customer" : "provider"))
-        throw Error(
-          action === "task"
-            ? "Переключитесь на роль заказчика в кабинете"
-            : "Переключитесь на роль исполнителя в кабинете",
-        );
       const data: Record<string, unknown> = {
         title: value("title", 140),
         description: value("description"),
@@ -270,8 +275,6 @@ export async function POST(request: Request) {
         await insert("task", data);
       }
     } else if (action === "bid") {
-      if (identity.role !== "provider")
-        throw Error("Отклики доступны исполнителям");
       const parent = value("parent", 100);
       const task = await db
         .prepare("SELECT * FROM records WHERE id=? AND kind='task'")
@@ -298,6 +301,7 @@ export async function POST(request: Request) {
         "bid:" + parent + ":" + u.userId,
       );
       if (!savedBid.meta.changes) throw Error("Это задание недоступно для отклика");
+      await sendPush(task.owner,parent);
     } else if (action === "choose") {
       const bid = await db
         .prepare("SELECT * FROM records WHERE id=? AND kind='bid'")
@@ -337,6 +341,7 @@ export async function POST(request: Request) {
         { description: value("description"), name: identity.name },
         parent,
       );
+      await sendPush(bid.owner===u.userId?task.owner:bid.owner,parent,true);
     } else if (action === "review") {
       const task = await db
         .prepare("SELECT * FROM records WHERE id=? AND kind='task' AND owner=?")
