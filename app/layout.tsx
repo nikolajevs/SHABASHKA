@@ -6,6 +6,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const locale = parseLocale((await cookies()).get("shabashka_locale")?.value);
   return {
     title: translate(locale, "Gigs — услуги в Латвии"),
+    manifest: '/manifest.webmanifest',
     description: translate(
       locale,
       "Специалисты и задания по всей Латвии. Договаривайтесь напрямую.",

@@ -234,7 +234,7 @@ export default function Home() {
     refresh();
   }, [refresh]);
   useEffect(()=>{if(loading||authQueryHandled)return;const params=new URLSearchParams(location.search);if(params.get('auth')==='login'){setAuthOpen(true);}else if(params.get('auth')==='complete'&&user){setView('mine');if(!user.registered)setModal('register');history.replaceState(null,'','/');}setAuthQueryHandled(true);},[loading,user,authQueryHandled]);
-  useEffect(()=>{if(loading||deepLinkHandled)return;const id=new URLSearchParams(location.search).get('item');if(id){const item=records.find(r=>r.id===id);if(item){setSelected(item);setModal('detail');}}setDeepLinkHandled(true);},[records,loading,deepLinkHandled]);
+  useEffect(()=>{if(loading||deepLinkHandled)return;const params=new URLSearchParams(location.search),id=params.get('item');if(id){const item=records.find(r=>r.id===id);if(item){setSelected(item);setModal(params.get('chat')==='1'&&item.kind==='bid'?'chat':'detail');}}setDeepLinkHandled(true);},[records,loading,deepLinkHandled]);
   useEffect(() => {
     if (!user) return;
     const timer = setInterval(() => {if(document.visibilityState==='visible')refresh(true);}, 5000);

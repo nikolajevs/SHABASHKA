@@ -3,9 +3,11 @@ import {useEffect,useState} from 'react';
 import {Bell,MessageCircle} from 'lucide-react';
 import {Dialog,DialogContent,DialogTitle,DialogDescription} from '@/components/ui/dialog';
 import {useLanguage} from './i18n/provider';
+import {NotificationSettings} from './notification-settings';
 type Entry={id:string;kind:string;parent?:string;name:string;title?:string;created?:string;unread?:boolean;mine?:boolean};
 export function Notifications({records,activeId,activeKind,onOpen,onRead}:{records:Entry[];activeId?:string;activeKind:string;onOpen:(kind:string,id:string)=>void;onRead:(ids:string[])=>void}) {
   const {t,locale}=useLanguage();
+  const [settingsContainer,setSettingsContainer]=useState<HTMLDivElement|null>(null);
   const [open,setOpen]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState('');
   const incoming=records.filter(r=>(r.kind==='message'||r.kind==='bid')&&!r.mine);
   async function mark(ids:string[]) {
@@ -32,9 +34,11 @@ export function Notifications({records,activeId,activeKind,onOpen,onRead}:{recor
   const grouped=[...groups.values()].sort((a,b)=>Number(b.some(r=>r.unread))-Number(a.some(r=>r.unread))||(b[0].created||'').localeCompare(a[0].created||''));
   const unread=incoming.filter(r=>r.unread).length;
   return <>
+    <NotificationSettings container={settingsContainer} eventIds={incoming.filter(r=>r.unread&&!activeUnread.includes(r.id)).map(r=>r.id)}/>
     <button className="notification-bell" aria-label={`${t('Уведомления')}: ${unread}`} onClick={()=>setOpen(true)}><Bell size={21}/>{unread>0&&<span>{unread>99?'99+':unread}</span>}</button>
     <Dialog open={open} onOpenChange={setOpen}><DialogContent className="notification-dialog"><DialogTitle>{t('Уведомления')}</DialogTitle><DialogDescription>{t('Новые отклики и сообщения')}</DialogDescription>
       {error&&<p role="alert">{error}</p>}
+      <div ref={setSettingsContainer}/>
       <button className="outline" disabled={busy||!unread} onClick={()=>void mark(incoming.filter(r=>r.unread).map(r=>r.id))}>{t('Прочитать всё')}</button>
       {!grouped.length&&<p>{t('Уведомлений пока нет')}</p>}
       <div className="notification-list">{grouped.map(group=>{

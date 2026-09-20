@@ -6,6 +6,14 @@ import './auth.css';
 type Mode='login'|'register'|'forgot'|'reset'|'verify';
 type Config={google:boolean;email:boolean;user:{email:string;emailVerified:boolean;provider:string}|null};
 export async function authRequest(action:string,data:Record<string,unknown>,locale:string) {
+  if(action==='logout'&&'serviceWorker'in navigator){
+    const registration=await navigator.serviceWorker.getRegistration('/push-sw.js');
+    const subscription=await registration?.pushManager.getSubscription();
+    if(subscription){
+      const removed=await fetch('/api/push',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'remove',subscription:subscription.toJSON()})});
+      if(removed.ok)await subscription.unsubscribe();
+    }
+  }
   const r=await fetch('/api/auth',{method:'POST',headers:{'Content-Type':'application/json','X-SHABASHKA-Language':locale},body:JSON.stringify({action,...data})});
   const b=await r.json() as {errorKey?:string;message?:string;ok?:boolean};if(!r.ok)throw Error(b.errorKey||'Не удалось сохранить. Попробуйте ещё раз.');return b;
 }

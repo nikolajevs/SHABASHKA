@@ -1,4 +1,5 @@
 import { localizedJson } from "../../i18n/shared";
+import {sendPush} from '../../push-store';
 import { env } from "cloudflare:workers";
 import { getChatGPTUser } from "../../chatgpt-auth";
 import { isAdmin, blocked, unavailable } from "../../admin-access";
@@ -295,6 +296,7 @@ export async function POST(request: Request) {
         "bid:" + parent + ":" + u.userId,
       );
       if (!savedBid.meta.changes) throw Error("Это задание недоступно для отклика");
+      await sendPush(task.owner,parent);
     } else if (action === "choose") {
       const bid = await db
         .prepare("SELECT * FROM records WHERE id=? AND kind='bid'")
@@ -334,6 +336,7 @@ export async function POST(request: Request) {
         { description: value("description"), name: identity.name },
         parent,
       );
+      await sendPush(bid.owner===u.userId?task.owner:bid.owner,parent,true);
     } else if (action === "review") {
       const task = await db
         .prepare("SELECT * FROM records WHERE id=? AND kind='task' AND owner=?")
