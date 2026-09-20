@@ -1,4 +1,8 @@
 [
+  ["Задание недоступно", "Uzdevums nav pieejams", "Task unavailable", "Завдання недоступне"],
+  ["Задание удалено", "Uzdevums ir dzēsts", "Task deleted", "Завдання видалено"],
+  ["Работа завершена", "Darbs pabeigts", "Work completed", "Роботу завершено"],
+  ["Выбран другой исполнитель", "Izvēlēts cits izpildītājs", "Another provider was selected", "Обрано іншого виконавця"],
   ["По всей Латвии", "Visā Latvijā", "Throughout Latvia", "По всій Латвії"],
   [
     "Админка",

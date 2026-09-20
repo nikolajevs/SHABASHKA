@@ -736,6 +736,16 @@ nav button {
   border-radius: 18px !important;
 }
 .modal-toolbar { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.response-excerpt { padding:18px; border-radius:14px; background:#f5f8ef; }
+.response-excerpt small { display:block; margin-bottom:8px; font-size:13px; color:#68785d; }
+.response-view { display:grid; gap:24px; }
+.response-view > .task-status { justify-self:start; }
+.response-task { padding:24px; border-radius:16px; background:#f5f8ef; min-width:0; }
+.response-task h3 { font-size:23px; line-height:1.35; overflow-wrap:anywhere; }
+.detail-dialog .response-task h3 { display:block; margin:8px 0 16px; }
+.response-view .task-description-section p { margin:0; }
+.response-card .specialist-actions button { display:flex; align-items:center; gap:8px; }
+@media(max-width:600px) { .response-task { padding:18px; } .response-task > button { width:100%; } }
 .modal-toolbar .dialog-close { position:static; flex-shrink:0; width:40px; height:40px; }
 .market-dialog.detail-dialog { width:calc(100vw - 48px); max-width:880px; max-height:92dvh; padding:0 32px 28px; gap:20px; border-radius:24px !important; scroll-padding-top:86px; }
 .detail-dialog .modal-toolbar { position:sticky; top:0; z-index:5; padding:18px 0 12px; background:#fff; border-bottom:1px solid #edf0e8; }

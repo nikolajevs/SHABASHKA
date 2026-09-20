@@ -294,6 +294,13 @@ export default function Home() {
     if (Number.isNaN(from.getTime()) || Number.isNaN(to.getTime())) return t('Сроки не указаны');
     return format.format(from)+' — '+format.format(to);
   }
+  function bidStatus(bid: Item) {
+    const task = taskFor(bid);
+    if (!task) return t('Задание недоступно');
+    if (task.deleted) return t('Задание удалено');
+    if (task.chosen === bid.id) return t(task.status === 'complete' ? 'Работа завершена' : 'Вы выбраны исполнителем');
+    return t(task.status === 'open' ? 'Отклик отправлен' : 'Выбран другой исполнитель');
+  }
   function navigate(v: string) {
     setView(v);
     setCategory("Все услуги");
@@ -625,6 +632,13 @@ export default function Home() {
                   <div className="task-customer"><span className="task-customer-avatar" aria-hidden="true">{item.name.split(' ').map(s=>s[0]).slice(0,2).join('')}</span><span><small>{t('Заказчик')}</small>{item.name}</span></div>
                   <div className="specialist-actions"><button className="primary" onClick={()=>open('detail',item)}>{t('Подробнее о задании')}</button>{item.mine&&!item.deleted&&<button className="outline" onClick={()=>{open('detail',item);setDeleteConfirmation(true);}}>{t('Удалить задание')}</button>}</div>
                   <ReportLink id={item.id}/>
+                </article> : item.kind === 'bid' ? <article className="specialist-card response-card" key={item.id}>
+                  <div className="task-heading"><span className="specialist-category">{t('Ваш отклик')}</span><span className="task-status">{bidStatus(item)}</span></div>
+                  <h3 className="task-title"><button onClick={()=>open('detail',item)}>{taskFor(item)?.title||t('Предложение по заданию')}</button></h3>
+                  {taskFor(item)&&<div className="specialist-facts"><div><MapPin size={16}/><span>{t(taskFor(item)?.city||'Латвия')}</span></div><div><CalendarDays size={16}/><span>{taskDates(taskFor(item)!)}</span></div></div>}
+                  <div className="response-excerpt"><small>{t('Ваше предложение')}</small><p className="specialist-description">{item.description}</p></div>
+                  {taskFor(item)&&<div className="task-customer"><span className="task-customer-avatar" aria-hidden="true">{taskFor(item)!.name.slice(0,1)}</span><span><small>{t('Заказчик')}</small>{taskFor(item)!.name}</span></div>}
+                  <div className="specialist-actions"><button className="primary" onClick={()=>open('detail',item)}>{t('Посмотреть отклик')}</button><button className="outline" onClick={()=>open('chat',item)}><MessageCircle size={16}/>{t('Чат')}</button></div>
                 </article> : <article className="card" key={item.id}>
                   <div className={"avatar color" + (i % 4)}>
                     {item.kind==='profile'&&item.photo ? <img className="card-profile-photo" src={item.photo} alt={item.name} loading="lazy"/> : <>
@@ -777,7 +791,7 @@ export default function Home() {
           }
         }}
       >
-        <DialogContent className={'market-dialog'+(modal==='detail'&&['profile','task'].includes(detail?.kind||'')?' detail-dialog':'')} showCloseButton={false}>
+        <DialogContent className={'market-dialog'+(modal==='detail'&&['profile','task','bid'].includes(detail?.kind||'')?' detail-dialog':'')} showCloseButton={false}>
           <div className="modal-toolbar">
           <LanguageSwitcher />
           <DialogClose className="dialog-close" aria-label={t("Закрыть")}>
@@ -797,7 +811,7 @@ export default function Home() {
                       ? t("Отзыв об исполнителе")
                       : modal === "chat"
                         ? t("Диалог по заданию")
-                        : detail?.title || t("Ваше предложение")}
+                        : detail?.kind==='bid' ? t('Ваш отклик') : detail?.title || t("Ваше предложение")}
           </DialogTitle>
           <DialogDescription className={modal==='detail'?'sr-only':''}>
             {modal === "detail"
@@ -835,9 +849,9 @@ export default function Home() {
             <div className="details">
               {((detail.kind === "task" && detail.deleted) || (detail.kind === "bid" && taskFor(detail)?.deleted)) && <p className="feedback">{t("Задание удалено из каталога. История доступна только участникам.")}</p>}
               {detail.kind==='review' && <ReportLink id={detail.id}/>}
-              {detail.kind !== "profile" && detail.kind !== "task" && <b>{detail.name}</b>}
-              {detail.kind !== "profile" && detail.kind !== "task" && <p>{detail.description}</p>}
-              {detail.kind !== "profile" && detail.kind !== "task" && (
+              {!['profile','task','bid'].includes(detail.kind) && <b>{detail.name}</b>}
+              {!['profile','task','bid'].includes(detail.kind) && <p>{detail.description}</p>}
+              {!['profile','task','bid'].includes(detail.kind) && (
                 <p>
                   {detail.cities?.length ? detail.cities.map(city=>t(city)).join(' · ') : t(detail.city)}
                 </p>
@@ -934,14 +948,11 @@ export default function Home() {
                   <div className="detail-footer">{detail.mine&&<button className="primary" onClick={()=>open('profile',detail)}>{t('Изменить профиль')}</button>}<ReportLink id={detail.id}/></div>
                 </div>
               ) : detail.kind === "bid" ? (
-                <>
-                  <p>
-                    {t("Статус: ")}{" "}
-                    {taskFor(detail)?.chosen === detail.id
-                      ? t("Вы выбраны исполнителем. ")
-                      : ""}
-                    {t(statusText(taskFor(detail)?.status))}
-                  </p>
+                <div className="response-view">
+                  <span className="task-status">{bidStatus(detail)}</span>
+                  {taskFor(detail)&&<section className="response-task"><span className="specialist-category">{t(taskFor(detail)?.category)}</span><h3>{taskFor(detail)?.title}</h3><div className="specialist-facts"><div><MapPin size={17}/><span>{t(taskFor(detail)?.city||'Латвия')}</span></div><div><CalendarDays size={17}/><span>{taskDates(taskFor(detail)!)}</span></div></div><p><span className="fact-label">{t('Заказчик')}: </span>{taskFor(detail)?.name}</p><button className="outline" onClick={()=>open('detail',taskFor(detail))}>{t('Подробнее о задании')}</button></section>}
+                  <section className="task-description-section"><h4 className="profile-view-heading">{t('Ваше предложение')}</h4><p className="task-view-lead">{detail.description}</p></section>
+                  <div className="detail-footer">
                   <button
                     className="primary"
                     onClick={() => open("chat", detail)}
@@ -949,7 +960,8 @@ export default function Home() {
                     <MessageCircle size={18} />
                     {t("Открыть чат с заказчиком ")}
                   </button>
-                </>
+                  </div>
+                </div>
               ) : (
                 <div className="task-view">
                   <div className="task-topline">
