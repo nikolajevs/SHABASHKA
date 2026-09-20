@@ -426,6 +426,18 @@ h1 em {
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
+.task-view { display:grid; gap:16px; }
+.task-view-lead { margin:0; font-size:17px; line-height:1.5; white-space:pre-wrap; overflow-wrap:anywhere; color:#2f3a28; }
+.task-topline { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+.task-topline-cat { display:inline-flex; align-items:center; gap:8px; font-size:15px; font-weight:700; color:#3a4a2c; overflow-wrap:anywhere; }
+.task-topline-cat svg { color:#7f9b4b; flex-shrink:0; }
+.fact-card-col { align-items:flex-start; }
+.fact-card-customer .task-customer-avatar { width:34px; height:34px; font-size:13px; }
+.fact-card-col > div { display:grid; gap:2px; min-width:0; }
+.fact-label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.03em; color:#77836b; }
+.fact-value { font-size:14px; font-weight:600; color:#3f4b36; overflow-wrap:anywhere; }
+.task-view-actions { display:grid; gap:12px; }
+.task-view-actions h3 { margin:6px 0 0; font-size:16px; }
 .task-heading { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
 .task-status { border-radius:20px; padding:5px 10px; font-size:12px; background:#edf5df; color:#48632c; }
 .task-status-active { background:#fff2d9; color:#795316; }
@@ -785,6 +797,9 @@ nav button {
 }
 .market-dialog [data-slot="dialog-title"] {
   font-size: 24px;
+}
+.market-dialog [data-slot="dialog-description"]:empty {
+  display: none;
 }
 button:disabled {
   opacity: 0.5;
