@@ -799,7 +799,9 @@ export default function Home() {
           </DialogTitle>
           <DialogDescription>
             {modal === "detail"
-              ? t("Условия и подробности")
+              ? detail?.kind === "profile"
+                ? t("Профиль исполнителя")
+                : t("Условия и подробности")
               : modal === "chat"
                 ? t(
                     "Переписку видят только заказчик и исполнитель. Сообщения обновляются автоматически.",
@@ -839,28 +841,34 @@ export default function Home() {
               )}
               {detail.kind === "profile" ? (
                 <div className="profile-view">
-                  <header className="profile-view-head">
-                    <div className="profile-view-avatar">
+                  <header className="profile-hero">
+                    <div className="profile-hero-avatar">
                       {detail.photo ? (
                         <img src={detail.photo} alt={detail.name} loading="lazy" />
                       ) : (
                         <span>{detail.name.split(" ").map((s) => s[0]).slice(0, 2).join("")}</span>
                       )}
                     </div>
-                    <div className="profile-view-identity">
-                      {detail.category && <span className="specialist-category">{t(detail.category)}</span>}
-                      <h3 className="profile-view-name">{detail.name}</h3>
-                      <div className="specialist-rating"><Star size={16} />{ratingText(detail.id)}</div>
+                    <div className="profile-hero-info">
+                      {detail.category && <span className="profile-hero-category">{t(detail.category)}</span>}
+                      <h3 className="profile-hero-name">{detail.name}</h3>
+                      <div className="profile-hero-rating"><Star size={15} />{ratingText(detail.id)}</div>
                     </div>
                   </header>
-                  <div className="specialist-facts">
-                    <div>
-                      <MapPin size={16} />
+                  <div className="profile-facts-grid">
+                    <div className="fact-card">
+                      <MapPin size={18} />
                       <span>{(detail.cities?.length ? detail.cities : [detail.city || "Латвия"]).map((city) => t(city)).join(" · ")}</span>
                     </div>
+                    {detail.category && (
+                      <div className="fact-card">
+                        <Wrench size={18} />
+                        <span>{t(detail.category)}</span>
+                      </div>
+                    )}
                     {detail.transport && (
-                      <div>
-                        <Truck size={16} />
+                      <div className="fact-card fact-card-accent">
+                        <Truck size={18} />
                         <span>{t("Собственный транспорт")}</span>
                       </div>
                     )}
@@ -901,7 +909,10 @@ export default function Home() {
                     )}
                   </section>
                   <section className="profile-view-section">
-                    <h4 className="profile-view-heading"><Star size={18} /> {t("Отзывы")}</h4>
+                    <div className="profile-reviews-head">
+                      <h4 className="profile-view-heading"><Star size={18} /> {t("Отзывы")}</h4>
+                      {!!reviews(detail.id).length && <span className="profile-reviews-count">{reviews(detail.id).length}</span>}
+                    </div>
                     {reviews(detail.id).length ? (
                       reviews(detail.id).map((r) => (
                         <div className="review-card" key={r.id}>
