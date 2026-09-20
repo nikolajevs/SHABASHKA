@@ -172,6 +172,8 @@ export default function Home() {
   const [categoriesExpanded, setCategoriesExpanded] = useState(false);
   const [authOpen,setAuthOpen]=useState(false),[authQueryHandled,setAuthQueryHandled]=useState(false),[hiddenDecisions,setHiddenDecisions]=useState<string[]>([]),[mineTab,setMineTab]=useState('tasks');
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [portfolioToKeep, setPortfolioToKeep] = useState<string[]>([]);
+  const [profilePhotoPreview, setProfilePhotoPreview] = useState("");
   const [deepLinkHandled,setDeepLinkHandled]=useState(false);
   const { locale, t, errorText } = useLanguage();
   const [view, setView] = useState("profile"),
@@ -276,6 +278,8 @@ export default function Home() {
     setError("");
     setNotice("");
     setSelected(item || null);
+    setPortfolioToKeep(item?.portfolioImages || []);
+    setProfilePhotoPreview(item?.photo || "");
     setFormCategory(item?.category || "Ремонт");
     setFormCity(item?.city && cities.includes(item.city) ? item.city : "Рига");
     setRole(user?.role || "customer");
@@ -339,9 +343,10 @@ export default function Home() {
       delete values.photo;delete values.portfolioImages;
       const photo = form.querySelector<HTMLInputElement>('input[name="photo"]')?.files?.[0];
       const images = Array.from(form.querySelector<HTMLInputElement>('input[name="portfolioImages"]')?.files || []);
-      if(images.length>8)throw Error('Не более 8 фотографий портфолио.');
+      if(portfolioToKeep.length + images.length > 10)throw Error('Не более 10 фотографий портфолио.');
       if (photo) values.photo = await prepareProfileImage(photo);
-      if (images.length) {values.portfolioImages=[];for(const file of images)(values.portfolioImages as string[]).push(await prepareProfileImage(file));}
+      values.portfolioImages=[...portfolioToKeep];
+      for(const file of images)(values.portfolioImages as string[]).push(await prepareProfileImage(file));
       values.transport=new FormData(form).get('transport')==='on';
       values.cities = Array.from(form.querySelectorAll<HTMLInputElement>('input[name="cities"]:checked')).map(input=>input.value);
       if(!(values.cities as string[]).length)throw Error('Выберите населённый пункт Латвии');
@@ -1115,10 +1120,7 @@ export default function Home() {
                     )}
                     {modal === "profile" && (
                       <>
-                        <label>
-                          {t("Фото профиля")}
-                          <input name="photo" type="file" accept="image/jpeg,image/png,image/webp" />
-                        </label>
+                        <div className="profile-photo-editor"><div className="profile-photo-preview">{profilePhotoPreview ? <img src={profilePhotoPreview} alt={t('Аватар профиля')} /> : <span>{selected?.name?.split(' ').map(s=>s[0]).slice(0,2).join('')}</span>}</div><label className="profile-photo-input">{t("Заменить фото профиля")}<input name="photo" type="file" accept="image/jpeg,image/png,image/webp" onChange={e=>{const file=e.currentTarget.files?.[0];if(file)setProfilePhotoPreview(URL.createObjectURL(file));}} /></label></div>
                         <label className="check-label"><input type="checkbox" name="transport" defaultChecked={selected?.transport}/>{t("Собственный транспорт")}</label>
                         <fieldset className="city-picker"><legend>{t("Города работы")}</legend>{cities.map(city=><label key={city} className="check-label"><input type="checkbox" name="cities" value={city} defaultChecked={(selected?.cities||[selected?.city||formCity]).includes(city)}/>{t(city)}</label>)}</fieldset>
                         <label>
@@ -1145,7 +1147,8 @@ export default function Home() {
                             )}
                           />
                         </label>
-                        <label>{t("Фото в портфолио")}
+                        {!!portfolioToKeep.length&&<div className="portfolio-edit-grid">{portfolioToKeep.map((image,index)=><div className="portfolio-edit-item" key={image}><img src={image} alt={`${t('Фото работы')} ${index+1}`} /><button type="button" className="portfolio-remove" aria-label={t('Удалить фото')} onClick={()=>setPortfolioToKeep(current=>current.filter((_,i)=>i!==index))}>×</button></div>)}</div>}
+                        <label>{t("Добавить фото в портфолио (до 10)")}
                           <input name="portfolioImages" type="file" accept="image/jpeg,image/png,image/webp" multiple />
                         </label>
                       </>

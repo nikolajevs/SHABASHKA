@@ -229,7 +229,7 @@ export async function POST(request: Request) {
         const old=previous?JSON.parse(previous.data):{};
         const validImage=(v:unknown)=>typeof v==='string'&&v.length<=140000&&/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(v);
         if(b.photo!==undefined&&b.photo!==''&&!validImage(b.photo))throw Error('Изображение слишком большое или имеет неподдерживаемый формат');
-        if(b.portfolioImages!==undefined&&(!Array.isArray(b.portfolioImages)||b.portfolioImages.length>8||!b.portfolioImages.every(validImage)))throw Error('Изображение слишком большое или имеет неподдерживаемый формат');
+        if(b.portfolioImages!==undefined&&(!Array.isArray(b.portfolioImages)||b.portfolioImages.length>10||!b.portfolioImages.every(validImage)))throw Error('Не более 10 фотографий портфолио или неподдерживаемый формат');
         data.photo=b.photo===undefined?(old.photo||''):b.photo;
         data.portfolioImages=b.portfolioImages===undefined?(old.portfolioImages||[]):b.portfolioImages;
         data.skills = value("skills", 500);

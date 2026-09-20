@@ -346,6 +346,14 @@ h1 em {
 .portfolio-empty strong { color: #4f6048; font-size: 14px; margin-bottom: 4px; }
 .portfolio-empty span { font-size: 12px; line-height: 1.45; }
 .portfolio-empty button { flex-shrink: 0; padding: 8px 12px; font-size: 12px; }
+.profile-photo-editor { display:flex; align-items:center; gap:16px; padding:12px 0; }
+.profile-photo-preview { width:84px; height:84px; overflow:hidden; border-radius:50%; display:grid; place-items:center; flex-shrink:0; background:#e3ecd8; color:#506342; font-size:24px; font-weight:700; }
+.profile-photo-preview img { width:100%; height:100%; object-fit:cover; }
+.profile-photo-input { flex:1; }
+.portfolio-edit-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; }
+.portfolio-edit-item { position:relative; aspect-ratio:1; overflow:hidden; border-radius:10px; background:#eef3e9; }
+.portfolio-edit-item img { width:100%; height:100%; object-fit:cover; }
+.portfolio-remove { position:absolute; top:4px; right:4px; width:24px; height:24px; border:0; border-radius:50%; background:#1f2b1bdd; color:#fff; font-size:18px; line-height:1; cursor:pointer; }
 .portfolio-thumbnail { position: relative; }
 .portfolio-more { position: absolute; right: 8px; bottom: 8px; border-radius: 8px; background: #20301bd9; color: #fff; padding: 4px 8px; font-size: 13px; }
 .specialist-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; padding-top: 4px; }
@@ -360,6 +368,7 @@ h1 em {
   .specialist-actions button { width: 100%; }
   .portfolio-empty { align-items: flex-start; flex-wrap: wrap; }
   .portfolio-empty button { width: 100%; margin-left: 36px; }
+  .portfolio-edit-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
 }
 .cards {
   display: grid;
