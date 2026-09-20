@@ -831,10 +831,9 @@ export default function Home() {
             <div className="details">
               {((detail.kind === "task" && detail.deleted) || (detail.kind === "bid" && taskFor(detail)?.deleted)) && <p className="feedback">{t("Задание удалено из каталога. История доступна только участникам.")}</p>}
               {['task','profile','review'].includes(detail.kind) && <ReportLink id={detail.id}/>}
-              {detail.kind !== "profile" && <b>{detail.name}</b>}
-              {detail.kind==='task'&&<p className="task-detail-dates"><CalendarDays size={18}/><span>{t('Срок выполнения')}: {taskDates(detail)}</span></p>}
-              {detail.kind !== "profile" && <p>{detail.description}</p>}
-              {detail.kind !== "profile" && (
+              {detail.kind !== "profile" && detail.kind !== "task" && <b>{detail.name}</b>}
+              {detail.kind !== "profile" && detail.kind !== "task" && <p>{detail.description}</p>}
+              {detail.kind !== "profile" && detail.kind !== "task" && (
                 <p>
                   {detail.cities?.length ? detail.cities.map(city=>t(city)).join(' · ') : t(detail.city)}
                 </p>
@@ -946,7 +945,18 @@ export default function Home() {
                   </button>
                 </>
               ) : (
-                <>
+                <div className="task-view">
+                  <div className="task-heading">
+                    {detail.category && <span className="specialist-category">{t(detail.category)}</span>}
+                    <span className={"task-status task-status-" + (detail.deleted ? "deleted" : detail.status || "open")}>{t(detail.deleted ? "Удалено" : statusText(detail.status))}</span>
+                  </div>
+                  {detail.description && <p className="task-view-about">{detail.description}</p>}
+                  <div className="task-facts">
+                    <div><MapPin size={17} /><span>{(detail.cities?.length ? detail.cities : [detail.city || "Латвия"]).map((city) => t(city)).join(" · ")}</span></div>
+                    <div><CalendarDays size={17} /><span><small>{t("Срок выполнения")}</small>{taskDates(detail)}</span></div>
+                  </div>
+                  <div className="task-customer"><span className="task-customer-avatar" aria-hidden="true">{detail.name.split(" ").map((s) => s[0]).slice(0, 2).join("")}</span><span><small>{t("Заказчик")}</small>{detail.name}</span></div>
+                  <div className="task-view-actions">
                   {!detail.mine && !detail.deleted && detail.status === "open" && (
                     <button
                       className="primary"
@@ -1034,7 +1044,8 @@ export default function Home() {
                         ))}
                     </>
                   )}
-                </>
+                  </div>
+                </div>
               )}
             </div>
           ) : !user ? (

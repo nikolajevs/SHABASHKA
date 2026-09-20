@@ -426,6 +426,10 @@ h1 em {
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
+.task-view { display:grid; gap:16px; }
+.task-view-about { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; font-size:16px; line-height:1.55; color:#3c4736; }
+.task-view-actions { display:grid; gap:12px; }
+.task-view-actions h3 { margin:6px 0 0; font-size:16px; }
 .task-heading { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
 .task-status { border-radius:20px; padding:5px 10px; font-size:12px; background:#edf5df; color:#48632c; }
 .task-status-active { background:#fff2d9; color:#795316; }
