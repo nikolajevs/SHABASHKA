@@ -735,6 +735,48 @@ nav button {
   background: #fff;
   border-radius: 18px !important;
 }
+.modal-toolbar { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.modal-toolbar .dialog-close { position:static; flex-shrink:0; width:40px; height:40px; }
+.market-dialog.detail-dialog { width:calc(100vw - 48px); max-width:880px; max-height:92dvh; padding:0 32px 28px; gap:20px; border-radius:24px !important; scroll-padding-top:86px; }
+.detail-dialog .modal-toolbar { position:sticky; top:0; z-index:5; padding:18px 0 12px; background:#fff; border-bottom:1px solid #edf0e8; }
+.detail-dialog > h2:not(.sr-only) { font-size:30px; line-height:1.2; margin:0; overflow-wrap:anywhere; }
+.detail-dialog .profile-view { grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:24px; }
+.detail-dialog .profile-hero, .detail-dialog .profile-view-facts, .detail-dialog .profile-view-portfolio, .detail-dialog .profile-view-reviews, .detail-dialog .detail-footer { grid-column:1/-1; }
+.detail-dialog .profile-hero { height:auto; padding:26px; border:0; background:#f0f5e7; flex-wrap:nowrap; }
+.detail-dialog .profile-hero-avatar { width:104px; height:104px; }
+.detail-dialog .profile-hero-name { font-size:28px; }
+.profile-hero-service { margin:2px 0 6px; font-size:17px; line-height:1.4; overflow-wrap:anywhere; }
+.detail-dialog .profile-hero-category { font-size:12px; }
+.detail-dialog .profile-view-section { align-content:start; padding-top:20px; gap:14px; min-width:0; }
+.detail-dialog .profile-view-heading { text-transform:none; letter-spacing:0; color:#273722; font-size:18px; }
+.detail-dialog .profile-view-about, .detail-dialog .task-view-lead { font-size:16px; line-height:1.7; }
+.detail-dialog .profile-view-portfolio .portfolio-gallery { grid-template-columns:repeat(3,minmax(0,1fr)); margin:0; }
+.detail-dialog .profile-view-empty { padding:20px; background:#f7f9f4; border-radius:12px; }
+.detail-dialog .review-card { padding:18px; }
+.detail-dialog .task-view { gap:24px; }
+.detail-dialog .task-topline { order:-1; }
+.detail-dialog .task-view .profile-facts-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.detail-dialog .fact-card { padding:18px; background:#f7f9f3; border:0; align-items:flex-start; }
+.detail-dialog .fact-value { font-size:15px; line-height:1.5; }
+.task-description-section { display:grid; gap:14px; border-top:1px solid #e9eee2; padding-top:24px; }
+.detail-dialog .task-view-actions { border-top:1px solid #e9eee2; padding-top:20px; gap:18px; }
+.detail-dialog .task-view-actions > .primary { justify-self:start; min-width:220px; }
+.detail-dialog .task-delete { padding:16px; border-radius:12px; background:#faf6f3; }
+.detail-dialog .bid { padding:20px; border-radius:16px; background:#f7f9f3; overflow-wrap:anywhere; }
+.detail-footer { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; border-top:1px solid #e9eee2; padding-top:20px; }
+.detail-footer .report-link { margin:0; font-size:13px; }
+@media(max-width:600px) {
+  .market-dialog.detail-dialog { width:100%; max-width:100%; max-height:96dvh; padding:0 18px 24px; border-radius:20px !important; }
+  .detail-dialog .profile-view { grid-template-columns:minmax(0,1fr); gap:20px; }
+  .detail-dialog .profile-hero { padding:18px; gap:16px; }
+  .detail-dialog .profile-hero-avatar { width:72px; height:72px; }
+  .detail-dialog .profile-hero-name { font-size:23px; }
+  .detail-dialog > h2:not(.sr-only) { font-size:25px; }
+  .detail-dialog .profile-view-portfolio .portfolio-gallery { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .detail-dialog .task-view .profile-facts-grid { grid-template-columns:minmax(0,1fr); }
+  .detail-dialog .task-view-actions > .primary, .detail-footer > button { width:100%; }
+  .detail-dialog .account-actions { flex-direction:column; align-items:stretch; }
+}
 .market-form {
   display: grid;
   gap: 16px;
