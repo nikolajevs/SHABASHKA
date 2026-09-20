@@ -389,7 +389,8 @@ export default function Home() {
       : view === "task"
         ? records.filter((r) => r.kind === "task" && !r.deleted)
         : records.filter((r) => r.mine && (
-            mineTab === 'tasks' ? r.kind === 'task' :
+            mineTab === 'tasks' ? r.kind === 'task' && !r.deleted && r.status !== 'complete' :
+            mineTab === 'archive' ? r.kind === 'task' && (r.deleted || r.status === 'complete') :
             mineTab === 'bids' ? r.kind === 'bid' :
             mineTab === 'profile' ? r.kind === 'profile' : false
           ));
@@ -547,7 +548,7 @@ export default function Home() {
               </Select>
             </div>
             {view === 'mine' && <div className="mine-tabs" role="tablist" aria-label={t('Разделы кабинета')}>
-              {([['tasks','Мои задания'],['bids','Мои отклики'],['profile','Мой профиль'],['decisions','Решения по публикациям']] as const).map(([value,label])=><button key={value} type="button" role="tab" aria-selected={mineTab===value} onClick={()=>setMineTab(value)}>{t(label)}</button>)}
+              {([['tasks','Мои задания'],['bids','Мои отклики'],['profile','Мой профиль'],['decisions','Решения по публикациям'],['archive','Архив']] as const).map(([value,label])=><button key={value} type="button" role="tab" aria-selected={mineTab===value} onClick={()=>setMineTab(value)}>{t(label)}</button>)}
             </div>}
             {view === "mine" && (
               <div className="account">
@@ -717,7 +718,9 @@ export default function Home() {
                     : t("Пока ничего не найдено")}
                 </h3>
                 <p>
-                  {view === "task"
+                  {view === 'mine' && mineTab === 'archive'
+                    ? t('Здесь будут завершённые и удалённые задания.')
+                    : view === "task"
                     ? t("Создайте первое задание или измените поиск.")
                     : t(
                         "Попробуйте другую категорию или опубликуйте свой профиль.",

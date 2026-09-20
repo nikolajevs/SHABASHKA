@@ -1,4 +1,6 @@
 [
+  ["Здесь будут завершённые и удалённые задания.", "Šeit būs pabeigtie un dzēstie uzdevumi.", "Completed and deleted tasks will appear here.", "Тут будуть завершені та видалені завдання."],
+  ["Архив", "Arhīvs", "Archive", "Архів"],
   ["Задание недоступно", "Uzdevums nav pieejams", "Task unavailable", "Завдання недоступне"],
   ["Задание удалено", "Uzdevums ir dzēsts", "Task deleted", "Завдання видалено"],
   ["Работа завершена", "Darbs pabeigts", "Work completed", "Роботу завершено"],
