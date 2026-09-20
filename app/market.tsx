@@ -31,6 +31,10 @@ import {
   BriefcaseBusiness,
   PartyPopper,
   ChevronDown,
+  LogOut,
+  Shield,
+  FileText,
+  UserCog,
 } from "lucide-react";
 import {
   Dialog,
@@ -549,61 +553,75 @@ export default function Home() {
             </div>
             {view === "mine" && (
               <div className="account">
-                <h3>{user?.name || t("Ваши задания и предложения")}</h3><EmailVerification/>
-                <p>
-                  {user?.role
-                    ? t("Ваша роль: {role}", {
-                        role: t(
-                          user.role === "customer" ? "заказчик" : "исполнитель",
-                        ),
-                      })
-                    : user
-                      ? t("Выберите роль, чтобы завершить регистрацию.")
-                      : t("Войдите, чтобы публиковать задания и откликаться.")}
-                </p>
-                <div className="account-actions">
-                  {user?.requiresTerms && <button className="outline" onClick={()=>open('register')}>{t('Примите обновлённые условия в кабинете.')}</button>}
-                  {user?.inactive && <p>{t('Аккаунт неактивен. Откройте настройки данных.')}</p>}
-                  {user?.isAdmin && <a className="outline" href="/admin">{t("Админка")}</a>}
-                  {user?.blocked && <p role="alert">{t("Ваш аккаунт заблокирован администратором.")}</p>}
-                  {!user ? (
-                    <button className="dark" onClick={()=>setAuthOpen(true)}>{t("Войти")}</button>
-                  ) : (
-                    <>
-                      <button
-                        className="outline"
-                        onClick={() => open("register")}
-                      >
-                        {user.role
-                          ? t("Изменить имя или роль")
-                          : t("Завершить регистрацию")}
+                {!user ? (
+                  <div className="account-guest">
+                    <div className="account-guest-icon"><UserCog size={22} /></div>
+                    <p>{t("Войдите, чтобы публиковать задания и откликаться.")}</p>
+                    <button className="dark" onClick={() => setAuthOpen(true)}>{t("Войти")}</button>
+                  </div>
+                ) : (
+                  <>
+                    <div className="account-identity">
+                      <div className="account-avatar">{user.name.split(" ").map((s) => s[0]).slice(0, 2).join("")}</div>
+                      <div className="account-identity-info">
+                        <h3>{user.name}</h3>
+                        {user.role ? (
+                          <span className="account-role-badge">{t(user.role === "customer" ? "заказчик" : "исполнитель")}</span>
+                        ) : (
+                          <span className="account-role-badge account-role-badge-muted">{t("Роль не выбрана")}</span>
+                        )}
+                      </div>
+                    </div>
+                    <EmailVerification />
+                    {!user.role && <p className="account-hint">{t("Выберите роль, чтобы завершить регистрацию.")}</p>}
+                    {user.requiresTerms && (
+                      <button type="button" className="account-alert account-alert-action" onClick={() => open("register")}>
+                        {t("Примите обновлённые условия в кабинете.")}
                       </button>
-                      {user.role === "provider" && (
-                        <button
-                          className="primary"
-                          onClick={() =>
-                            open(
-                              "profile",
-                              profiles.find((p) => p.mine),
-                            )
-                          }
-                        >
-                          {t("Мой профиль исполнителя ")}
+                    )}
+                    {user.inactive && <p className="account-alert">{t("Аккаунт неактивен. Откройте настройки данных.")}</p>}
+                    {user.blocked && <p className="account-alert account-alert-danger" role="alert">{t("Ваш аккаунт заблокирован администратором.")}</p>}
+
+                    {user.role === "provider" && (
+                      <button
+                        className="primary account-primary"
+                        onClick={() => open("profile", profiles.find((p) => p.mine))}
+                      >
+                        {t("Мой профиль исполнителя ")}
+                      </button>
+                    )}
+                    {user.role === "customer" && (
+                      <button className="primary account-primary" onClick={() => open("task")}>
+                        {t("Создать задание ")}
+                      </button>
+                    )}
+                    {!user.role && (
+                      <button className="primary account-primary" onClick={() => open("register")}>
+                        {t("Завершить регистрацию")}
+                      </button>
+                    )}
+
+                    <div className="account-menu">
+                      {user.role && (
+                        <button type="button" className="account-menu-item" onClick={() => open("register")}>
+                          <UserCog size={17} /><span>{t("Изменить имя или роль")}</span><ChevronRight size={16} />
                         </button>
                       )}
-                      {user.role === "customer" && (
-                        <button
-                          className="primary"
-                          onClick={() => open("task")}
-                        >
-                          {t("Создать задание ")}
-                        </button>
+                      {user.isAdmin && (
+                        <a className="account-menu-item" href="/admin">
+                          <Shield size={17} /><span>{t("Админка")}</span><ChevronRight size={16} />
+                        </a>
                       )}
-                      {user && <a className="outline" href="/privacy">{t('Мои данные')}</a>}
-                      <AuthLogout/>
-                    </>
-                  )}
-                </div>
+                      <a className="account-menu-item" href="/privacy">
+                        <FileText size={17} /><span>{t("Мои данные")}</span><ChevronRight size={16} />
+                      </a>
+                    </div>
+
+                    <div className="account-logout">
+                      <LogOut size={16} /><AuthLogout />
+                    </div>
+                  </>
+                )}
               </div>
             )}
             {view === 'mine' && <div className="mine-tabs" role="tablist" aria-label={t('Разделы кабинета')}>
