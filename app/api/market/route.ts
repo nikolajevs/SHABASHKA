@@ -122,7 +122,7 @@ export async function POST(request: Request) {
       return reply({ error: "Слишком большой запрос" }, { status: 413 });
     const b = JSON.parse(raw) as Record<string, unknown>;
     const action = b.action;
-    if(action!=='profile'&&raw.length>16000)return reply({error:'Слишком большой запрос'},{status:413});
+    if(action!=='profile'&&action!=='task'&&raw.length>16000)return reply({error:'Слишком большой запрос'},{status:413});
     const currentState = await accountState(u.userId);
     if (currentState?.inactive && !(currentState.erased && action==='register' && b.reopen===true))
       return reply({error:"Аккаунт неактивен. Откройте настройки данных."},{status:403});
@@ -140,6 +140,8 @@ export async function POST(request: Request) {
         throw Error("Заполните корректно: " + key);
       return v.trim();
     };
+    const validImage = (v: unknown) =>
+      typeof v === "string" && v.length <= 140000 && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(v);
     const id = crypto.randomUUID();
     const now = new Date().toISOString();
     const account = await db
@@ -227,7 +229,6 @@ export async function POST(request: Request) {
         data.transport = b.transport === true || b.transport === "true";
         const previous=await db.prepare("SELECT data FROM records WHERE id=? AND owner=? AND kind='profile'").bind('profile:'+u.userId,u.userId).first<{data:string}>();
         const old=previous?JSON.parse(previous.data):{};
-        const validImage=(v:unknown)=>typeof v==='string'&&v.length<=140000&&/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(v);
         if(b.photo!==undefined&&b.photo!==''&&!validImage(b.photo))throw Error('Изображение слишком большое или имеет неподдерживаемый формат');
         if(b.portfolioImages!==undefined&&(!Array.isArray(b.portfolioImages)||b.portfolioImages.length>10||!b.portfolioImages.every(validImage)))throw Error('Не более 10 фотографий портфолио или неподдерживаемый формат');
         data.photo=b.photo===undefined?(old.photo||''):b.photo;
@@ -262,6 +263,10 @@ export async function POST(request: Request) {
         if (!validDate(from) || !validDate(to) || to < from) throw Error('Укажите корректный диапазон дат.');
         data.dateFrom = from;
         data.dateTo = to;
+        data.transport = b.transport === true || b.transport === "true";
+        if (b.images !== undefined && (!Array.isArray(b.images) || b.images.length > 10 || !b.images.every(validImage)))
+          throw Error("Не более 10 фотографий или неподдерживаемый формат");
+        data.images = Array.isArray(b.images) ? b.images : [];
         await insert("task", data);
       }
     } else if (action === "bid") {

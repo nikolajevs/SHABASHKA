@@ -2598,5 +2598,12 @@
     "Responses",
     "Відгуки"
   ],
-  ["Роль не выбрана", "Loma nav izvēlēta", "Role not selected", "Роль не обрано"]
+  ["Роль не выбрана", "Loma nav izvēlēta", "Role not selected", "Роль не обрано"],
+  ["Нужен свой транспорт","Nepieciešams savs transports","Own transport needed","Потрібен власний транспорт"],
+  ["Чтобы добраться до места выполнения заказа","Lai nokļūtu līdz uzdevuma izpildes vietai","To reach the job location","Щоб дістатися до місця виконання завдання"],
+  ["Фото задания","Uzdevuma foto","Task photos","Фото завдання"],
+  ["Добавить фото","Pievienot foto","Add photo","Додати фото"],
+  ["Удалить фото","Dzēst foto","Remove photo","Видалити фото"],
+  ["Не более 10 фотографий.","Ne vairāk kā 10 fotoattēli.","No more than 10 photos.","Не більше 10 фотографій."],
+  ["Транспорт","Transports","Transport","Транспорт"]
 ]
