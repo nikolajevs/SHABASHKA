@@ -547,9 +547,6 @@ export default function Home() {
                 </SelectContent>
               </Select>
             </div>
-            {view === 'mine' && <div className="mine-tabs" role="tablist" aria-label={t('Разделы кабинета')}>
-              {([['tasks','Мои задания'],['bids','Мои отклики'],['profile','Мой профиль'],['decisions','Решения по публикациям'],['archive','Архив']] as const).map(([value,label])=><button key={value} type="button" role="tab" aria-selected={mineTab===value} onClick={()=>setMineTab(value)}>{t(label)}</button>)}
-            </div>}
             {view === "mine" && (
               <div className="account">
                 <h3>{user?.name || t("Ваши задания и предложения")}</h3><EmailVerification/>
@@ -609,6 +606,9 @@ export default function Home() {
                 </div>
               </div>
             )}
+            {view === 'mine' && <div className="mine-tabs" role="tablist" aria-label={t('Разделы кабинета')}>
+              {([['tasks','Мои задания'],['bids','Мои отклики'],['profile','Мой профиль'],['decisions','Решения по публикациям'],['archive','Архив']] as const).map(([value,label])=><button key={value} type="button" role="tab" aria-selected={mineTab===value} onClick={()=>setMineTab(value)}>{t(label)}</button>)}
+            </div>}
             {view==='mine' && mineTab==='decisions' && records.filter(r=>r.kind==='notice'&&r.mine&&!hiddenDecisions.includes(r.id)).map(r=><div className="feedback" key={r.id}><div className="feedback-heading"><strong>{t('Решение по публикации')}</strong><button type="button" className="auth-link" onClick={()=>hideDecision(r.id)}>{t('Скрыть решение')}</button></div><p>{r.description}</p><p>{t('Основание')}: {r.basis}</p><p>{t('Решение принято человеком. Если вы не согласны, отправьте оператору номер обращения и обоснование пересмотра.')} {r.parent}</p><a href="mailto:igors.nikos@gmail.com">igors.nikos@gmail.com</a></div>)}
             {loading && <p role="status">{t("Загружаем данные\u2026 ")}</p>}
             {mineTab !== 'decisions' && <div className="cards">
