@@ -607,7 +607,7 @@ export default function Home() {
                   <div className="specialist-facts"><div><MapPin size={16}/><span>{(item.cities?.length?item.cities:[item.city||'Латвия']).map(city=>t(city)).join(' · ')}</span></div>{item.transport&&<div><Truck size={16}/><span>{t('Собственный транспорт')}</span></div>}</div>
                   {item.description&&<p className="specialist-description">{item.description}</p>}
                   {item.skills&&<ul className="specialist-skills" aria-label={t('Навыки')}>{item.skills.split(/[,;\n]+/).map(s=>s.trim()).filter(Boolean).slice(0,5).map((skill,index)=><li key={index}>{skill}</li>)}</ul>}
-                  {!!item.portfolioImages?.length&&<PortfolioGallery images={item.portfolioImages} previewCount={3}/>}
+                  {!!item.portfolioImages?.length ? <PortfolioGallery images={item.portfolioImages} previewCount={3}/> : <div className="portfolio-empty"><Camera size={24}/><div><strong>{t('Портфолио пока не добавлено')}</strong><span>{item.mine ? t('Добавьте фотографии своих работ, чтобы клиентам было проще выбрать вас.') : t('Исполнитель ещё не добавил фотографии своих работ.')}</span></div>{item.mine&&view==='mine'&&mineTab==='profile'&&<button className="outline" onClick={()=>open('profile',item)}>{t('Добавить фото')}</button>}</div>}
                   <div className="specialist-actions"><button className="primary" onClick={()=>open('detail',item)}>{t('Посмотреть профиль')}</button>{view==='mine'&&mineTab==='profile'&&item.mine&&<button className="outline" onClick={()=>open('profile',item)}>{t('Изменить профиль')}</button>}</div>
                   <ReportLink id={item.id}/>
                 </article> : item.kind === 'task' ? <article className="specialist-card task-card" key={item.id}>

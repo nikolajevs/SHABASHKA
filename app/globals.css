@@ -339,6 +339,13 @@ h1 em {
 .specialist-skills li { background: #f1f5ec; color: #4d6141; padding: 5px 10px; border-radius: 8px; font-size: 12px; overflow-wrap: anywhere; max-width: 100%; }
 .specialist-card .portfolio-gallery { margin: 0; }
 .specialist-card .portfolio-gallery img { aspect-ratio: 4 / 3; }
+.portfolio-empty { min-height: 92px; display: flex; align-items: center; gap: 12px; padding: 16px; border: 1px dashed #ccd8c1; border-radius: 14px; background: linear-gradient(135deg,#f7faf3,#fbfcfa); color: #65735d; }
+.portfolio-empty > svg { flex-shrink: 0; color: #94a487; }
+.portfolio-empty div { min-width: 0; flex: 1; }
+.portfolio-empty strong, .portfolio-empty span { display: block; overflow-wrap: anywhere; }
+.portfolio-empty strong { color: #4f6048; font-size: 14px; margin-bottom: 4px; }
+.portfolio-empty span { font-size: 12px; line-height: 1.45; }
+.portfolio-empty button { flex-shrink: 0; padding: 8px 12px; font-size: 12px; }
 .portfolio-thumbnail { position: relative; }
 .portfolio-more { position: absolute; right: 8px; bottom: 8px; border-radius: 8px; background: #20301bd9; color: #fff; padding: 4px 8px; font-size: 13px; }
 .specialist-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; padding-top: 4px; }
@@ -351,6 +358,8 @@ h1 em {
   .specialist-identity h3 { font-size: 19px; }
   .specialist-actions { flex-direction: column; }
   .specialist-actions button { width: 100%; }
+  .portfolio-empty { align-items: flex-start; flex-wrap: wrap; }
+  .portfolio-empty button { width: 100%; margin-left: 36px; }
 }
 .cards {
   display: grid;
