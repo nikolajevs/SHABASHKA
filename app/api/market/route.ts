@@ -201,6 +201,7 @@ export async function POST(request: Request) {
       if (
         ![
           "IT и дизайн",
+          "Аниматоры",
           "Для животных",
           "Другое",
           "Красота и здоровье",

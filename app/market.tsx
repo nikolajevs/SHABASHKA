@@ -28,6 +28,8 @@ import {
   Leaf,
   HandHelping,
   BriefcaseBusiness,
+  PartyPopper,
+  ChevronDown,
 } from "lucide-react";
 import {
   Dialog,
@@ -47,8 +49,8 @@ import {
 const categories = [
   ["Все услуги", Grid2X2],
   ["IT и дизайн", Monitor],
+  ["Аниматоры", PartyPopper],
   ["Для животных", PawPrint],
-  ["Другое", Grid2X2],
   ["Красота и здоровье", HeartPulse],
   ["Одежда", Shirt],
   ["Обучение", GraduationCap],
@@ -60,6 +62,7 @@ const categories = [
   ["Уборка помещений", Sparkles],
   ["Уход и помощь", HandHelping],
   ["Фото и видео", Camera],
+  ["Другое", Grid2X2],
 ] as const;
 const cities = [
   "Рига",
@@ -165,6 +168,7 @@ function Picker({
   );
 }
 export default function Home() {
+  const [categoriesExpanded, setCategoriesExpanded] = useState(false);
   const [authOpen,setAuthOpen]=useState(false),[authQueryHandled,setAuthQueryHandled]=useState(false),[hiddenDecisions,setHiddenDecisions]=useState<string[]>([]),[mineTab,setMineTab]=useState('tasks');
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [deepLinkHandled,setDeepLinkHandled]=useState(false);
@@ -455,7 +459,8 @@ export default function Home() {
           />
           <button className="primary">{t("Найти ")}</button>
         </form>
-        <section className="categories">
+        <div className={`category-picker ${categoriesExpanded ? 'expanded' : 'collapsed'}`}>
+        <section className="categories" id="service-categories">
           {categories.map(([name, Icon]) => (
             <button
               key={name}
@@ -468,6 +473,11 @@ export default function Home() {
             </button>
           ))}
         </section>
+        {!categoriesExpanded && <div className="category-preview" aria-hidden="true">{categories.slice(4,8).map(([name,Icon])=><span key={name}><Icon size={24}/><span>{t(name)}</span></span>)}</div>}
+        <button type="button" className="category-toggle" aria-controls="service-categories" aria-expanded={categoriesExpanded} onClick={()=>setCategoriesExpanded(value=>!value)}>
+          <span>{t(categoriesExpanded?'Свернуть категории':'Все категории')}</span><ChevronDown size={20}/>
+        </button>
+        </div>
         {notice && (
           <div className="feedback" role="status">
             {t(notice)}
@@ -1065,10 +1075,7 @@ export default function Home() {
                           label={t("Категория")}
                           value={formCategory}
                           onChange={setFormCategory}
-                          values={[
-                            ...categories.slice(1).map((c) => c[0]),
-                            "Другое",
-                          ]}
+                          values={categories.slice(1).map((c) => c[0])}
                         />
                         <Picker
                           label={t("Где в Латвии?")}
