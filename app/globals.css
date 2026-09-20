@@ -346,10 +346,32 @@ h1 em {
 .portfolio-empty strong { color: #4f6048; font-size: 14px; margin-bottom: 4px; }
 .portfolio-empty span { font-size: 12px; line-height: 1.45; }
 .portfolio-empty button { flex-shrink: 0; padding: 8px 12px; font-size: 12px; }
-.profile-photo-editor { display:flex; align-items:center; gap:16px; padding:12px 0; }
+.form-section { display:grid; gap:16px; padding:18px; border:1px solid #e4ebdb; border-radius:14px; background:#fbfcf8; }
+.form-section-title { margin:0; font-size:13px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#61754b; }
+.profile-photo-editor { display:flex; align-items:center; gap:16px; }
 .profile-photo-preview { width:84px; height:84px; overflow:hidden; border-radius:50%; display:grid; place-items:center; flex-shrink:0; background:#e3ecd8; color:#506342; font-size:24px; font-weight:700; }
 .profile-photo-preview img { width:100%; height:100%; object-fit:cover; }
-.profile-photo-input { flex:1; }
+.profile-photo-meta { flex:1; display:grid; gap:8px; min-width:0; }
+.field-hint { font-size:12px; font-weight:400; color:#6f7a63; line-height:1.4; }
+.market-form label.file-button { display:inline-flex; align-items:center; gap:8px; justify-self:start; padding:9px 14px; border:1px solid #cdd5c3; border-radius:9px; background:#fff; font-size:14px; font-weight:600; color:#3f5030; cursor:pointer; transition:background .15s,border-color .15s; }
+.market-form label.file-button:hover { background:#f1f5ec; border-color:#a9b79a; }
+.market-form label.file-button input, .market-form label.file-dropzone input { position:absolute; width:1px; height:1px; padding:0; border:0; opacity:0; overflow:hidden; pointer-events:none; }
+.market-form label.check-card { display:flex; align-items:flex-start; gap:12px; padding:14px; border:1px solid #dce4d1; border-radius:10px; background:#fff; cursor:pointer; font-weight:400; transition:border-color .15s,background .15s; }
+.market-form label.check-card:hover { border-color:#a9b79a; background:#fafcf6; }
+.market-form label.check-card:has(input:checked) { border-color:#7f9b4b; background:#f2f7e8; }
+.market-form label.check-card input { width:auto; margin-top:2px; flex-shrink:0; }
+.check-card span { display:grid; gap:2px; }
+.check-card strong { font-size:14px; color:#39482c; }
+.check-card small { font-size:12px; color:#6f7a63; }
+.city-search { margin-bottom:2px; }
+.market-form label.check-label { display:flex; align-items:flex-start; gap:8px; font-weight:400; }
+.market-form label.check-label input { width:auto; flex-shrink:0; margin-top:2px; }
+.market-form label.file-dropzone { display:flex; align-items:center; gap:14px; padding:18px; border:2px dashed #cdd8c0; border-radius:12px; background:#fff; cursor:pointer; color:#5c6b4d; transition:border-color .15s,background .15s; }
+.market-form label.file-dropzone:hover { border-color:#8fa863; background:#f7faf2; }
+.file-dropzone > svg { flex-shrink:0; color:#82996a; }
+.file-dropzone span { display:grid; gap:2px; }
+.file-dropzone strong { font-size:14px; color:#39482c; }
+.file-dropzone small { font-size:12px; color:#6f7a63; }
 .portfolio-edit-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; }
 .portfolio-edit-item { position:relative; aspect-ratio:1; overflow:hidden; border-radius:10px; background:#eef3e9; }
 .portfolio-edit-item img { width:100%; height:100%; object-fit:cover; }
@@ -810,7 +832,7 @@ button:disabled {
   margin: 10px 0;
   color: #49612b;
 }
-.profile-photo{display:block;width:104px;height:104px;object-fit:cover;border-radius:50%;margin:12px 0 18px;border:3px solid #e7f3cb}.profile-feature{color:#315b3d;font-weight:650}.profile-cities{color:#66735e}.portfolio-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}.portfolio-gallery img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;border:1px solid #dce4d1}.city-picker{border:1px solid #dce4d1;border-radius:10px;padding:12px;display:grid;gap:8px;max-height:190px;overflow:auto}.city-picker legend{padding:0 5px;font-weight:650}.check-label{display:flex;gap:8px;align-items:flex-start}.check-label input{width:auto}
+.profile-photo{display:block;width:104px;height:104px;object-fit:cover;border-radius:50%;margin:12px 0 18px;border:3px solid #e7f3cb}.profile-feature{color:#315b3d;font-weight:650}.profile-cities{color:#66735e}.portfolio-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}.portfolio-gallery img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;border:1px solid #dce4d1}.city-picker{border:1px solid #dce4d1;border-radius:10px;padding:12px;display:grid;gap:10px}.city-picker legend{padding:0 5px;font-weight:650}.city-list{display:grid;gap:8px;max-height:180px;overflow:auto;padding-right:4px}.check-label{display:flex;gap:8px;align-items:flex-start}.check-label input{width:auto}
 .details h3 {
   display: flex;
   align-items: center;

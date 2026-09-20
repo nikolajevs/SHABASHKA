@@ -2471,7 +2471,100 @@
     "One-off work and side jobs",
     "Разова робота і підробіток"
   ],
-  ["Аниматоры", "Pasākumu animatori", "Party entertainers", "Аніматори"],
-  ["Все категории", "Visas kategorijas", "All categories", "Усі категорії"],
-  ["Свернуть категории", "Sakļaut kategorijas", "Collapse categories", "Згорнути категорії"]
+  [
+    "Аниматоры",
+    "Pasākumu animatori",
+    "Party entertainers",
+    "Аніматори"
+  ],
+  [
+    "Все категории",
+    "Visas kategorijas",
+    "All categories",
+    "Усі категорії"
+  ],
+  [
+    "Свернуть категории",
+    "Sakļaut kategorijas",
+    "Collapse categories",
+    "Згорнути категорії"
+  ],
+  [
+    "JPG, PNG или WebP. Лучше всего смотрится квадратное фото.",
+    "JPG, PNG vai WebP. Vislabāk izskatās kvadrātveida foto.",
+    "JPG, PNG or WebP. A square photo looks best.",
+    "JPG, PNG або WebP. Найкраще виглядає квадратне фото."
+  ],
+  [
+    "Например, сборка мебели и мелкий ремонт",
+    "Piemēram, mēbeļu montāža un sīki remontdarbi",
+    "For example, furniture assembly and small repairs",
+    "Наприклад, збірка меблів і дрібний ремонт"
+  ],
+  [
+    "Навыки и описание",
+    "Prasmes un apraksts",
+    "Skills and description",
+    "Навички та опис"
+  ],
+  [
+    "Перечислите через запятую — они покажутся тегами в вашей карточке.",
+    "Uzskaitiet tās ar komatu — tās parādīsies kā birkas jūsu kartītē.",
+    "List them separated by commas — they appear as tags on your card.",
+    "Перелічіть через кому — вони з’являться тегами у вашій картці."
+  ],
+  [
+    "О себе и услуге",
+    "Par sevi un pakalpojumu",
+    "About you and your service",
+    "Про себе та послугу"
+  ],
+  [
+    "Расскажите, что вы делаете и почему стоит выбрать вас.",
+    "Pastāstiet, ko jūs darāt un kāpēc izvēlēties tieši jūs.",
+    "Tell customers what you do and why they should choose you.",
+    "Розкажіть, що ви робите і чому варто обрати саме вас."
+  ],
+  [
+    "Где вы работаете",
+    "Kur jūs strādājat",
+    "Where you work",
+    "Де ви працюєте"
+  ],
+  [
+    "Можете приехать к заказчику",
+    "Varat ierasties pie pasūtītāja",
+    "You can travel to the customer",
+    "Можете приїхати до замовника"
+  ],
+  [
+    "Поиск города…",
+    "Meklēt pilsētu…",
+    "Search city…",
+    "Пошук міста…"
+  ],
+  [
+    "Добавить фото в портфолио",
+    "Pievienot foto portfolio",
+    "Add photos to portfolio",
+    "Додати фото до портфоліо"
+  ],
+  [
+    "До 10 фотографий, JPG · PNG · WebP",
+    "Līdz 10 fotoattēliem, JPG · PNG · WebP",
+    "Up to 10 photos, JPG · PNG · WebP",
+    "До 10 фотографій, JPG · PNG · WebP"
+  ],
+  [
+    "Заменить фото профиля",
+    "Nomainīt profila foto",
+    "Change profile photo",
+    "Замінити фото профілю"
+  ],
+  [
+    "Отметьте все населённые пункты, где готовы работать.",
+    "Atzīmējiet visas apdzīvotās vietas, kur esat gatavs strādāt.",
+    "Check every location where you are ready to work.",
+    "Позначте всі населені пункти, де готові працювати."
+  ]
 ]

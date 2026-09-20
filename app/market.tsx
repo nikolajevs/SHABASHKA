@@ -174,6 +174,7 @@ export default function Home() {
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [portfolioToKeep, setPortfolioToKeep] = useState<string[]>([]);
   const [profilePhotoPreview, setProfilePhotoPreview] = useState("");
+  const [citySearch, setCitySearch] = useState("");
   const [deepLinkHandled,setDeepLinkHandled]=useState(false);
   const { locale, t, errorText } = useLanguage();
   const [view, setView] = useState("profile"),
@@ -280,6 +281,7 @@ export default function Home() {
     setSelected(item || null);
     setPortfolioToKeep(item?.portfolioImages || []);
     setProfilePhotoPreview(item?.photo || "");
+    setCitySearch("");
     setFormCategory(item?.category || "Ремонт");
     setFormCity(item?.city && cities.includes(item.city) ? item.city : "Рига");
     setRole(user?.role || "customer");
@@ -1088,19 +1090,14 @@ export default function Home() {
                   </>
                 ) : (
                   <>
-                    {["task", "profile"].includes(modal) && (
+                    {modal === "task" && (
                       <>
                         <label>
-                          {modal === "profile"
-                            ? t("Название услуги")
-                            : t("Что нужно сделать?")}
+                          {t("Что нужно сделать?")}
                           <input
                             name="title"
                             required
                             maxLength={140}
-                            defaultValue={
-                              modal === "profile" ? selected?.title : ""
-                            }
                             placeholder={t("Например, собрать шкаф")}
                           />
                         </label>
@@ -1120,21 +1117,117 @@ export default function Home() {
                     )}
                     {modal === "profile" && (
                       <>
-                        <div className="profile-photo-editor"><div className="profile-photo-preview">{profilePhotoPreview ? <img src={profilePhotoPreview} alt={t('Аватар профиля')} /> : <span>{selected?.name?.split(' ').map(s=>s[0]).slice(0,2).join('')}</span>}</div><label className="profile-photo-input">{t("Заменить фото профиля")}<input name="photo" type="file" accept="image/jpeg,image/png,image/webp" onChange={e=>{const file=e.currentTarget.files?.[0];if(file)setProfilePhotoPreview(URL.createObjectURL(file));}} /></label></div>
-                        <label className="check-label"><input type="checkbox" name="transport" defaultChecked={selected?.transport}/>{t("Собственный транспорт")}</label>
-                        <fieldset className="city-picker"><legend>{t("Города работы")}</legend>{cities.map(city=><label key={city} className="check-label"><input type="checkbox" name="cities" value={city} defaultChecked={(selected?.cities||[selected?.city||formCity]).includes(city)}/>{t(city)}</label>)}</fieldset>
-                        <label>
-                          {t("Навыки ")}
-                          <input
-                            name="skills"
-                            required
-                            maxLength={500}
-                            defaultValue={selected?.skills}
-                            placeholder={t(
-                              "Например: сборка мебели, электрика",
-                            )}
+                        <section className="form-section">
+                          <div className="profile-photo-editor">
+                            <div className="profile-photo-preview">
+                              {profilePhotoPreview ? (
+                                <img src={profilePhotoPreview} alt={t("Аватар профиля")} />
+                              ) : (
+                                <span>{selected?.name?.split(" ").map((s) => s[0]).slice(0, 2).join("")}</span>
+                              )}
+                            </div>
+                            <div className="profile-photo-meta">
+                              <label className="file-button">
+                                <Camera size={16} />
+                                {t("Заменить фото профиля")}
+                                <input
+                                  name="photo"
+                                  type="file"
+                                  accept="image/jpeg,image/png,image/webp"
+                                  onChange={(e) => {
+                                    const file = e.currentTarget.files?.[0];
+                                    if (file) setProfilePhotoPreview(URL.createObjectURL(file));
+                                  }}
+                                />
+                              </label>
+                              <span className="field-hint">{t("JPG, PNG или WebP. Лучше всего смотрится квадратное фото.")}</span>
+                            </div>
+                          </div>
+                          <label>
+                            {t("Название услуги")}
+                            <input
+                              name="title"
+                              required
+                              maxLength={140}
+                              defaultValue={selected?.title}
+                              placeholder={t("Например, сборка мебели и мелкий ремонт")}
+                            />
+                          </label>
+                          <Picker
+                            label={t("Категория")}
+                            value={formCategory}
+                            onChange={setFormCategory}
+                            values={categories.slice(1).map((c) => c[0])}
                           />
-                        </label>
+                        </section>
+
+                        <section className="form-section">
+                          <h4 className="form-section-title">{t("Навыки и описание")}</h4>
+                          <label>
+                            {t("Навыки ")}
+                            <input
+                              name="skills"
+                              required
+                              maxLength={500}
+                              defaultValue={selected?.skills}
+                              placeholder={t("Например: сборка мебели, электрика")}
+                            />
+                            <span className="field-hint">{t("Перечислите через запятую — они покажутся тегами в вашей карточке.")}</span>
+                          </label>
+                          <label>
+                            {t("О себе и услуге")}
+                            <textarea
+                              name="description"
+                              required
+                              maxLength={2000}
+                              rows={4}
+                              defaultValue={selected?.description}
+                              placeholder={t("Расскажите, что вы делаете и почему стоит выбрать вас.")}
+                            />
+                          </label>
+                        </section>
+
+                        <section className="form-section">
+                          <h4 className="form-section-title">{t("Где вы работаете")}</h4>
+                          <label className="check-card">
+                            <input type="checkbox" name="transport" defaultChecked={selected?.transport} />
+                            <span>
+                              <strong>{t("Собственный транспорт")}</strong>
+                              <small>{t("Можете приехать к заказчику")}</small>
+                            </span>
+                          </label>
+                          <fieldset className="city-picker">
+                            <legend>{t("Города работы")}</legend>
+                            <input
+                              type="search"
+                              className="city-search"
+                              value={citySearch}
+                              onChange={(e) => setCitySearch(e.target.value)}
+                              placeholder={t("Поиск города…")}
+                              aria-label={t("Поиск города…")}
+                            />
+                            <div className="city-list">
+                              {cities.map((city) => {
+                                const label = t(city);
+                                const match = !citySearch || label.toLowerCase().includes(citySearch.toLowerCase());
+                                return (
+                                  <label key={city} className="check-label" style={{ display: match ? undefined : "none" }}>
+                                    <input
+                                      type="checkbox"
+                                      name="cities"
+                                      value={city}
+                                      defaultChecked={(selected?.cities || [selected?.city || formCity]).includes(city)}
+                                    />
+                                    {label}
+                                  </label>
+                                );
+                              })}
+                            </div>
+                          </fieldset>
+                          <span className="field-hint">{t("Отметьте все населённые пункты, где готовы работать.")}</span>
+                        </section>
+                        <section className="form-section">
+                          <h4 className="form-section-title">{t("Портфолио")}</h4>
                         <label>
                           {t("Портфолио \u2014 ссылки на работы ")}
                           <textarea
@@ -1147,10 +1240,32 @@ export default function Home() {
                             )}
                           />
                         </label>
-                        {!!portfolioToKeep.length&&<div className="portfolio-edit-grid">{portfolioToKeep.map((image,index)=><div className="portfolio-edit-item" key={image}><img src={image} alt={`${t('Фото работы')} ${index+1}`} /><button type="button" className="portfolio-remove" aria-label={t('Удалить фото')} onClick={()=>setPortfolioToKeep(current=>current.filter((_,i)=>i!==index))}>×</button></div>)}</div>}
-                        <label>{t("Добавить фото в портфолио (до 10)")}
+                        {!!portfolioToKeep.length && (
+                          <div className="portfolio-edit-grid">
+                            {portfolioToKeep.map((image, index) => (
+                              <div className="portfolio-edit-item" key={image}>
+                                <img src={image} alt={`${t('Фото работы')} ${index + 1}`} />
+                                <button
+                                  type="button"
+                                  className="portfolio-remove"
+                                  aria-label={t('Удалить фото')}
+                                  onClick={() => setPortfolioToKeep((current) => current.filter((_, i) => i !== index))}
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        <label className="file-dropzone">
+                          <Camera size={22} />
+                          <span>
+                            <strong>{t("Добавить фото в портфолио")}</strong>
+                            <small>{t("До 10 фотографий, JPG · PNG · WebP")}</small>
+                          </span>
                           <input name="portfolioImages" type="file" accept="image/jpeg,image/png,image/webp" multiple />
                         </label>
+                        </section>
                       </>
                     )}
                     {modal === "review" && (
@@ -1161,24 +1276,23 @@ export default function Home() {
                         values={["5", "4", "3", "2", "1"]}
                       />
                     )}
-                    <label>
-                      {modal === "chat"
-                        ? t("Сообщение")
-                        : modal === "review"
-                          ? t("Как прошла работа?")
-                          : modal === "bid"
-                            ? t("Ваше предложение")
-                            : t("Описание")}
-                      <textarea
-                        name="description"
-                        required
-                        maxLength={2000}
-                        rows={modal === "chat" ? 2 : 4}
-                        defaultValue={
-                          modal === "profile" ? selected?.description : ""
-                        }
-                      />
-                    </label>
+                    {modal !== "profile" && (
+                      <label>
+                        {modal === "chat"
+                          ? t("Сообщение")
+                          : modal === "review"
+                            ? t("Как прошла работа?")
+                            : modal === "bid"
+                              ? t("Ваше предложение")
+                              : t("Описание")}
+                        <textarea
+                          name="description"
+                          required
+                          maxLength={2000}
+                          rows={modal === "chat" ? 2 : 4}
+                        />
+                      </label>
+                    )}
                     {modal==='task'&&<fieldset className="task-date-fields"><legend>{t('Срок выполнения')}</legend><label>{t('Дата начала')}<input type="date" name="dateFrom" required onChange={e=>{const end=e.currentTarget.form?.elements.namedItem('dateTo') as HTMLInputElement|null;if(end)end.min=e.currentTarget.value;}}/></label><label>{t('Дата окончания')}<input type="date" name="dateTo" required/></label></fieldset>}
                   </>
                 )}
