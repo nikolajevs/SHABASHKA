@@ -251,7 +251,19 @@ export async function POST(request: Request) {
           )
           .bind("profile:" + u.userId, u.userId, JSON.stringify(data), now,'account:'+u.userId)
           .run();
-      } else await insert("task", data);
+      } else {
+        const from = typeof b.dateFrom === 'string' ? b.dateFrom : '';
+        const to = typeof b.dateTo === 'string' ? b.dateTo : '';
+        const validDate = (date: string) => {
+          if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || date < '0001-01-01') return false;
+          const parsed = new Date(date+'T12:00:00Z');
+          return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0,10) === date;
+        };
+        if (!validDate(from) || !validDate(to) || to < from) throw Error('Укажите корректный диапазон дат.');
+        data.dateFrom = from;
+        data.dateTo = to;
+        await insert("task", data);
+      }
     } else if (action === "bid") {
       if (identity.role !== "provider")
         throw Error("Отклики доступны исполнителям");

@@ -16,6 +16,7 @@ import {
   PawPrint,
   Grid2X2,
   MapPin,
+  CalendarDays,
   ChevronRight,
   ArrowUpRight,
   RefreshCw,
@@ -103,6 +104,8 @@ type Item = {
   name: string;
   description: string;
   city?: string;
+  dateFrom?: string;
+  dateTo?: string;
   category?: string;
   mine?: boolean;
   parent?: string;
@@ -277,6 +280,13 @@ export default function Home() {
     setFormCity(item?.city && cities.includes(item.city) ? item.city : "Рига");
     setRole(user?.role || "customer");
     setModal(kind);
+  }
+  function taskDates(item: Item) {
+    if (!item.dateFrom || !item.dateTo) return t('Сроки не указаны');
+    const format = new Intl.DateTimeFormat(localeTags[locale], {day:'numeric',month:'short',year:'numeric',timeZone:'UTC'});
+    const from = new Date(item.dateFrom+'T12:00:00Z'), to = new Date(item.dateTo+'T12:00:00Z');
+    if (Number.isNaN(from.getTime()) || Number.isNaN(to.getTime())) return t('Сроки не указаны');
+    return format.format(from)+' — '+format.format(to);
   }
   function navigate(v: string) {
     setView(v);
@@ -600,6 +610,14 @@ export default function Home() {
                   {!!item.portfolioImages?.length&&<PortfolioGallery images={item.portfolioImages} previewCount={3}/>}
                   <div className="specialist-actions"><button className="primary" onClick={()=>open('detail',item)}>{t('Посмотреть профиль')}</button>{view==='mine'&&mineTab==='profile'&&item.mine&&<button className="outline" onClick={()=>open('profile',item)}>{t('Изменить профиль')}</button>}</div>
                   <ReportLink id={item.id}/>
+                </article> : item.kind === 'task' ? <article className="specialist-card task-card" key={item.id}>
+                  <div className="task-heading"><span className="specialist-category">{t(item.category)}</span><span className={'task-status task-status-'+(item.deleted?'deleted':item.status||'open')}>{t(item.deleted?'Удалено':statusText(item.status))}</span></div>
+                  <h3 className="task-title"><button onClick={()=>open('detail',item)}>{item.title}</button></h3>
+                  <p className="specialist-description">{item.description}</p>
+                  <div className="task-facts"><div><MapPin size={17}/><span>{t(item.city||'Латвия')}</span></div><div><CalendarDays size={17}/><span><small>{t('Срок выполнения')}</small>{taskDates(item)}</span></div></div>
+                  <div className="task-customer"><span className="task-customer-avatar" aria-hidden="true">{item.name.split(' ').map(s=>s[0]).slice(0,2).join('')}</span><span><small>{t('Заказчик')}</small>{item.name}</span></div>
+                  <div className="specialist-actions"><button className="primary" onClick={()=>open('detail',item)}>{t('Подробнее о задании')}</button>{item.mine&&!item.deleted&&<button className="outline" onClick={()=>{open('detail',item);setDeleteConfirmation(true);}}>{t('Удалить задание')}</button>}</div>
+                  <ReportLink id={item.id}/>
                 </article> : <article className="card" key={item.id}>
                   <div className={"avatar color" + (i % 4)}>
                     {item.kind==='profile'&&item.photo ? <img className="card-profile-photo" src={item.photo} alt={item.name} loading="lazy"/> : <>
@@ -805,6 +823,7 @@ export default function Home() {
               {((detail.kind === "task" && detail.deleted) || (detail.kind === "bid" && taskFor(detail)?.deleted)) && <p className="feedback">{t("Задание удалено из каталога. История доступна только участникам.")}</p>}
               {['task','profile','review'].includes(detail.kind) && <ReportLink id={detail.id}/>}
               <b>{detail.name}</b>
+              {detail.kind==='task'&&<p className="task-detail-dates"><CalendarDays size={18}/><span>{t('Срок выполнения')}: {taskDates(detail)}</span></p>}
               <p>{detail.description}</p>
               <p>
                 {detail.cities?.length ? detail.cities.map(city=>t(city)).join(' · ') : t(detail.city)}
@@ -1157,6 +1176,7 @@ export default function Home() {
                         }
                       />
                     </label>
+                    {modal==='task'&&<fieldset className="task-date-fields"><legend>{t('Срок выполнения')}</legend><label>{t('Дата начала')}<input type="date" name="dateFrom" required onChange={e=>{const end=e.currentTarget.form?.elements.namedItem('dateTo') as HTMLInputElement|null;if(end)end.min=e.currentTarget.value;}}/></label><label>{t('Дата окончания')}<input type="date" name="dateTo" required/></label></fieldset>}
                   </>
                 )}
                 <button className="primary" disabled={busy}>

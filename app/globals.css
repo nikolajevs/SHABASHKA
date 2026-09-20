@@ -357,6 +357,22 @@ h1 em {
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
+.task-heading { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+.task-status { border-radius:20px; padding:5px 10px; font-size:12px; background:#edf5df; color:#48632c; }
+.task-status-active { background:#fff2d9; color:#795316; }
+.task-status-complete, .task-status-deleted { background:#f0f1ed; color:#62695b; }
+.task-title { margin:0; font-size:23px; line-height:1.3; overflow-wrap:anywhere; }
+.task-title button { text-align:left; }
+.task-facts { display:grid; gap:12px; padding:16px; background:#f6f8f2; border-radius:12px; font-size:14px; }
+.task-facts > div, .task-detail-dates { display:flex; align-items:flex-start; gap:9px; }
+.task-facts svg, .task-detail-dates svg { flex-shrink:0; color:#647852; }
+.task-facts small, .task-customer small { display:block; color:#74806b; font-size:12px; margin-bottom:3px; }
+.task-customer { display:flex; gap:10px; align-items:center; font-size:14px; overflow-wrap:anywhere; }
+.task-customer-avatar { display:grid; place-items:center; width:38px; height:38px; flex-shrink:0; border-radius:50%; background:#eaf0e0; color:#536642; font-weight:600; }
+.task-date-fields { display:grid; grid-template-columns:1fr 1fr; gap:12px; border:0; padding:0; margin:0; min-width:0; }
+.task-date-fields legend { margin-bottom:10px; font-weight:600; }
+.task-date-fields label, .task-date-fields input { min-width:0; width:100%; }
+@media(max-width:420px) { .task-date-fields { grid-template-columns:1fr; } .task-title { font-size:21px; } }
 .card {
   background: white;
   border: 1px solid #e3e7de;
