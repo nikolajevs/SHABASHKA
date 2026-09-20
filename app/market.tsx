@@ -1,4 +1,5 @@
 "use client";
+import {Notifications} from './notifications';
 import {prepareProfileImage} from './profile-image';
 import {PortfolioGallery} from './portfolio-gallery';
 import { useLanguage, LanguageSwitcher, localeTags } from "./i18n/provider";
@@ -104,6 +105,7 @@ const cities = [
 type Item = {
   id: string;
   kind: string;
+  unread?: boolean;
   title?: string;
   name: string;
   description: string;
@@ -234,10 +236,10 @@ export default function Home() {
   useEffect(()=>{if(loading||authQueryHandled)return;const params=new URLSearchParams(location.search);if(params.get('auth')==='login'){setAuthOpen(true);}else if(params.get('auth')==='complete'&&user){setView('mine');if(!user.registered)setModal('register');history.replaceState(null,'','/');}setAuthQueryHandled(true);},[loading,user,authQueryHandled]);
   useEffect(()=>{if(loading||deepLinkHandled)return;const id=new URLSearchParams(location.search).get('item');if(id){const item=records.find(r=>r.id===id);if(item){setSelected(item);setModal('detail');}}setDeepLinkHandled(true);},[records,loading,deepLinkHandled]);
   useEffect(() => {
-    if (modal !== "chat") return;
-    const timer = setInterval(() => refresh(true), 5000);
+    if (!user) return;
+    const timer = setInterval(() => {if(document.visibilityState==='visible')refresh(true);}, 5000);
     return () => clearInterval(timer);
-  }, [modal, refresh]);
+  }, [!!user, refresh]);
   useEffect(() => {
     const context = (
       document as unknown as {
@@ -302,6 +304,13 @@ export default function Home() {
     if (task.deleted) return t('Задание удалено');
     if (task.chosen === bid.id) return t(task.status === 'complete' ? 'Работа завершена' : 'Вы выбраны исполнителем');
     return t(task.status === 'open' ? 'Отклик отправлен' : 'Выбран другой исполнитель');
+  }
+  function unreadFor(item: Item) {
+    return records.filter(r=>r.unread&&(item.kind==='bid'?r.kind==='message'&&r.parent===item.id:
+      (r.kind==='bid'&&r.parent===item.id)||(r.kind==='message'&&records.some(b=>b.kind==='bid'&&b.id===r.parent&&b.parent===item.id)))).length;
+  }
+  function tabUnread(tab:string) {
+    return records.filter(r=>r.mine&&(tab==='bids'?r.kind==='bid':r.kind==='task'&&(tab==='archive'?r.deleted||r.status==='complete':tab==='tasks'&&!r.deleted&&r.status!=='complete'))).reduce((sum,r)=>sum+unreadFor(r),0);
   }
   function navigate(v: string) {
     setView(v);
@@ -463,7 +472,7 @@ export default function Home() {
                   <div className="specialist-actions"><button className="primary" onClick={()=>open('detail',item)}>{t('Подробнее о задании')}</button>{item.mine&&!item.deleted&&<button className="outline" onClick={()=>{open('detail',item);setDeleteConfirmation(true);}}>{t('Удалить задание')}</button>}</div>
                   <ReportLink id={item.id}/>
                 </article> : item.kind === 'bid' ? <article className="specialist-card response-card" key={item.id}>
-                  <div className="task-heading"><span className="specialist-category">{t('Ваш отклик')}</span><span className="task-status">{bidStatus(item)}</span></div>
+                  <div className="task-heading"><span className="specialist-category">{t('Ваш отклик')}{unreadFor(item)>0&&<span className="unread-count" aria-label={t('Непрочитанное')}>{unreadFor(item)}</span>}</span><span className="task-status">{bidStatus(item)}</span></div>
                   <h3 className="task-title"><button onClick={()=>open('detail',item)}>{taskFor(item)?.title||t('Предложение по заданию')}</button></h3>
                   {taskFor(item)&&<div className="specialist-facts"><div><MapPin size={16}/><span>{t(taskFor(item)?.city||'Латвия')}</span></div><div><CalendarDays size={16}/><span>{taskDates(taskFor(item)!)}</span></div></div>}
                   <div className="response-excerpt"><small>{t('Ваше предложение')}</small><p className="specialist-description">{item.description}</p></div>
@@ -583,6 +592,7 @@ export default function Home() {
           </button>
         </nav>
         <div className="header-right">
+          {user&&<Notifications records={records} activeId={selected?.id} activeKind={modal} onOpen={(kind,id)=>{const item=records.find(r=>r.id===id);if(item)open(kind,item);}} onRead={ids=>setRecords(current=>current.map(r=>ids.includes(r.id)?{...r,unread:false}:r))}/>}
           <LanguageSwitcher />
         </div>
       </header>
@@ -743,7 +753,7 @@ export default function Home() {
               </div>
                 <div className="cabinet-main">
                   <div className="mine-tabs" role="tablist" aria-label={t('Разделы кабинета')}>
-                    {([['tasks','Мои задания'],['bids','Мои отклики'],['profile','Мой профиль'],['decisions','Решения по публикациям'],['archive','Архив']] as const).map(([value,label])=><button key={value} type="button" role="tab" aria-selected={mineTab===value} onClick={()=>setMineTab(value)}>{t(label)}</button>)}
+                    {([['tasks','Мои задания'],['bids','Мои отклики'],['profile','Мой профиль'],['decisions','Решения по публикациям'],['archive','Архив']] as const).map(([value,label])=><button key={value} type="button" role="tab" aria-selected={mineTab===value} onClick={()=>setMineTab(value)}>{t(label)}{tabUnread(value)>0&&<span className="unread-count">{tabUnread(value)}</span>}</button>)}
                   </div>
                   <div className="cabinet-city-filter"><Select value={city} onValueChange={setCity}><SelectTrigger aria-label={t("Город")}><SelectValue /></SelectTrigger><SelectContent>{["Все города", ...cities].map((c) => <SelectItem key={c} value={c}>{t(c)}</SelectItem>)}</SelectContent></Select></div>
                   {browsingContent}
@@ -1059,6 +1069,7 @@ export default function Home() {
                               >
                                 <MessageCircle size={16} />
                                 {t("Чат ")}
+                                {unreadFor(b)>0&&<span className="unread-count">{unreadFor(b)}</span>}
                               </button>
                               {detail.status === "open" ? (
                                 <button

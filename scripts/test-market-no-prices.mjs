@@ -23,6 +23,17 @@ await send('/api/market',{action:'bid',parent:reverseTask.id,description:'Custom
 const selfBid=await fetch(origin+'/api/market',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json',Cookie:'gigs_session='+customer},body:JSON.stringify({action:'bid',parent:task.id,description:'Self bid must fail'})});
 assert.notEqual(selfBid.status,200);
 assert.equal((await send('/api/market',null,customer)).user.registered,true);
+const received=(await send('/api/market',null,customer)).records.find(r=>r.kind==='bid'&&r.parent===task.id);
+assert.equal(received.unread,true);
+await send('/api/market',{action:'read-notifications',ids:[received.id]},provider);
+assert.equal((await send('/api/market',null,customer)).records.find(r=>r.id===received.id).unread,true);
+await send('/api/market',{action:'read-notifications',ids:[received.id]},customer);
+assert.equal((await send('/api/market',null,customer)).records.find(r=>r.id===received.id).unread,false);
+await send('/api/market',{action:'message',parent:received.id,description:'Unread notification test'},provider);
+const message=(await send('/api/market',null,customer)).records.find(r=>r.kind==='message'&&r.parent===received.id);
+assert.equal(message.unread,true);
+await send('/api/market',{action:'read-notifications',ids:[message.id]},customer);
+assert.equal((await send('/api/market',null,customer)).records.find(r=>r.id===message.id).unread,false);
 for(const row of rows.filter(r=>r.id===task.id||(r.mine&&['profile','bid'].includes(r.kind)))){
  for(const key of ['price','budget','budgetCents','currency'])assert.equal(Object.hasOwn(row,key),false);
 }

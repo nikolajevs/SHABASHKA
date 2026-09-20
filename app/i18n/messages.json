@@ -1,4 +1,9 @@
 [
+  ["Уведомления", "Paziņojumi", "Notifications", "Сповіщення"],
+  ["Новые отклики и сообщения", "Jaunas atsauksmes uz uzdevumiem un ziņas", "New responses and messages", "Нові відгуки на завдання та повідомлення"],
+  ["Прочитать всё", "Atzīmēt visu kā izlasītu", "Mark all as read", "Прочитати все"],
+  ["Уведомлений пока нет", "Paziņojumu vēl nav", "No notifications yet", "Сповіщень поки немає"],
+  ["Непрочитанное", "Nelasīts", "Unread", "Непрочитане"],
   ["Изменить профиль исполнителя", "Rediģēt izpildītāja profilu", "Edit provider profile", "Змінити профіль виконавця"],
   ["Изменить имя", "Mainīt vārdu", "Change name", "Змінити ім’я"],
   ["Один аккаунт для ваших заданий и услуг.", "Viens konts jūsu uzdevumiem un pakalpojumiem.", "One account for your tasks and services.", "Один обліковий запис для ваших завдань і послуг."],

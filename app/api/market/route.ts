@@ -77,6 +77,8 @@ export async function GET(request: Request) {
     const account = rows.results.find(
       (r) => r.kind === "account" && r.owner === uid,
     );
+    const read = uid ? await database().prepare("SELECT parent FROM records WHERE kind='notification-read' AND owner=?").bind(uid).all<{parent:string}>() : {results:[]};
+    const readIds = new Set(read.results.map(r=>r.parent));
     return reply(
       {
         user: u
@@ -92,7 +94,7 @@ export async function GET(request: Request) {
           : null,
         records: rows.results
           .filter((r) => r.kind !== "account")
-          .map((r) => unpack(r, uid)),
+          .map((r) => ({...unpack(r, uid), unread: !!uid && r.owner!==uid && ['bid','message'].includes(r.kind) && !readIds.has(r.id)})),
       },
       { headers: { "Cache-Control": "private, no-store" } },
     );
@@ -124,6 +126,17 @@ export async function POST(request: Request) {
     const action = b.action;
     if(action!=='profile'&&raw.length>16000)return reply({error:'Слишком большой запрос'},{status:413});
     const currentState = await accountState(u.userId);
+    if(action==='read-notifications') {
+      if(!Array.isArray(b.ids)||b.ids.length>200||!b.ids.every(id=>typeof id==='string'&&id.length<=300))return reply({error:'Неверный запрос'},{status:400});
+      if(!b.ids.length)return reply({ok:true});
+      await db.batch(b.ids.map(id=>db.prepare(`INSERT INTO records(id,kind,owner,parent,data,created)
+        SELECT ?,'notification-read',?,r.id,'{}',? FROM records r
+        WHERE r.id=? AND r.owner<>? AND (
+          (r.kind='bid' AND EXISTS(SELECT 1 FROM records t WHERE t.id=r.parent AND t.kind='task' AND t.owner=?)) OR
+          (r.kind='message' AND EXISTS(SELECT 1 FROM records b JOIN records t ON t.id=b.parent WHERE b.id=r.parent AND b.kind='bid' AND t.kind='task' AND (b.owner=? OR t.owner=?)))
+        ) ON CONFLICT(id) DO NOTHING`).bind('read:'+u.userId+':'+id,u.userId,new Date().toISOString(),id,u.userId,u.userId,u.userId,u.userId)));
+      return reply({ok:true});
+    }
     if (currentState?.inactive && !(currentState.erased && action==='register' && b.reopen===true))
       return reply({error:"Аккаунт неактивен. Откройте настройки данных."},{status:403});
     if(currentState?.termsVersion!==TERMS_VERSION && action!=='register')return reply({error:"Примите обновлённые условия в кабинете."},{status:403});
