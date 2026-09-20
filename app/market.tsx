@@ -102,7 +102,6 @@ type Item = {
   title?: string;
   name: string;
   description: string;
-  price: string;
   city?: string;
   category?: string;
   mine?: boolean;
@@ -136,7 +135,6 @@ const statusText = (s?: string) =>
     : s === "complete"
       ? "Завершено"
       : "Принимает отклики";
-const priceText = (value?: string) => value && /€|eur|евро/i.test(value) ? value : value ? `${value} €` : "";
 function Picker({
   label,
   value,
@@ -639,7 +637,6 @@ export default function Home() {
                       </span>
                     )}
                     <div className="card-bottom">
-                      <strong>{priceText(item.price)}</strong>
                       {view === "mine" && mineTab === "profile" && item.kind === "profile" && item.mine && (
                         <button
                           className="outline card-open"
@@ -798,7 +795,7 @@ export default function Home() {
               <b>{detail.name}</b>
               <p>{detail.description}</p>
               <p>
-                {detail.cities?.length ? detail.cities.map(city=>t(city)).join(' · ') : t(detail.city)} · {priceText(detail.price)}
+                {detail.cities?.length ? detail.cities.map(city=>t(city)).join(' · ') : t(detail.city)}
               </p>
               {detail.kind === "profile" ? (
                 <>
@@ -888,7 +885,7 @@ export default function Home() {
                         .map((b) => (
                           <div className="bid" key={b.id}>
                             <b>
-                              {b.name} · {b.price}
+                              {b.name}
                             </b>
                             <p>{b.description}</p>
                             <div className="account-actions">
@@ -1148,24 +1145,6 @@ export default function Home() {
                         }
                       />
                     </label>
-                    {!["chat", "review"].includes(modal) && (
-                      <label>
-                        {modal === "task"
-                          ? t("Бюджет, EUR")
-                          : t("Стоимость, EUR")}
-                        <input
-                          name="price"
-                          required
-                          maxLength={80}
-                          placeholder={t(
-                            "Например, 50 \u20AC или по договорённости",
-                          )}
-                          defaultValue={
-                            modal === "profile" ? selected?.price : ""
-                          }
-                        />
-                      </label>
-                    )}
                   </>
                 )}
                 <button className="primary" disabled={busy}>

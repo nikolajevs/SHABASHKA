@@ -8,6 +8,13 @@
       "when": 1789395865404,
       "tag": "0000_medical_sumo",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1789862400000,
+      "tag": "0001_remove_market_prices",
+      "breakpoints": true
     }
   ]
 }

@@ -18,8 +18,10 @@ function database() {
   return db;
 }
 function unpack(r: Row, uid?: string) {
+  const data = JSON.parse(r.data);
+  if (['task','profile','bid'].includes(r.kind)) { delete data.price; delete data.budget; delete data.budgetCents; delete data.currency; }
   return {
-    ...JSON.parse(r.data),
+    ...data,
     id: r.id,
     kind: r.kind,
     parent: r.parent,
@@ -192,7 +194,6 @@ export async function POST(request: Request) {
         description: value("description"),
         category: value("category", 60),
         city: value("city", 80),
-        price: value("price", 80),
         name: identity.name,
         status: "open",
       };
@@ -274,7 +275,6 @@ export async function POST(request: Request) {
         "bid",
         {
           description: value("description"),
-          price: value("price", 80),
           name: identity.name,
         },
         parent,
