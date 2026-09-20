@@ -427,11 +427,8 @@ h1 em {
   gap: 16px;
 }
 .task-view { display:grid; gap:16px; }
-.task-hero { display:flex; gap:16px; align-items:center; padding:18px 20px; border-radius:16px; background:linear-gradient(135deg,#eef4e1,#f7faf1); border:1px solid #e2ecce; }
-.task-hero-icon { width:64px; height:64px; border-radius:16px; background:#fff; display:grid; place-items:center; color:#5f7a3b; flex-shrink:0; box-shadow:0 2px 8px rgba(60,80,40,.12); }
-.task-hero-info { display:grid; gap:8px; min-width:0; }
-.task-hero-category { font-size:17px; font-weight:700; color:#33422a; overflow-wrap:anywhere; }
-.task-hero-info .task-status { justify-self:start; }
+.task-view-lead { margin:0; font-size:17px; line-height:1.5; white-space:pre-wrap; overflow-wrap:anywhere; color:#2f3a28; }
+.task-topline { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
 .fact-card-col { align-items:flex-start; }
 .fact-card-col > div { display:grid; gap:2px; min-width:0; }
 .fact-label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.03em; color:#77836b; }
@@ -797,6 +794,9 @@ nav button {
 }
 .market-dialog [data-slot="dialog-title"] {
   font-size: 24px;
+}
+.market-dialog [data-slot="dialog-description"]:empty {
+  display: none;
 }
 button:disabled {
   opacity: 0.5;

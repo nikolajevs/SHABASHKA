@@ -801,7 +801,9 @@ export default function Home() {
             {modal === "detail"
               ? detail?.kind === "profile"
                 ? t("Профиль исполнителя")
-                : t("Условия и подробности")
+                : detail?.kind === "task"
+                  ? ""
+                  : t("Условия и подробности")
               : modal === "chat"
                 ? t(
                     "Переписку видят только заказчик и исполнитель. Сообщения обновляются автоматически.",
@@ -830,7 +832,7 @@ export default function Home() {
           {modal === "detail" && detail ? (
             <div className="details">
               {((detail.kind === "task" && detail.deleted) || (detail.kind === "bid" && taskFor(detail)?.deleted)) && <p className="feedback">{t("Задание удалено из каталога. История доступна только участникам.")}</p>}
-              {['task','profile','review'].includes(detail.kind) && <ReportLink id={detail.id}/>}
+              {['profile','review'].includes(detail.kind) && <ReportLink id={detail.id}/>}
               {detail.kind !== "profile" && detail.kind !== "task" && <b>{detail.name}</b>}
               {detail.kind !== "profile" && detail.kind !== "task" && <p>{detail.description}</p>}
               {detail.kind !== "profile" && detail.kind !== "task" && (
@@ -946,18 +948,11 @@ export default function Home() {
                 </>
               ) : (
                 <div className="task-view">
-                  <header className="task-hero">
-                    <div className="task-hero-icon">
-                      {(() => {
-                        const Icon = categories.find((c) => c[0] === detail.category)?.[1] || Grid2X2;
-                        return <Icon size={30} />;
-                      })()}
-                    </div>
-                    <div className="task-hero-info">
-                      {detail.category && <span className="task-hero-category">{t(detail.category)}</span>}
-                      <span className={"task-status task-status-" + (detail.deleted ? "deleted" : detail.status || "open")}>{t(detail.deleted ? "Удалено" : statusText(detail.status))}</span>
-                    </div>
-                  </header>
+                  {detail.description && <p className="task-view-lead">{detail.description}</p>}
+                  <div className="task-topline">
+                    {detail.category && <span className="specialist-category">{t(detail.category)}</span>}
+                    <span className={"task-status task-status-" + (detail.deleted ? "deleted" : detail.status || "open")}>{t(detail.deleted ? "Удалено" : statusText(detail.status))}</span>
+                  </div>
                   <div className="profile-facts-grid">
                     <div className="fact-card fact-card-col">
                       <MapPin size={18} />
@@ -972,16 +967,7 @@ export default function Home() {
                       <div><span className="fact-label">{t("Отклики")}</span><span className="fact-value">{records.filter((r) => r.kind === "bid" && r.parent === detail.id).length}</span></div>
                     </div>
                   </div>
-                  {detail.description && (
-                    <section className="profile-view-section">
-                      <h4 className="profile-view-heading">{t("Описание")}</h4>
-                      <p className="profile-view-about">{detail.description}</p>
-                    </section>
-                  )}
-                  <section className="profile-view-section">
-                    <h4 className="profile-view-heading">{t("Заказчик")}</h4>
-                    <div className="task-customer"><span className="task-customer-avatar" aria-hidden="true">{detail.name.split(" ").map((s) => s[0]).slice(0, 2).join("")}</span><span>{detail.name}</span></div>
-                  </section>
+                  <div className="task-customer"><span className="task-customer-avatar" aria-hidden="true">{detail.name.split(" ").map((s) => s[0]).slice(0, 2).join("")}</span><span><small>{t("Заказчик")}</small>{detail.name}</span></div>
                   <div className="task-view-actions">
                   {!detail.mine && !detail.deleted && detail.status === "open" && (
                     <button
@@ -1071,6 +1057,7 @@ export default function Home() {
                     </>
                   )}
                   </div>
+                  <ReportLink id={detail.id}/>
                 </div>
               )}
             </div>
