@@ -715,7 +715,6 @@ nav button {
   padding: 22px;
   background: #fff;
   border: 1px solid #e4ebdb;
-  margin-bottom: 20px;
   border-radius: 16px;
   display: grid;
   gap: 14px;
@@ -746,18 +745,15 @@ nav button {
 .account-logout .logout-action { display: contents; }
 .account-logout .auth-link { margin: 0; text-decoration: none; font-size: 14px; font-weight: 600; color: #8b6a5f; }
 .account-logout .auth-link:hover { text-decoration: underline; }
-/* In the personal cabinet the account card is the first element of the right column. */
+/* In the personal cabinet the account card is an independent sidebar: it and
+   the main list live in separate flex items (.cabinet-columns), each sized
+   purely by its own content, so one's height never stretches the other's. */
 .content:has(.account) { grid-template-columns: minmax(0, 1fr); }
 .content:has(.account) > aside { display: none; }
-.content:has(.account) > section { display: grid; grid-template-columns: minmax(0, 1fr) 290px; grid-template-rows: repeat(3, min-content) 1fr; gap: 0 30px; align-items: start; }
-.content:has(.account) > section > * { grid-column: 1; min-width: 0; }
-.content:has(.account) > section > .cards:empty { display: none; }
-.content:has(.account) > section > .account { grid-column: 2; grid-row: 1 / span 4; margin: 0; order: -1; }
-.content:has(.account) > section > .section-head,
-.content:has(.account) > section > .filters,
-.content:has(.account) > section > .feedback,
-.content:has(.account) > section > .cards,
-.content:has(.account) > section > [role="status"] { grid-column: 1; }
+.cabinet-columns { display: flex; align-items: flex-start; gap: 30px; }
+.cabinet-columns > .account { width: 290px; flex-shrink: 0; order: 1; }
+.cabinet-main { flex: 1; min-width: 0; }
+.cards:empty { display: none; }
 .market-dialog {
   max-height: 90vh;
   overflow-y: auto;
@@ -897,8 +893,8 @@ button:disabled {
     padding: 10px;
     font-size: 14px;
   }
-  .content:has(.account) > section { display: block; }
-  .content:has(.account) > section > .account { margin-bottom: 20px; padding: 16px; }
+  .cabinet-columns { display: block; }
+  .cabinet-columns > .account { width: auto; margin-bottom: 20px; padding: 16px; }
   .account-identity-info h3 { font-size: 17px; }
 }
 .brand {
