@@ -720,7 +720,9 @@ nav button {
 /* In the personal cabinet the account card is the first element of the right column. */
 .content:has(.account) { grid-template-columns: minmax(0, 1fr); }
 .content:has(.account) > aside { display: none; }
-.content:has(.account) > section { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 0 30px; align-items: start; }
+.content:has(.account) > section { display: grid; grid-template-columns: minmax(0, 1fr) 290px; grid-template-rows: repeat(3, min-content) 1fr; gap: 0 30px; align-items: start; }
+.content:has(.account) > section > * { grid-column: 1; min-width: 0; }
+.content:has(.account) > section > .cards:empty { display: none; }
 .content:has(.account) > section > .account { grid-column: 2; grid-row: 1 / span 4; margin: 0; order: -1; }
 .content:has(.account) > section > .section-head,
 .content:has(.account) > section > .filters,
