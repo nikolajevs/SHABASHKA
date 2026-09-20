@@ -439,197 +439,10 @@ export default function Home() {
   };
   const taskFor = (bid: Item) =>
     records.find((r) => r.kind === "task" && r.id === bid.parent);
-  return (
+  const browsingContent = (
     <>
-      <header>
-        <a className="logo brand" href="/">
-          Gigs<span>✳</span>
-        </a>
-        <nav>
-          <button
-            className={view === "profile" ? "nav-active" : ""}
-            onClick={() => navigate("profile")}
-          >
-            {t("Найти специалиста ")}
-          </button>
-          <button
-            className={view === "task" ? "nav-active" : ""}
-            onClick={() => navigate("task")}
-          >
-            {t("Найти задание ")}
-          </button>
-        </nav>
-        <div className="header-right">
-          <LanguageSwitcher />
-        </div>
-      </header>
-      <main>
-        <form
-          className="search"
-          onSubmit={(e) => {
-            e.preventDefault();
-            document
-              .getElementById("results")
-              ?.scrollIntoView({ behavior: "smooth" });
-          }}
-        >
-          <Search />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={
-              view === "task"
-                ? t("Какое задание вы ищете?")
-                : t("Какая помощь вам нужна?")
-            }
-            aria-label={t("Поиск")}
-          />
-          <button className="primary">{t("Найти ")}</button>
-        </form>
-        <div className={`category-picker ${categoriesExpanded ? 'expanded' : 'collapsed'}`}>
-        <section className="categories" id="service-categories">
-          {categories.map(([name, Icon]) => (
-            <button
-              key={name}
-              onClick={() => setCategory(name)}
-              className={category === name ? "active" : ""}
-              aria-pressed={category === name}
-            >
-              <Icon size={24} />
-              <span>{t(name)}</span>
-            </button>
-          ))}
-        </section>
-        {!categoriesExpanded && <div className="category-preview" aria-hidden="true">{categories.slice(4,8).map(([name,Icon])=><span key={name}><Icon size={24}/><span>{t(name)}</span></span>)}</div>}
-        <button type="button" className="category-toggle" aria-controls="service-categories" aria-expanded={categoriesExpanded} onClick={()=>setCategoriesExpanded(value=>!value)}>
-          <span>{t(categoriesExpanded?'Свернуть категории':'Все категории')}</span><ChevronDown size={20}/>
-        </button>
-        </div>
-        {notice && (
-          <div className="feedback" role="status">
-            {t(notice)}
-          </div>
-        )}
-        {loadError && (
-          <div className="error" role="alert">
-            {errorText(loadError)}{" "}
-            <button onClick={() => refresh()}>{t("Повторить ")}</button>
-          </div>
-        )}
-        <div className="content" id="results">
-          <section>
-            <div className="section-head">
-              <h2>
-                {view === "profile"
-                  ? t("Специалисты под ваше дело")
-                  : view === "task"
-                    ? t("Задания для вас")
-                    : t("Мой кабинет")}
-              </h2>
-              <button aria-label={t("Обновить")} onClick={() => refresh()}>
-                <RefreshCw size={17} />
-              </button>
-            </div>
-            <div className="filters">
-              <Tabs value={view} onValueChange={navigate}>
-                <TabsList>
-                  <TabsTrigger value="profile">{t("Специалисты ")}</TabsTrigger>
-                  <TabsTrigger value="task">{t("Задания ")}</TabsTrigger>
-                  <TabsTrigger value="mine">{t("Мой кабинет")}</TabsTrigger>
-                </TabsList>
-              </Tabs>
-              {view !== 'mine' && <Select value={city} onValueChange={setCity}>
-                <SelectTrigger aria-label={t("Город")}>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {["Все города", ...cities].map((c) => (
-                    <SelectItem key={c} value={c}>
-                      {t(c)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>}
-            </div>
-            {view === "mine" && (
-              <div className="account">
-                {!user ? (
-                  <div className="account-guest">
-                    <div className="account-guest-icon"><UserCog size={22} /></div>
-                    <p>{t("Войдите, чтобы публиковать задания и откликаться.")}</p>
-                    <button className="dark" onClick={() => setAuthOpen(true)}>{t("Войти")}</button>
-                  </div>
-                ) : (
-                  <>
-                    <div className="account-identity">
-                      <div className="account-avatar">{user.name.split(" ").map((s) => s[0]).slice(0, 2).join("")}</div>
-                      <div className="account-identity-info">
-                        <h3>{user.name}</h3>
-                        {user.role ? (
-                          <span className="account-role-badge">{t(user.role === "customer" ? "заказчик" : "исполнитель")}</span>
-                        ) : (
-                          <span className="account-role-badge account-role-badge-muted">{t("Роль не выбрана")}</span>
-                        )}
-                      </div>
-                    </div>
-                    <EmailVerification />
-                    {!user.role && <p className="account-hint">{t("Выберите роль, чтобы завершить регистрацию.")}</p>}
-                    {user.requiresTerms && (
-                      <button type="button" className="account-alert account-alert-action" onClick={() => open("register")}>
-                        {t("Примите обновлённые условия в кабинете.")}
-                      </button>
-                    )}
-                    {user.inactive && <p className="account-alert">{t("Аккаунт неактивен. Откройте настройки данных.")}</p>}
-                    {user.blocked && <p className="account-alert account-alert-danger" role="alert">{t("Ваш аккаунт заблокирован администратором.")}</p>}
-
-                    {user.role === "provider" && (
-                      <button
-                        className="primary account-primary"
-                        onClick={() => open("profile", profiles.find((p) => p.mine))}
-                      >
-                        {t("Мой профиль исполнителя ")}
-                      </button>
-                    )}
-                    {user.role === "customer" && (
-                      <button className="primary account-primary" onClick={() => open("task")}>
-                        {t("Создать задание ")}
-                      </button>
-                    )}
-                    {!user.role && (
-                      <button className="primary account-primary" onClick={() => open("register")}>
-                        {t("Завершить регистрацию")}
-                      </button>
-                    )}
-
-                    <div className="account-menu">
-                      {user.role && (
-                        <button type="button" className="account-menu-item" onClick={() => open("register")}>
-                          <UserCog size={17} /><span>{t("Изменить имя или роль")}</span><ChevronRight size={16} />
-                        </button>
-                      )}
-                      {user.isAdmin && (
-                        <a className="account-menu-item" href="/admin">
-                          <Shield size={17} /><span>{t("Админка")}</span><ChevronRight size={16} />
-                        </a>
-                      )}
-                      <a className="account-menu-item" href="/privacy">
-                        <FileText size={17} /><span>{t("Мои данные")}</span><ChevronRight size={16} />
-                      </a>
-                    </div>
-
-                    <div className="account-logout">
-                      <LogOut size={16} /><AuthLogout />
-                    </div>
-                  </>
-                )}
-              </div>
-            )}
-            {view === 'mine' && <div className="mine-tabs" role="tablist" aria-label={t('Разделы кабинета')}>
-              {([['tasks','Мои задания'],['bids','Мои отклики'],['profile','Мой профиль'],['decisions','Решения по публикациям'],['archive','Архив']] as const).map(([value,label])=><button key={value} type="button" role="tab" aria-selected={mineTab===value} onClick={()=>setMineTab(value)}>{t(label)}</button>)}
-            </div>}
-            {view === 'mine' && <div className="cabinet-city-filter"><Select value={city} onValueChange={setCity}><SelectTrigger aria-label={t("Город")}><SelectValue /></SelectTrigger><SelectContent>{["Все города", ...cities].map((c) => <SelectItem key={c} value={c}>{t(c)}</SelectItem>)}</SelectContent></Select></div>}
             {view==='mine' && mineTab==='decisions' && records.filter(r=>r.kind==='notice'&&r.mine&&!hiddenDecisions.includes(r.id)).map(r=><div className="feedback" key={r.id}><div className="feedback-heading"><strong>{t('Решение по публикации')}</strong><button type="button" className="auth-link" onClick={()=>hideDecision(r.id)}>{t('Скрыть решение')}</button></div><p>{r.description}</p><p>{t('Основание')}: {r.basis}</p><p>{t('Решение принято человеком. Если вы не согласны, отправьте оператору номер обращения и обоснование пересмотра.')} {r.parent}</p><a href="mailto:igors.nikos@gmail.com">igors.nikos@gmail.com</a></div>)}
-            {loading && <p role="status">{t("Загружаем данные\u2026 ")}</p>}
+            {loading && <p role="status">{t("Загружаем данные… ")}</p>}
             {mineTab !== 'decisions' && <div className="cards">
               {items.map((item, i) => (
                 item.kind === 'profile' ? <article className="specialist-card" key={item.id}>
@@ -749,6 +562,204 @@ export default function Home() {
                   {t("Сбросить фильтры ")}
                 </button>
               </div>
+            )}
+    </>
+  );
+  return (
+    <>
+      <header>
+        <a className="logo brand" href="/">
+          Gigs<span>✳</span>
+        </a>
+        <nav>
+          <button
+            className={view === "profile" ? "nav-active" : ""}
+            onClick={() => navigate("profile")}
+          >
+            {t("Найти специалиста ")}
+          </button>
+          <button
+            className={view === "task" ? "nav-active" : ""}
+            onClick={() => navigate("task")}
+          >
+            {t("Найти задание ")}
+          </button>
+        </nav>
+        <div className="header-right">
+          <LanguageSwitcher />
+        </div>
+      </header>
+      <main>
+        <form
+          className="search"
+          onSubmit={(e) => {
+            e.preventDefault();
+            document
+              .getElementById("results")
+              ?.scrollIntoView({ behavior: "smooth" });
+          }}
+        >
+          <Search />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={
+              view === "task"
+                ? t("Какое задание вы ищете?")
+                : t("Какая помощь вам нужна?")
+            }
+            aria-label={t("Поиск")}
+          />
+          <button className="primary">{t("Найти ")}</button>
+        </form>
+        <div className={`category-picker ${categoriesExpanded ? 'expanded' : 'collapsed'}`}>
+        <section className="categories" id="service-categories">
+          {categories.map(([name, Icon]) => (
+            <button
+              key={name}
+              onClick={() => setCategory(name)}
+              className={category === name ? "active" : ""}
+              aria-pressed={category === name}
+            >
+              <Icon size={24} />
+              <span>{t(name)}</span>
+            </button>
+          ))}
+        </section>
+        {!categoriesExpanded && <div className="category-preview" aria-hidden="true">{categories.slice(4,8).map(([name,Icon])=><span key={name}><Icon size={24}/><span>{t(name)}</span></span>)}</div>}
+        <button type="button" className="category-toggle" aria-controls="service-categories" aria-expanded={categoriesExpanded} onClick={()=>setCategoriesExpanded(value=>!value)}>
+          <span>{t(categoriesExpanded?'Свернуть категории':'Все категории')}</span><ChevronDown size={20}/>
+        </button>
+        </div>
+        {notice && (
+          <div className="feedback" role="status">
+            {t(notice)}
+          </div>
+        )}
+        {loadError && (
+          <div className="error" role="alert">
+            {errorText(loadError)}{" "}
+            <button onClick={() => refresh()}>{t("Повторить ")}</button>
+          </div>
+        )}
+        <div className="content" id="results">
+          <section>
+            <div className="section-head">
+              <h2>
+                {view === "profile"
+                  ? t("Специалисты под ваше дело")
+                  : view === "task"
+                    ? t("Задания для вас")
+                    : t("Мой кабинет")}
+              </h2>
+              <button aria-label={t("Обновить")} onClick={() => refresh()}>
+                <RefreshCw size={17} />
+              </button>
+            </div>
+            <div className="filters">
+              <Tabs value={view} onValueChange={navigate}>
+                <TabsList>
+                  <TabsTrigger value="profile">{t("Специалисты ")}</TabsTrigger>
+                  <TabsTrigger value="task">{t("Задания ")}</TabsTrigger>
+                  <TabsTrigger value="mine">{t("Мой кабинет")}</TabsTrigger>
+                </TabsList>
+              </Tabs>
+              {view !== 'mine' && <Select value={city} onValueChange={setCity}>
+                <SelectTrigger aria-label={t("Город")}>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {["Все города", ...cities].map((c) => (
+                    <SelectItem key={c} value={c}>
+                      {t(c)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>}
+            </div>
+            {view === "mine" ? (
+              <div className="cabinet-columns">
+              <div className="account">
+                {!user ? (
+                  <div className="account-guest">
+                    <div className="account-guest-icon"><UserCog size={22} /></div>
+                    <p>{t("Войдите, чтобы публиковать задания и откликаться.")}</p>
+                    <button className="dark" onClick={() => setAuthOpen(true)}>{t("Войти")}</button>
+                  </div>
+                ) : (
+                  <>
+                    <div className="account-identity">
+                      <div className="account-avatar">{user.name.split(" ").map((s) => s[0]).slice(0, 2).join("")}</div>
+                      <div className="account-identity-info">
+                        <h3>{user.name}</h3>
+                        {user.role ? (
+                          <span className="account-role-badge">{t(user.role === "customer" ? "заказчик" : "исполнитель")}</span>
+                        ) : (
+                          <span className="account-role-badge account-role-badge-muted">{t("Роль не выбрана")}</span>
+                        )}
+                      </div>
+                    </div>
+                    <EmailVerification />
+                    {!user.role && <p className="account-hint">{t("Выберите роль, чтобы завершить регистрацию.")}</p>}
+                    {user.requiresTerms && (
+                      <button type="button" className="account-alert account-alert-action" onClick={() => open("register")}>
+                        {t("Примите обновлённые условия в кабинете.")}
+                      </button>
+                    )}
+                    {user.inactive && <p className="account-alert">{t("Аккаунт неактивен. Откройте настройки данных.")}</p>}
+                    {user.blocked && <p className="account-alert account-alert-danger" role="alert">{t("Ваш аккаунт заблокирован администратором.")}</p>}
+
+                    {user.role === "provider" && (
+                      <button
+                        className="primary account-primary"
+                        onClick={() => open("profile", profiles.find((p) => p.mine))}
+                      >
+                        {t("Мой профиль исполнителя ")}
+                      </button>
+                    )}
+                    {user.role === "customer" && (
+                      <button className="primary account-primary" onClick={() => open("task")}>
+                        {t("Создать задание ")}
+                      </button>
+                    )}
+                    {!user.role && (
+                      <button className="primary account-primary" onClick={() => open("register")}>
+                        {t("Завершить регистрацию")}
+                      </button>
+                    )}
+
+                    <div className="account-menu">
+                      {user.role && (
+                        <button type="button" className="account-menu-item" onClick={() => open("register")}>
+                          <UserCog size={17} /><span>{t("Изменить имя или роль")}</span><ChevronRight size={16} />
+                        </button>
+                      )}
+                      {user.isAdmin && (
+                        <a className="account-menu-item" href="/admin">
+                          <Shield size={17} /><span>{t("Админка")}</span><ChevronRight size={16} />
+                        </a>
+                      )}
+                      <a className="account-menu-item" href="/privacy">
+                        <FileText size={17} /><span>{t("Мои данные")}</span><ChevronRight size={16} />
+                      </a>
+                    </div>
+
+                    <div className="account-logout">
+                      <LogOut size={16} /><AuthLogout />
+                    </div>
+                  </>
+                )}
+              </div>
+                <div className="cabinet-main">
+                  <div className="mine-tabs" role="tablist" aria-label={t('Разделы кабинета')}>
+                    {([['tasks','Мои задания'],['bids','Мои отклики'],['profile','Мой профиль'],['decisions','Решения по публикациям'],['archive','Архив']] as const).map(([value,label])=><button key={value} type="button" role="tab" aria-selected={mineTab===value} onClick={()=>setMineTab(value)}>{t(label)}</button>)}
+                  </div>
+                  <div className="cabinet-city-filter"><Select value={city} onValueChange={setCity}><SelectTrigger aria-label={t("Город")}><SelectValue /></SelectTrigger><SelectContent>{["Все города", ...cities].map((c) => <SelectItem key={c} value={c}>{t(c)}</SelectItem>)}</SelectContent></Select></div>
+                  {browsingContent}
+                </div>
+              </div>
+            ) : (
+              browsingContent
             )}
           </section>
           <aside>
