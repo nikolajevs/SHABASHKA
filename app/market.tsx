@@ -950,7 +950,15 @@ export default function Home() {
                 <div className="task-view">
                   {detail.description && <p className="task-view-lead">{detail.description}</p>}
                   <div className="task-topline">
-                    {detail.category && <span className="specialist-category">{t(detail.category)}</span>}
+                    {detail.category && (
+                      <span className="task-topline-cat">
+                        {(() => {
+                          const Icon = categories.find((c) => c[0] === detail.category)?.[1] || Grid2X2;
+                          return <Icon size={18} />;
+                        })()}
+                        {t(detail.category)}
+                      </span>
+                    )}
                     <span className={"task-status task-status-" + (detail.deleted ? "deleted" : detail.status || "open")}>{t(detail.deleted ? "Удалено" : statusText(detail.status))}</span>
                   </div>
                   <div className="profile-facts-grid">
@@ -966,8 +974,11 @@ export default function Home() {
                       <MessageCircle size={18} />
                       <div><span className="fact-label">{t("Отклики")}</span><span className="fact-value">{records.filter((r) => r.kind === "bid" && r.parent === detail.id).length}</span></div>
                     </div>
+                    <div className="fact-card fact-card-col fact-card-customer">
+                      <span className="task-customer-avatar" aria-hidden="true">{detail.name.split(" ").map((s) => s[0]).slice(0, 2).join("")}</span>
+                      <div><span className="fact-label">{t("Заказчик")}</span><span className="fact-value">{detail.name}</span></div>
+                    </div>
                   </div>
-                  <div className="task-customer"><span className="task-customer-avatar" aria-hidden="true">{detail.name.split(" ").map((s) => s[0]).slice(0, 2).join("")}</span><span><small>{t("Заказчик")}</small>{detail.name}</span></div>
                   <div className="task-view-actions">
                   {!detail.mine && !detail.deleted && detail.status === "open" && (
                     <button
