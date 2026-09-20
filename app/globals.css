@@ -372,6 +372,25 @@ h1 em {
 .file-dropzone span { display:grid; gap:2px; }
 .file-dropzone strong { font-size:14px; color:#39482c; }
 .file-dropzone small { font-size:12px; color:#6f7a63; }
+.profile-view { display:grid; gap:18px; }
+.profile-view-head { display:flex; gap:16px; align-items:center; }
+.profile-view-avatar { width:76px; height:76px; border-radius:50%; overflow:hidden; flex-shrink:0; display:grid; place-items:center; background:#e3ecd8; color:#506342; font-size:26px; font-weight:700; }
+.profile-view-avatar img { width:100%; height:100%; object-fit:cover; }
+.profile-view-identity { display:grid; gap:4px; min-width:0; }
+.profile-view-identity .specialist-category { font-size:12px; }
+.profile-view-name { margin:0; font-size:22px; overflow-wrap:anywhere; }
+.profile-view .specialist-facts { font-size:14px; }
+.profile-view-section { display:grid; gap:10px; padding-top:16px; border-top:1px solid #eaefe1; }
+.profile-view-heading { margin:0; font-size:13px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#61754b; display:flex; align-items:center; gap:6px; }
+.profile-view-about { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; color:#3c4736; font-size:15px; line-height:1.55; }
+.profile-view .specialist-skills li { font-size:13px; padding:6px 11px; }
+.profile-view-links { display:flex; flex-wrap:wrap; gap:8px; }
+.profile-view-empty { margin:0; color:#77836b; font-size:14px; }
+.review-card { border:1px solid #e4ebdb; border-radius:12px; padding:14px; background:#fbfcf8; display:grid; gap:6px; }
+.review-card-head { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.review-card-head b { font-size:15px; color:#39482c; overflow-wrap:anywhere; }
+.review-card-stars { display:inline-flex; align-items:center; gap:4px; font-size:13px; font-weight:650; color:#4d6141; background:#eef4e4; padding:3px 9px; border-radius:999px; flex-shrink:0; }
+.review-card p { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; font-size:15px; }
 .portfolio-edit-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; }
 .portfolio-edit-item { position:relative; aspect-ratio:1; overflow:hidden; border-radius:10px; background:#eef3e9; }
 .portfolio-edit-item img { width:100%; height:100%; object-fit:cover; }
