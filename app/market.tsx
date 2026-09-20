@@ -829,52 +829,94 @@ export default function Home() {
             <div className="details">
               {((detail.kind === "task" && detail.deleted) || (detail.kind === "bid" && taskFor(detail)?.deleted)) && <p className="feedback">{t("Задание удалено из каталога. История доступна только участникам.")}</p>}
               {['task','profile','review'].includes(detail.kind) && <ReportLink id={detail.id}/>}
-              <b>{detail.name}</b>
+              {detail.kind !== "profile" && <b>{detail.name}</b>}
               {detail.kind==='task'&&<p className="task-detail-dates"><CalendarDays size={18}/><span>{t('Срок выполнения')}: {taskDates(detail)}</span></p>}
-              <p>{detail.description}</p>
-              <p>
-                {detail.cities?.length ? detail.cities.map(city=>t(city)).join(' · ') : t(detail.city)}
-              </p>
+              {detail.kind !== "profile" && <p>{detail.description}</p>}
+              {detail.kind !== "profile" && (
+                <p>
+                  {detail.cities?.length ? detail.cities.map(city=>t(city)).join(' · ') : t(detail.city)}
+                </p>
+              )}
               {detail.kind === "profile" ? (
-                <>
-                  {detail.photo && <img className="profile-photo" src={detail.photo} alt={detail.name} />}
-                  {detail.transport && <p className="profile-feature">✓ {t('Собственный транспорт')}</p>}
-                  {detail.cities?.length ? <p className="profile-cities">{detail.cities.map(city=>t(city)).join(' · ')}</p> : null}
-                  <h3>{t("Навыки ")}</h3>
-                  <p>{detail.skills}</p>
-                  <h3>{t("Портфолио ")}</h3>
-                  {(detail.portfolioImages?.length || detail.portfolio) ? (
-                    <div>{!!detail.portfolioImages?.length&&<PortfolioGallery images={detail.portfolioImages}/>}
-                    {(detail.portfolio||'')
-                      .split("\n")
-                      .filter(Boolean)
-                      .map((link, i) => (
-                        <a
-                          className="portfolio-link"
-                          key={i}
-                          href={link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {t("Работа ")}
-                          {i + 1} <ArrowUpRight size={16} />
-                        </a>
-                      ))}
-                    </div>) : (
-                    <p>{t("Работы ещё не добавлены. ")}</p>
-                  )}
-                  <h3>
-                    <Star size={18} /> {ratingText(detail.id)}
-                  </h3>
-                  {reviews(detail.id).map((r) => (
-                    <div className="bid" key={r.id}>
-                      <b>
-                        {r.name} · {r.rating}/5
-                      </b>
-                      <p>{r.description}</p>
+                <div className="profile-view">
+                  <header className="profile-view-head">
+                    <div className="profile-view-avatar">
+                      {detail.photo ? (
+                        <img src={detail.photo} alt={detail.name} loading="lazy" />
+                      ) : (
+                        <span>{detail.name.split(" ").map((s) => s[0]).slice(0, 2).join("")}</span>
+                      )}
                     </div>
-                  ))}
-                </>
+                    <div className="profile-view-identity">
+                      {detail.category && <span className="specialist-category">{t(detail.category)}</span>}
+                      <h3 className="profile-view-name">{detail.name}</h3>
+                      <div className="specialist-rating"><Star size={16} />{ratingText(detail.id)}</div>
+                    </div>
+                  </header>
+                  <div className="specialist-facts">
+                    <div>
+                      <MapPin size={16} />
+                      <span>{(detail.cities?.length ? detail.cities : [detail.city || "Латвия"]).map((city) => t(city)).join(" · ")}</span>
+                    </div>
+                    {detail.transport && (
+                      <div>
+                        <Truck size={16} />
+                        <span>{t("Собственный транспорт")}</span>
+                      </div>
+                    )}
+                  </div>
+                  {detail.description && (
+                    <section className="profile-view-section">
+                      <h4 className="profile-view-heading">{t("О себе")}</h4>
+                      <p className="profile-view-about">{detail.description}</p>
+                    </section>
+                  )}
+                  {detail.skills && (
+                    <section className="profile-view-section">
+                      <h4 className="profile-view-heading">{t("Навыки ")}</h4>
+                      <ul className="specialist-skills">
+                        {detail.skills.split(/[,;\n]+/).map((s) => s.trim()).filter(Boolean).map((skill, index) => (
+                          <li key={index}>{skill}</li>
+                        ))}
+                      </ul>
+                    </section>
+                  )}
+                  <section className="profile-view-section">
+                    <h4 className="profile-view-heading">{t("Портфолио ")}</h4>
+                    {(detail.portfolioImages?.length || (detail.portfolio || "").split("\n").filter(Boolean).length) ? (
+                      <>
+                        {!!detail.portfolioImages?.length && <PortfolioGallery images={detail.portfolioImages} />}
+                        {!!(detail.portfolio || "").split("\n").filter(Boolean).length && (
+                          <div className="profile-view-links">
+                            {(detail.portfolio || "").split("\n").filter(Boolean).map((link, i) => (
+                              <a className="portfolio-link" key={i} href={link} target="_blank" rel="noopener noreferrer">
+                                {t("Работа ")}{i + 1} <ArrowUpRight size={16} />
+                              </a>
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <p className="profile-view-empty">{t("Работы ещё не добавлены. ")}</p>
+                    )}
+                  </section>
+                  <section className="profile-view-section">
+                    <h4 className="profile-view-heading"><Star size={18} /> {t("Отзывы")}</h4>
+                    {reviews(detail.id).length ? (
+                      reviews(detail.id).map((r) => (
+                        <div className="review-card" key={r.id}>
+                          <div className="review-card-head">
+                            <b>{r.name}</b>
+                            <span className="review-card-stars"><Star size={13} />{r.rating}/5</span>
+                          </div>
+                          <p>{r.description}</p>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="profile-view-empty">{t("Пока нет отзывов")}</p>
+                    )}
+                  </section>
+                </div>
               ) : detail.kind === "bid" ? (
                 <>
                   <p>
