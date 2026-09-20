@@ -946,16 +946,42 @@ export default function Home() {
                 </>
               ) : (
                 <div className="task-view">
-                  <div className="task-heading">
-                    {detail.category && <span className="specialist-category">{t(detail.category)}</span>}
-                    <span className={"task-status task-status-" + (detail.deleted ? "deleted" : detail.status || "open")}>{t(detail.deleted ? "Удалено" : statusText(detail.status))}</span>
+                  <header className="task-hero">
+                    <div className="task-hero-icon">
+                      {(() => {
+                        const Icon = categories.find((c) => c[0] === detail.category)?.[1] || Grid2X2;
+                        return <Icon size={30} />;
+                      })()}
+                    </div>
+                    <div className="task-hero-info">
+                      {detail.category && <span className="task-hero-category">{t(detail.category)}</span>}
+                      <span className={"task-status task-status-" + (detail.deleted ? "deleted" : detail.status || "open")}>{t(detail.deleted ? "Удалено" : statusText(detail.status))}</span>
+                    </div>
+                  </header>
+                  <div className="profile-facts-grid">
+                    <div className="fact-card fact-card-col">
+                      <MapPin size={18} />
+                      <div><span className="fact-label">{t("Локация")}</span><span className="fact-value">{(detail.cities?.length ? detail.cities : [detail.city || "Латвия"]).map((city) => t(city)).join(" · ")}</span></div>
+                    </div>
+                    <div className="fact-card fact-card-col">
+                      <CalendarDays size={18} />
+                      <div><span className="fact-label">{t("Срок выполнения")}</span><span className="fact-value">{taskDates(detail)}</span></div>
+                    </div>
+                    <div className="fact-card fact-card-col">
+                      <MessageCircle size={18} />
+                      <div><span className="fact-label">{t("Отклики")}</span><span className="fact-value">{records.filter((r) => r.kind === "bid" && r.parent === detail.id).length}</span></div>
+                    </div>
                   </div>
-                  {detail.description && <p className="task-view-about">{detail.description}</p>}
-                  <div className="task-facts">
-                    <div><MapPin size={17} /><span>{(detail.cities?.length ? detail.cities : [detail.city || "Латвия"]).map((city) => t(city)).join(" · ")}</span></div>
-                    <div><CalendarDays size={17} /><span><small>{t("Срок выполнения")}</small>{taskDates(detail)}</span></div>
-                  </div>
-                  <div className="task-customer"><span className="task-customer-avatar" aria-hidden="true">{detail.name.split(" ").map((s) => s[0]).slice(0, 2).join("")}</span><span><small>{t("Заказчик")}</small>{detail.name}</span></div>
+                  {detail.description && (
+                    <section className="profile-view-section">
+                      <h4 className="profile-view-heading">{t("Описание")}</h4>
+                      <p className="profile-view-about">{detail.description}</p>
+                    </section>
+                  )}
+                  <section className="profile-view-section">
+                    <h4 className="profile-view-heading">{t("Заказчик")}</h4>
+                    <div className="task-customer"><span className="task-customer-avatar" aria-hidden="true">{detail.name.split(" ").map((s) => s[0]).slice(0, 2).join("")}</span><span>{detail.name}</span></div>
+                  </section>
                   <div className="task-view-actions">
                   {!detail.mine && !detail.deleted && detail.status === "open" && (
                     <button
