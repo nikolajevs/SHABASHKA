@@ -712,11 +712,40 @@ nav button {
   margin: 0 auto 16px;
 }
 .account {
-  padding: 20px;
-  background: #edf2e3;
+  padding: 22px;
+  background: #fff;
+  border: 1px solid #e4ebdb;
   margin-bottom: 20px;
-  border-radius: 12px;
+  border-radius: 16px;
+  display: grid;
+  gap: 14px;
 }
+.account-guest { display: grid; gap: 12px; justify-items: start; }
+.account-guest-icon { width: 44px; height: 44px; border-radius: 50%; background: #eef4e2; color: #5f7a3b; display: grid; place-items: center; }
+.account-guest p { margin: 0; font-size: 14px; line-height: 1.5; color: #4f5c45; }
+.account-guest .dark { width: 100%; justify-content: center; }
+.account-identity { display: flex; align-items: center; gap: 14px; }
+.account-avatar { width: 56px; height: 56px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; background: #dfe9d0; color: #4c6138; font-size: 19px; font-weight: 700; }
+.account-identity-info { display: grid; gap: 5px; min-width: 0; }
+.account-identity-info h3 { margin: 0; font-size: 18px; overflow-wrap: anywhere; }
+.account-role-badge { justify-self: start; font-size: 11px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; color: #4d6141; background: #e4efce; padding: 3px 10px; border-radius: 999px; }
+.account-role-badge-muted { color: #8a7a3f; background: #faf1d9; }
+.account-hint { margin: 0; font-size: 13px; color: #77836b; line-height: 1.5; }
+.account-alert { margin: 0; padding: 10px 12px; border-radius: 10px; background: #fdf6e6; color: #8a6a1e; font-size: 13px; line-height: 1.5; }
+.account-alert-danger { background: #fdeeec; color: #963c21; }
+.account-alert-action { width: 100%; text-align: left; border: 1px solid #f0dfae; cursor: pointer; font-weight: 600; }
+.account-primary { width: 100%; justify-content: center; }
+.account-menu { display: grid; gap: 2px; border-top: 1px solid #eef1e7; padding-top: 6px; }
+.account-menu-item { display: flex; align-items: center; gap: 10px; padding: 10px 6px; border-radius: 9px; font-size: 14px; color: #3a4634; background: transparent; border: 0; width: 100%; text-align: left; text-decoration: none; }
+.account-menu-item:hover { background: #f5f8f0; }
+.account-menu-item svg:first-child { color: #7f9b4b; flex-shrink: 0; }
+.account-menu-item span { flex: 1; overflow-wrap: anywhere; }
+.account-menu-item svg:last-child { color: #a9b79a; flex-shrink: 0; }
+.account-logout { display: flex; align-items: center; gap: 9px; border-top: 1px solid #eef1e7; padding-top: 10px; color: #8b6a5f; }
+.account-logout > svg { color: #b08476; flex-shrink: 0; }
+.account-logout .logout-action { display: contents; }
+.account-logout .auth-link { margin: 0; text-decoration: none; font-size: 14px; font-weight: 600; color: #8b6a5f; }
+.account-logout .auth-link:hover { text-decoration: underline; }
 /* In the personal cabinet the account card is the first element of the right column. */
 .content:has(.account) { grid-template-columns: minmax(0, 1fr); }
 .content:has(.account) > aside { display: none; }
@@ -729,8 +758,6 @@ nav button {
 .content:has(.account) > section > .feedback,
 .content:has(.account) > section > .cards,
 .content:has(.account) > section > [role="status"] { grid-column: 1; }
-.content:has(.account) .account-actions { align-items: stretch; flex-direction: column; }
-.content:has(.account) .account-actions > * { width: 100%; }
 .market-dialog {
   max-height: 90vh;
   overflow-y: auto;
@@ -871,14 +898,8 @@ button:disabled {
     font-size: 14px;
   }
   .content:has(.account) > section { display: block; }
-  .content:has(.account) > section > .account { margin-bottom: 20px; padding:16px; }
-  .account h3 { margin:0 0 6px; font-size:18px; }
-  .account > p { margin:0 0 14px; font-size:14px; }
-  .content:has(.account) .account-actions { gap:8px; }
-  .content:has(.account) .account-actions > .outline,
-  .content:has(.account) .account-actions > .primary { padding:10px 12px; min-height:44px; font-size:13px; }
-  .content:has(.account) .account-actions { flex-direction: row; }
-  .content:has(.account) .account-actions > * { width: auto; }
+  .content:has(.account) > section > .account { margin-bottom: 20px; padding: 16px; }
+  .account-identity-info h3 { font-size: 17px; }
 }
 .brand {
   font-size: 28px;
