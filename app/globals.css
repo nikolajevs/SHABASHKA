@@ -986,6 +986,9 @@ header {
     width: 100%;
     max-width: none;
   }
+  .content:has(.mine-tabs) .filters { flex-direction: column; align-items: stretch; }
+  .content:has(.mine-tabs) .filters > [data-slot="tabs"] { width: 100%; }
+  .content:has(.mine-tabs) .filters > [data-slot="tabs"] [data-slot="tabs-list"] { width: max-content; max-width: 100%; overflow-x: auto; }
 }
 :root {
   color-scheme: light;
