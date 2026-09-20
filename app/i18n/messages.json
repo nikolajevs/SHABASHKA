@@ -1,4 +1,7 @@
 [
+  ["Изменить профиль исполнителя", "Rediģēt izpildītāja profilu", "Edit provider profile", "Змінити профіль виконавця"],
+  ["Изменить имя", "Mainīt vārdu", "Change name", "Змінити ім’я"],
+  ["Один аккаунт для ваших заданий и услуг.", "Viens konts jūsu uzdevumiem un pakalpojumiem.", "One account for your tasks and services.", "Один обліковий запис для ваших завдань і послуг."],
   ["Здесь будут завершённые и удалённые задания.", "Šeit būs pabeigtie un dzēstie uzdevumi.", "Completed and deleted tasks will appear here.", "Тут будуть завершені та видалені завдання."],
   ["Архив", "Arhīvs", "Archive", "Архів"],
   ["Задание недоступно", "Uzdevums nav pieejams", "Task unavailable", "Завдання недоступне"],

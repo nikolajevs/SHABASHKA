@@ -129,7 +129,7 @@ type Item = {
 };
 type User = {
   name: string;
-  role: "customer" | "provider" | null;
+  registered: boolean;
   isAdmin?: boolean;
   blocked?: boolean;
   inactive?: boolean;
@@ -196,7 +196,6 @@ export default function Home() {
     [busy, setBusy] = useState(false),
     [formCategory, setFormCategory] = useState("Ремонт"),
     [formCity, setFormCity] = useState("Рига"),
-    [role, setRole] = useState("customer"),
     [rating, setRating] = useState("5");
   useEffect(()=>{try{setHiddenDecisions(JSON.parse(localStorage.getItem('gigs_hidden_decisions')||'[]'));}catch{}} ,[]);
   function hideDecision(id:string){const next=[...hiddenDecisions,id];setHiddenDecisions(next);try{localStorage.setItem('gigs_hidden_decisions',JSON.stringify(next));}catch{}}
@@ -232,7 +231,7 @@ export default function Home() {
   useEffect(() => {
     refresh();
   }, [refresh]);
-  useEffect(()=>{if(loading||authQueryHandled)return;const params=new URLSearchParams(location.search);if(params.get('auth')==='login'){setAuthOpen(true);}else if(params.get('auth')==='complete'&&user){setView('mine');if(!user.role)setModal('register');history.replaceState(null,'','/');}setAuthQueryHandled(true);},[loading,user,authQueryHandled]);
+  useEffect(()=>{if(loading||authQueryHandled)return;const params=new URLSearchParams(location.search);if(params.get('auth')==='login'){setAuthOpen(true);}else if(params.get('auth')==='complete'&&user){setView('mine');if(!user.registered)setModal('register');history.replaceState(null,'','/');}setAuthQueryHandled(true);},[loading,user,authQueryHandled]);
   useEffect(()=>{if(loading||deepLinkHandled)return;const id=new URLSearchParams(location.search).get('item');if(id){const item=records.find(r=>r.id===id);if(item){setSelected(item);setModal('detail');}}setDeepLinkHandled(true);},[records,loading,deepLinkHandled]);
   useEffect(() => {
     if (modal !== "chat") return;
@@ -288,7 +287,6 @@ export default function Home() {
     setCitySearch("");
     setFormCategory(item?.category || "Ремонт");
     setFormCity(item?.city && cities.includes(item.city) ? item.city : "Рига");
-    setRole(user?.role || "customer");
     setModal(kind);
   }
   function taskDates(item: Item) {
@@ -373,7 +371,6 @@ export default function Home() {
           action: kind,
           category: formCategory,
           city: formCity,
-          role,
           reopen:!!user?.erased,
           rating,
           parent: selected?.id,
@@ -692,15 +689,9 @@ export default function Home() {
                       <div className="account-avatar">{user.name.split(" ").map((s) => s[0]).slice(0, 2).join("")}</div>
                       <div className="account-identity-info">
                         <h3>{user.name}</h3>
-                        {user.role ? (
-                          <span className="account-role-badge">{t(user.role === "customer" ? "заказчик" : "исполнитель")}</span>
-                        ) : (
-                          <span className="account-role-badge account-role-badge-muted">{t("Роль не выбрана")}</span>
-                        )}
                       </div>
                     </div>
                     <EmailVerification />
-                    {!user.role && <p className="account-hint">{t("Выберите роль, чтобы завершить регистрацию.")}</p>}
                     {user.requiresTerms && (
                       <button type="button" className="account-alert account-alert-action" onClick={() => open("register")}>
                         {t("Примите обновлённые условия в кабинете.")}
@@ -709,29 +700,29 @@ export default function Home() {
                     {user.inactive && <p className="account-alert">{t("Аккаунт неактивен. Откройте настройки данных.")}</p>}
                     {user.blocked && <p className="account-alert account-alert-danger" role="alert">{t("Ваш аккаунт заблокирован администратором.")}</p>}
 
-                    {user.role === "provider" && (
+                    {(
                       <button
                         className="primary account-primary"
                         onClick={() => open("profile", profiles.find((p) => p.mine))}
                       >
-                        {t("Мой профиль исполнителя ")}
+                        {t("Изменить профиль исполнителя")}
                       </button>
                     )}
-                    {user.role === "customer" && (
+                    {(
                       <button className="primary account-primary" onClick={() => open("task")}>
                         {t("Создать задание ")}
                       </button>
                     )}
-                    {!user.role && (
+                    {!user.registered && (
                       <button className="primary account-primary" onClick={() => open("register")}>
                         {t("Завершить регистрацию")}
                       </button>
                     )}
 
                     <div className="account-menu">
-                      {user.role && (
+                      {user.registered && (
                         <button type="button" className="account-menu-item" onClick={() => open("register")}>
-                          <UserCog size={17} /><span>{t("Изменить имя или роль")}</span><ChevronRight size={16} />
+                          <UserCog size={17} /><span>{t("Изменить имя")}</span><ChevronRight size={16} />
                         </button>
                       )}
                       {user.isAdmin && (
@@ -863,7 +854,7 @@ export default function Home() {
                     )
                   : modal === "register"
                     ? t(
-                        "Один аккаунт, две роли. При необходимости роль можно сменить в кабинете.",
+                        "Один аккаунт для ваших заданий и услуг.",
                       )
                     : modal === "bid"
                       ? t(
@@ -1123,22 +1114,10 @@ export default function Home() {
             </div>
           ) : !user ? (
             <AuthPanel/>
-          ) : modal !== "register" && !user.role ? (
+          ) : modal !== "register" && (!user.registered || user.requiresTerms) ? (
             <button className="primary" onClick={() => open("register")}>
               {t("Завершить регистрацию ")}
             </button>
-          ) : (modal === "task" && user.role !== "customer") ||
-            ((modal === "profile" || modal === "bid") &&
-              user.role !== "provider") ? (
-            <div>
-              <p>
-                {t("Для этого действия выберите роль ")}{" "}
-                {modal === "task" ? t("заказчика") : t("исполнителя")}.
-              </p>
-              <button className="primary" onClick={() => open("register")}>
-                {t("Изменить роль ")}
-              </button>
-            </div>
           ) : (
             <>
               {modal === "chat" && (
@@ -1205,22 +1184,6 @@ export default function Home() {
                         maxLength={80}
                         defaultValue={user.name}
                       />
-                    </label>
-                    <label>
-                      {t("Роль ")}
-                      <Select value={role} onValueChange={setRole}>
-                        <SelectTrigger aria-label={t("Роль")}>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="customer">
-                            {t("Заказчик \u2014 ищу помощь ")}
-                          </SelectItem>
-                          <SelectItem value="provider">
-                            {t("Исполнитель \u2014 предлагаю услуги ")}
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
                     </label>
                     <label className="check-label"><input type="checkbox" name="acceptTerms" required/>{t('Я принимаю условия использования и ознакомился с политикой конфиденциальности.')}</label>
                     <p><a href="/legal/terms" target="_blank" rel="noreferrer">{t('Условия использования')}</a> · <a href="/legal/privacy" target="_blank" rel="noreferrer">{t('Конфиденциальность')}</a></p>
