@@ -308,7 +308,7 @@ h1 em {
 .section-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
   margin-bottom: 20px;
 }
 .section-head h2 {
@@ -745,14 +745,16 @@ nav button {
 .account-logout .logout-action { display: contents; }
 .account-logout .auth-link { margin: 0; text-decoration: none; font-size: 14px; font-weight: 600; color: #8b6a5f; }
 .account-logout .auth-link:hover { text-decoration: underline; }
-/* In the personal cabinet the account card is an independent sidebar: it and
-   the main list live in separate flex items (.cabinet-columns), each sized
-   purely by its own content, so one's height never stretches the other's. */
+/* In the personal cabinet the account card is pinned to the top-right corner
+   of the section (level with the "Мой кабинет" heading and refresh icon) via
+   absolute positioning, so it never takes part in the left column's row
+   flow — it can start at the very top without stretching anything below it. */
 .content:has(.account) { grid-template-columns: minmax(0, 1fr); }
 .content:has(.account) > aside { display: none; }
-.cabinet-columns { display: flex; align-items: flex-start; gap: 30px; }
-.cabinet-columns > .account { width: 290px; flex-shrink: 0; order: 1; }
-.cabinet-main { flex: 1; min-width: 0; }
+.content:has(.account) > section { position: relative; }
+.content:has(.account) .filters { padding-right: 320px; }
+.cabinet-columns > .account { position: absolute; top: 0; right: 0; width: 290px; }
+.cabinet-main { max-width: calc(100% - 320px); }
 .cards:empty { display: none; }
 .market-dialog {
   max-height: 90vh;
@@ -893,8 +895,10 @@ button:disabled {
     padding: 10px;
     font-size: 14px;
   }
-  .cabinet-columns { display: block; }
-  .cabinet-columns > .account { width: auto; margin-bottom: 20px; padding: 16px; }
+  .content:has(.account) > section { position: static; }
+  .content:has(.account) .filters { padding-right: 0; }
+  .cabinet-columns > .account { position: static; width: auto; margin-bottom: 20px; padding: 16px; }
+  .cabinet-main { max-width: none; }
   .account-identity-info h3 { font-size: 17px; }
 }
 .brand {
