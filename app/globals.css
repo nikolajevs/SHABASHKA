@@ -418,7 +418,7 @@ h1 em {
   .specialist-actions { flex-direction: column; }
   .specialist-actions button { width: 100%; }
   .portfolio-empty { align-items: flex-start; flex-wrap: wrap; }
-  .portfolio-empty button { width: 100%; margin-left: 36px; }
+  .portfolio-empty button { width: 100%; min-width: 0; max-width: 100%; margin-left: 0; white-space: normal; }
   .portfolio-edit-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
 }
 .cards {

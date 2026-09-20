@@ -220,7 +220,7 @@ export async function POST(request: Request) {
       )
         throw Error("Выберите категорию");
       if (action === "profile") {
-        const selectedCities = Array.isArray(b.cities) ? b.cities.filter((v: unknown): v is string => typeof v === "string" && cities.includes(v)).slice(0, cities.length) : [data.city as string];
+        const selectedCities = Array.isArray(b.cities) ? b.cities.filter((v: unknown): v is string => typeof v === "string" && (cities.includes(v) || v === 'По всей Латвии')).slice(0, cities.length + 1) : [data.city as string];
         if (!selectedCities.length) throw Error("Выберите населённый пункт Латвии");
         data.city = selectedCities[0];
         data.cities = selectedCities;

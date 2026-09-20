@@ -404,7 +404,7 @@ export default function Home() {
       )
         .toLowerCase()
         .includes(query.toLowerCase()) &&
-      (city === "Все города" || r.city === city),
+      (city === "Все города" || r.city === city || (r.kind === 'profile' && (r.cities?.includes(city) || r.cities?.includes('По всей Латвии')))),
   );
   const detail = selected
     ? records.find((r) => r.id === selected.id) || selected
@@ -1299,7 +1299,7 @@ export default function Home() {
                               aria-label={t("Поиск города…")}
                             />
                             <div className="city-list">
-                              {cities.map((city) => {
+                              {['По всей Латвии', ...cities].map((city) => {
                                 const label = t(city);
                                 const match = !citySearch || label.toLowerCase().includes(citySearch.toLowerCase());
                                 return (
