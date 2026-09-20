@@ -588,7 +588,19 @@ export default function Home() {
             {loading && <p role="status">{t("Загружаем данные\u2026 ")}</p>}
             {mineTab !== 'decisions' && <div className="cards">
               {items.map((item, i) => (
-                <article className="card" key={item.id}>
+                item.kind === 'profile' ? <article className="specialist-card" key={item.id}>
+                  <div className="specialist-heading">
+                    <div className={'specialist-avatar color'+(i%4)}>{item.photo?<img src={item.photo} alt={item.name} loading="lazy"/>:item.name.split(' ').map(s=>s[0]).slice(0,2).join('')}</div>
+                    <div className="specialist-identity"><span className="specialist-category">{t(item.category)}</span><h3><button onClick={()=>open('detail',item)}>{item.name}</button></h3><div className="specialist-rating"><Star size={16}/>{ratingText(item.id)}</div></div>
+                  </div>
+                  {item.title&&<h4 className="specialist-title">{item.title}</h4>}
+                  <div className="specialist-facts"><div><MapPin size={16}/><span>{(item.cities?.length?item.cities:[item.city||'Латвия']).map(city=>t(city)).join(' · ')}</span></div>{item.transport&&<div><Truck size={16}/><span>{t('Собственный транспорт')}</span></div>}</div>
+                  {item.description&&<p className="specialist-description">{item.description}</p>}
+                  {item.skills&&<ul className="specialist-skills" aria-label={t('Навыки')}>{item.skills.split(/[,;\n]+/).map(s=>s.trim()).filter(Boolean).slice(0,5).map((skill,index)=><li key={index}>{skill}</li>)}</ul>}
+                  {!!item.portfolioImages?.length&&<PortfolioGallery images={item.portfolioImages} previewCount={3}/>}
+                  <div className="specialist-actions"><button className="primary" onClick={()=>open('detail',item)}>{t('Посмотреть профиль')}</button>{view==='mine'&&mineTab==='profile'&&item.mine&&<button className="outline" onClick={()=>open('profile',item)}>{t('Изменить профиль')}</button>}</div>
+                  <ReportLink id={item.id}/>
+                </article> : <article className="card" key={item.id}>
                   <div className={"avatar color" + (i % 4)}>
                     {item.kind==='profile'&&item.photo ? <img className="card-profile-photo" src={item.photo} alt={item.name} loading="lazy"/> : <>
                     {item.name
