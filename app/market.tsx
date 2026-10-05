@@ -493,7 +493,7 @@ export default function Home() {
             {loading && <p role="status">{t("Загружаем данные… ")}</p>}
             {mineTab !== 'decisions' && <div className="cards">
               {items.map((item, i) => (
-                item.kind === 'profile' ? <article className="specialist-card" key={item.id}>
+                item.kind === 'profile' ? <article className="specialist-card specialist-profile-card" key={item.id}>
                   <div className="specialist-heading">
                     <div className={'specialist-avatar color'+(i%4)}>{item.photo?<img src={item.photo} alt={item.name} loading="lazy"/>:item.name.split(' ').map(s=>s[0]).slice(0,2).join('')}</div>
                     <div className="specialist-identity"><span className="specialist-category">{t(item.category)}</span><h3><button onClick={()=>open('detail',item)}>{item.name}</button></h3><div className="specialist-rating"><Star size={16}/>{ratingText(item.id)}</div></div>
