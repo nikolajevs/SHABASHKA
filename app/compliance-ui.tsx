@@ -1,5 +1,6 @@
 "use client";
 import {AuthEntry} from "./auth-ui";
+import {Flag} from 'lucide-react';
 import {useEffect,useState} from 'react';
 import {useLanguage,LanguageProvider,LanguageSwitcher} from './i18n/provider';
 import type {Locale} from './i18n/shared';
@@ -10,7 +11,7 @@ export function LegalFooter(){const {t}=useLanguage();const [open,setOpen]=useSt
  function close(){document.cookie=`shabashka_cookie_notice=v1; Path=/; Max-Age=15552000; SameSite=Lax${location.protocol==='https:'?'; Secure':''}`;setOpen(false);}
  return <><nav className="legal-footer" aria-label={t('Правовая информация')}><a href="/legal/terms">{t('Условия использования')}</a><a href="/legal/privacy">{t('Конфиденциальность')}</a><a href="/legal/cookies">{t('Cookie')}</a><button onClick={()=>setOpen(true)}>{t('Настройки cookie')}</button><a href="/privacy">{t('Мои данные')}</a><a href="mailto:igors.nikos@gmail.com">{t('Связаться с оператором')}</a></nav>{open&&<aside className="cookie-notice" aria-label={t('Cookie')}><div><strong>{t('Только необходимые cookie')}</strong><p>{t('Мы используем cookie для входа, выбранного языка и сохранения этого уведомления. Аналитика и рекламные cookie не подключены.')}</p></div><a href="/legal/cookies">{t('Подробнее')}</a><button className="dark" onClick={close}>{t('Понятно')}</button></aside>}</>;
 }
-export function ReportLink({id}:{id:string}){const{t}=useLanguage();return <a className="report-link" href={'/report?target='+encodeURIComponent(id)}>{t('Пожаловаться / незаконный контент')}</a>;}
+export function ReportLink({id}:{id:string}){const{t}=useLanguage();return <a className="report-link" href={'/report?target='+encodeURIComponent(id)} title={t('Пожаловаться / незаконный контент')}><Flag size={16} aria-hidden="true"/><span>{t('Сообщить о нарушении')}</span></a>;}
 export function PrivacyPanel(){
  const{t,errorText,locale}=useLanguage();const[state,setState]=useState<{inactive?:boolean;erased?:boolean}|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState(''),[busy,setBusy]=useState(false),[confirm,setConfirm]=useState(''),[showErase,setShowErase]=useState(false),[guest,setGuest]=useState(false),[notice,setNotice]=useState('');
  async function load(){try{const r=await fetch('/api/privacy',{cache:'no-store',headers:{'X-SHABASHKA-Language':locale}});if(r.status===401){setGuest(true);return;}const b=await r.json() as {state:typeof state;errorKey?:string};if(!r.ok)throw Error(b.errorKey);setState(b.state);}catch(e){setError(e instanceof Error?e.message:'Не удалось загрузить данные. Попробуйте ещё раз.');}finally{setLoading(false);}}
