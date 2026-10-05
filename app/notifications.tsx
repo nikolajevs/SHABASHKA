@@ -40,12 +40,13 @@ export function Notifications({records,activeId,activeKind,onOpen,onRead}:{recor
       {error&&<p role="alert">{error}</p>}
       <div ref={setSettingsContainer}/>
       <button className="outline" disabled={busy||!unread} onClick={()=>void mark(incoming.filter(r=>r.unread).map(r=>r.id))}>{t('Прочитать всё')}</button>
-      {!grouped.length&&<p>{t('Уведомлений пока нет')}</p>}
+      {records.some(r=>r.kind==='conversation')&&<div className="notification-list"><h3>{t('Личные диалоги')}</h3>{records.filter(r=>r.kind==='conversation').map(chat=><button key={chat.id} className="notification-item" onClick={()=>{onOpen('chat',chat.id);setOpen(false);}}><MessageCircle size={19}/><span><strong>{chat.name}</strong><small>{t('Открыть чат')}</small></span></button>)}</div>}
+      {!grouped.length&&!records.some(r=>r.kind==='conversation')&&<p>{t('Уведомлений пока нет')}</p>}
       <div className="notification-list">{grouped.map(group=>{
         const item=group[0],target=records.find(r=>r.id===item.parent),task=item.kind==='message'?records.find(r=>r.id===target?.parent):target;
         const count=group.filter(r=>r.unread).length;
         return <button key={item.kind+item.parent} className={'notification-item'+(count?' unread':'')} disabled={!target||busy} onClick={()=>{onOpen(item.kind==='message'?'chat':'detail',item.parent!);setOpen(false);void mark(group.filter(r=>r.unread).map(r=>r.id));}}>
-          <MessageCircle size={19}/><span><strong>{t(item.kind==='message'?'Сообщения':'Отклики')}{count>0?` · ${count}`:''}</strong><span>{task?.title||t('Задание недоступно')}</span><small>{item.name}</small></span>{count>0&&<i aria-label={t('Непрочитанное')}/>}
+          <MessageCircle size={19}/><span><strong>{t(item.kind==='message'?'Сообщения':'Отклики')}{count>0?` · ${count}`:''}</strong><span>{target?.kind==='conversation'?target.name:task?.title||t('Задание недоступно')}</span><small>{item.name}</small></span>{count>0&&<i aria-label={t('Непрочитанное')}/>}
         </button>;
       })}</div>
     </DialogContent></Dialog>

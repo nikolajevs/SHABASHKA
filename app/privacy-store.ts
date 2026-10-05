@@ -25,6 +25,8 @@ export async function eraseAccount(owner: string, admin?: {id:string;email:strin
   const affected="SELECT id FROM records WHERE owner=? OR (kind IN ('bid','review') AND parent IN (SELECT id FROM records WHERE kind='task' AND owner=?)) OR (kind='review' AND json_extract(data,'$.profile')=?)";
   const args=[owner,owner,'profile:'+owner];
   await db.batch([
+    db.prepare("DELETE FROM records WHERE kind='message' AND parent IN (SELECT id FROM records WHERE kind='conversation' AND (owner=? OR parent=?))").bind(owner,owner),
+    db.prepare("DELETE FROM records WHERE kind='conversation' AND (owner=? OR parent=?)").bind(owner,owner),
     db.prepare(`DELETE FROM records WHERE kind IN ('audit','hidden','report','notice') AND parent IN (${affected})`).bind(...args),
     db.prepare("DELETE FROM records WHERE kind='message' AND parent IN (SELECT id FROM records WHERE kind='bid' AND (owner=? OR parent IN (SELECT id FROM records WHERE kind='task' AND owner=?)))").bind(owner,owner),
     db.prepare("UPDATE records SET data=json_set(data,'$.status',CASE WHEN json_extract(data,'$.status')='active' THEN 'open' ELSE json_extract(data,'$.status') END,'$.chosen',NULL) WHERE kind='task' AND json_extract(data,'$.chosen') IN (SELECT id FROM records WHERE kind='bid' AND owner=?)").bind(owner),

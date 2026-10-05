@@ -78,6 +78,11 @@ export async function GET(request: Request) {
     const account = rows.results.find(
       (r) => r.kind === "account" && r.owner === uid,
     );
+    if (uid) {
+      const direct = await db.prepare("SELECT * FROM records WHERE (kind='conversation' AND (owner=? OR parent=?)) OR (kind='message' AND parent IN (SELECT id FROM records WHERE kind='conversation' AND (owner=? OR parent=?))) ORDER BY created DESC").bind(uid,uid,uid,uid).all<Row>();
+      const existing = new Set(rows.results.map(r=>r.id));
+      rows.results.push(...direct.results.filter(r=>!existing.has(r.id)));
+    }
     const read = uid ? await database().prepare("SELECT parent FROM records WHERE kind='notification-read' AND owner=?").bind(uid).all<{parent:string}>() : {results:[]};
     const readIds = new Set(read.results.map(r=>r.parent));
     return reply(
@@ -95,7 +100,7 @@ export async function GET(request: Request) {
           : null,
         records: rows.results
           .filter((r) => r.kind !== "account")
-          .map((r) => ({...unpack(r, uid), unread: !!uid && r.owner!==uid && ['bid','message'].includes(r.kind) && !readIds.has(r.id)})),
+          .map((r) => ({...unpack(r, uid), ...(r.kind==='conversation'?{name:r.owner===uid?JSON.parse(r.data).recipientName:JSON.parse(r.data).name}:{}), unread: !!uid && r.owner!==uid && ['bid','message'].includes(r.kind) && !readIds.has(r.id)})),
       },
       { headers: { "Cache-Control": "private, no-store" } },
     );
@@ -134,8 +139,9 @@ export async function POST(request: Request) {
         SELECT ?,'notification-read',?,r.id,'{}',? FROM records r
         WHERE r.id=? AND r.owner<>? AND (
           (r.kind='bid' AND EXISTS(SELECT 1 FROM records t WHERE t.id=r.parent AND t.kind='task' AND t.owner=?)) OR
-          (r.kind='message' AND EXISTS(SELECT 1 FROM records b JOIN records t ON t.id=b.parent WHERE b.id=r.parent AND b.kind='bid' AND t.kind='task' AND (b.owner=? OR t.owner=?)))
-        ) ON CONFLICT(id) DO NOTHING`).bind('read:'+u.userId+':'+id,u.userId,new Date().toISOString(),id,u.userId,u.userId,u.userId,u.userId)));
+          (r.kind='message' AND EXISTS(SELECT 1 FROM records b JOIN records t ON t.id=b.parent WHERE b.id=r.parent AND b.kind='bid' AND t.kind='task' AND (b.owner=? OR t.owner=?))) OR
+          (r.kind='message' AND EXISTS(SELECT 1 FROM records c WHERE c.id=r.parent AND c.kind='conversation' AND (c.owner=? OR c.parent=?)))
+        ) ON CONFLICT(id) DO NOTHING`).bind('read:'+u.userId+':'+id,u.userId,new Date().toISOString(),id,u.userId,u.userId,u.userId,u.userId,u.userId,u.userId)));
       return reply({ok:true});
     }
     if (currentState?.inactive && !(currentState.erased && action==='register' && b.reopen===true))
@@ -188,6 +194,19 @@ export async function POST(request: Request) {
     }
     if (!identity)
       throw Error("Сначала завершите регистрацию в личном кабинете");
+    if (action === 'start-chat') {
+      const profile = await db.prepare("SELECT * FROM records WHERE id=? AND kind='profile'").bind(value('id',240)).first<Row>();
+      if (!profile || profile.owner===u.userId || await inactive(profile.owner) || await unavailable(profile.id))
+        return reply({error:'Диалог недоступен'},{status:403});
+      const pair = [u.userId,profile.owner].sort();
+      const digest = await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(pair)));
+      const conversationId='conversation:'+Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');
+      await db.prepare("INSERT INTO records(id,kind,owner,parent,data,created) VALUES (?,'conversation',?,?,?,?) ON CONFLICT(id) DO NOTHING")
+        .bind(conversationId,u.userId,profile.owner,JSON.stringify({name:identity.name,recipientName:JSON.parse(profile.data).name}),now).run();
+      const conversation=await db.prepare("SELECT * FROM records WHERE id=? AND kind='conversation'").bind(conversationId).first<Row>();
+      if(!conversation)throw Error('Диалог не найден');
+      return reply({ok:true,conversation:{...unpack(conversation,u.userId),name:conversation.owner===u.userId?JSON.parse(conversation.data).recipientName:JSON.parse(conversation.data).name}});
+    }
     if (action === "delete-task") {
       if (b.confirm !== true) throw Error("Подтвердите удаление задания.");
       const result = await db.prepare("UPDATE records SET data=json_set(data,'$.deleted',1,'$.deletedAt',?) WHERE id=? AND kind='task' AND owner=? AND coalesce(json_extract(data,'$.deleted'),0)=0")
@@ -325,6 +344,15 @@ export async function POST(request: Request) {
       if (!result.meta.changes) throw Error("Завершение недоступно");
     } else if (action === "message") {
       const parent = value("parent", 240);
+      const conversation=await db.prepare("SELECT * FROM records WHERE id=? AND kind='conversation'").bind(parent).first<Row>();
+      if(conversation){
+        if(conversation.owner!==u.userId&&conversation.parent!==u.userId)return reply({error:'Нет доступа к диалогу'},{status:403});
+        const recipient=conversation.owner===u.userId?conversation.parent!:conversation.owner;
+        if(await inactive(recipient)||await blocked(recipient))return reply({error:'Диалог недоступен'},{status:403});
+        await insert('message',{description:value('description'),name:identity.name},parent);
+        await sendPush(recipient,parent,true);
+        return reply({ok:true,id});
+      }
       const bid = await db
         .prepare("SELECT * FROM records WHERE id=? AND kind='bid'")
         .bind(parent)

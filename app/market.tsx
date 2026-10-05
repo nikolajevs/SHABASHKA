@@ -236,7 +236,7 @@ export default function Home() {
     refresh();
   }, [refresh]);
   useEffect(()=>{if(loading||authQueryHandled)return;const params=new URLSearchParams(location.search);if(params.get('auth')==='login'){setAuthOpen(true);}else if(params.get('auth')==='complete'&&user){setView('mine');if(!user.registered)setModal('register');history.replaceState(null,'','/');}setAuthQueryHandled(true);},[loading,user,authQueryHandled]);
-  useEffect(()=>{if(loading||deepLinkHandled)return;const params=new URLSearchParams(location.search),id=params.get('item');if(id){const item=records.find(r=>r.id===id);if(item){setSelected(item);setModal(params.get('chat')==='1'&&item.kind==='bid'?'chat':'detail');}}setDeepLinkHandled(true);},[records,loading,deepLinkHandled]);
+  useEffect(()=>{if(loading||deepLinkHandled)return;const params=new URLSearchParams(location.search),id=params.get('item');if(id){const item=records.find(r=>r.id===id);if(item){setSelected(item);setModal(params.get('chat')==='1'&&['bid','conversation'].includes(item.kind)?'chat':'detail');}}setDeepLinkHandled(true);},[records,loading,deepLinkHandled]);
   useEffect(() => {
     if (!user) return;
     const timer = setInterval(() => {if(document.visibilityState==='visible')refresh(true);}, 5000);
@@ -302,6 +302,19 @@ export default function Home() {
     setTaskPhotos((current) =>
       [...current, ...Array.from(fileList).map((file) => ({ file, url: URL.createObjectURL(file) }))].slice(0, 10),
     );
+  }
+  async function writeSpecialist(item: Item) {
+    if(!user){setAuthOpen(true);return;}
+    if(!user.registered||user.requiresTerms){open('register');return;}
+    if(busy)return;
+    setBusy(true);setNotice('');
+    try {
+      const response=await fetch('/api/market',{method:'POST',headers:{'Content-Type':'application/json','X-SHABASHKA-Language':locale},body:JSON.stringify({action:'start-chat',id:item.id})});
+      const data=await response.json() as {errorKey?:string;error?:string;conversation:Item};
+      if(!response.ok)throw Error(data.errorKey||data.error);
+      await refresh(true);
+      open('chat',data.conversation);
+    }catch(e){setNotice(e instanceof Error?e.message:'Не удалось сохранить');}finally{setBusy(false);}
   }
   function removeTaskPhoto(index: number) {
     setTaskPhotos((current) => {
@@ -490,7 +503,7 @@ export default function Home() {
                   {item.description&&<p className="specialist-description">{item.description}</p>}
                   {item.skills&&<ul className="specialist-skills" aria-label={t('Навыки')}>{item.skills.split(/[,;\n]+/).map(s=>s.trim()).filter(Boolean).slice(0,5).map((skill,index)=><li key={index}>{skill}</li>)}</ul>}
                   {!!item.portfolioImages?.length ? <PortfolioGallery images={item.portfolioImages} previewCount={3}/> : <div className="portfolio-empty"><Camera size={24}/><div><strong>{t('Портфолио пока не добавлено')}</strong><span>{item.mine ? t('Добавьте фотографии своих работ, чтобы клиентам было проще выбрать вас.') : t('Исполнитель ещё не добавил фотографии своих работ.')}</span></div>{item.mine&&view==='mine'&&mineTab==='profile'&&<button className="outline" onClick={()=>open('profile',item)}>{t('Добавить фото')}</button>}</div>}
-                  <div className="specialist-actions"><button className="primary" onClick={()=>open('detail',item)}>{t('Посмотреть профиль')}</button>{view==='mine'&&mineTab==='profile'&&item.mine&&<button className="outline" onClick={()=>open('profile',item)}>{t('Изменить профиль')}</button>}</div>
+                  <div className="specialist-actions"><button className="primary" onClick={()=>open('detail',item)}>{t('Посмотреть профиль')}</button>{!item.mine&&<button className="outline specialist-contact" disabled={busy} onClick={()=>void writeSpecialist(item)}><MessageCircle size={16}/>{t('Написать специалисту')}</button>}{view==='mine'&&mineTab==='profile'&&item.mine&&<button className="outline" onClick={()=>open('profile',item)}>{t('Изменить профиль')}</button>}</div>
                   <ReportLink id={item.id}/>
                 </article> : item.kind === 'task' ? <article className="specialist-card task-card" key={item.id}>
                   <div className="task-heading"><span className="specialist-category">{t(item.category)}</span><span className={'task-status task-status-'+(item.deleted?'deleted':item.status||'open')}>{t(item.deleted?'Удалено':statusText(item.status))}</span></div>
@@ -873,7 +886,7 @@ export default function Home() {
                     : modal === "review"
                       ? t("Отзыв об исполнителе")
                       : modal === "chat"
-                        ? t("Диалог по заданию")
+                        ? (detail?.kind==='conversation'?`${t('Чат')} · ${detail.name}`:t("Диалог по заданию"))
                         : detail?.kind==='bid' ? t('Ваш отклик') : detail?.title || t("Ваше предложение")}
           </DialogTitle>
           <DialogDescription className={modal==='detail'?'sr-only':''}>

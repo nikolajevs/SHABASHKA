@@ -1,4 +1,8 @@
 [
+  ["Написать специалисту", "Rakstīt speciālistam", "Message specialist", "Написати спеціалісту"],
+  ["Личные диалоги", "Privātās sarakstes", "Direct conversations", "Особисті діалоги"],
+  ["Открыть чат", "Atvērt saraksti", "Open chat", "Відкрити чат"],
+  ["Диалог недоступен", "Sarakste nav pieejama", "Conversation unavailable", "Діалог недоступний"],
   ["Выключить звук", "Izslēgt skaņu", "Turn sound off", "Вимкнути звук"],
   ["Включить звук", "Ieslēgt skaņu", "Turn sound on", "Увімкнути звук"],
   ["Отключить push", "Izslēgt push", "Disable push", "Вимкнути push"],
