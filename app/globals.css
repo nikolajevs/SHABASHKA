@@ -407,18 +407,24 @@ h1 em {
 .portfolio-remove { position:absolute; top:4px; right:4px; width:24px; height:24px; border:0; border-radius:50%; background:#1f2b1bdd; color:#fff; font-size:18px; line-height:1; cursor:pointer; }
 .portfolio-thumbnail { position: relative; }
 .portfolio-more { position: absolute; right: 8px; bottom: 8px; border-radius: 8px; background: #20301bd9; color: #fff; padding: 4px 8px; font-size: 13px; }
-.specialist-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; padding-top: 4px; }
-.specialist-actions button { justify-content: center; padding: 12px 18px; font-size: 14px; }
+.specialist-actions { display: grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap: 8px; margin-top: auto; padding-top: 4px; }
+.specialist-card .specialist-actions button { display:flex; align-items:center; justify-content:center; gap:8px; min-width:0; width:100%; min-height:48px; padding:12px 10px; font-size:14px; font-weight:600; line-height:1.35; border:1px solid #d5dfc9; border-radius:12px; white-space:normal; text-align:center; }
+.specialist-card .specialist-actions button.primary { background:#ddff80; color:#24331d; border-color:#cce974; }
+.specialist-card .specialist-actions button.outline { background:#fff; color:#24331d; text-decoration:none; }
+.specialist-card .specialist-actions button:hover { filter:brightness(.97); }
+.specialist-card .specialist-actions:has(>button:nth-child(3))>button:first-child { grid-column:1/-1; }
+.specialist-card .specialist-actions>button:only-child { grid-column:1/-1; }
 .specialist-actions .specialist-contact { display:flex; align-items:center; gap:8px; min-width:0; white-space:normal; }
-.specialist-profile-card .specialist-actions { display:grid; grid-auto-flow:column; grid-auto-columns:minmax(0,1fr); gap:8px; }
-.specialist-profile-card .specialist-actions button { min-width:0; width:100%; padding:12px 8px; white-space:normal; overflow-wrap:anywhere; line-height:1.35; }
+.specialist-profile-card .specialist-actions { grid-template-columns:repeat(2,minmax(0,1fr)); }
 .specialist-profile-card .specialist-actions svg { flex-shrink:0; }
 .favorite-button { display:inline-flex; align-items:center; justify-content:center; width:44px; min-width:44px; height:44px; padding:8px; border:1px solid #dce2d6; border-radius:12px; background:#fff; color:#637259; cursor:pointer; flex-shrink:0; }
 .favorite-button:hover,.favorite-button.selected { background:#fff0ee; color:#a83e50; border-color:#ecc4ca; }
 .favorite-button:focus-visible,.share-profile:focus-visible { outline:2px solid #536b3a; outline-offset:3px; }
 .availability { align-self:flex-start; display:inline-flex; border-radius:8px; padding:5px 9px; background:#eaf5d4; color:#405c20; font-size:14px; line-height:1.4; }
 .availability.busy { background:#f0eee8; color:#6b6556; }
-.card-secondary-actions { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+.card-secondary-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; padding-top:12px; border-top:1px solid #e5eadf; }
+.specialist-card .card-secondary-actions :is(.share-profile,.report-link) { display:flex; justify-content:center; align-items:center; gap:7px; width:100%; min-width:0; min-height:44px; margin:0; padding:9px 8px; border:1px solid #dce2d6; border-radius:12px; background:#f6f8f2; color:#53604b; font-size:14px; font-weight:500; line-height:1.4; text-decoration:none; text-align:center; white-space:normal; }
+.specialist-card .card-secondary-actions :is(.share-profile,.report-link):hover { background:#edf2e5; border-color:#b8c7a5; }
 .share-profile { display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:9px 12px; border:1px solid #dce2d6; border-radius:10px; background:#f6f8f2; color:#53604b; font-size:14px; cursor:pointer; }
 .share-profile svg { flex-shrink:0; }
 .inbox { width:100%; min-width:0; }

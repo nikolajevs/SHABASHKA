@@ -1,4 +1,6 @@
 [
+  ["Поделиться", "Dalīties", "Share", "Поділитися"],
+  ["Пожаловаться", "Ziņot", "Report", "Поскаржитися"],
   ["В избранном пока пусто", "Izlase vēl ir tukša", "No favorites yet", "В обраному поки порожньо"],
   ["Нажмите на сердечко в карточке специалиста или задания.", "Nospiediet sirsniņu speciālista vai uzdevuma kartītē.", "Tap the heart on a specialist or task card.", "Натисніть на сердечко в картці спеціаліста або завдання."],
   ["Опишите, как вы поможете. Отклик видите только вы и заказчик.", "Aprakstiet, kā varat palīdzēt. Pieteikumu redzat tikai jūs un pasūtītājs.", "Describe how you can help. Only you and the customer can see your response.", "Опишіть, як ви допоможете. Відгук бачите тільки ви та замовник."],
