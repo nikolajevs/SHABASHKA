@@ -519,9 +519,8 @@ export default function Home() {
                 item.kind === 'profile' ? <article className="specialist-card specialist-profile-card" key={item.id}>
                   <div className="specialist-heading">
                     <div className={'specialist-avatar color'+(i%4)}>{item.photo?<img src={item.photo} alt={item.name} loading="lazy"/>:item.name.split(' ').map(s=>s[0]).slice(0,2).join('')}</div>
-                    <div className="specialist-identity"><span className="specialist-category">{t(item.category)}</span><h3><button onClick={()=>open('detail',item)}>{item.name}</button></h3><div className="specialist-rating"><Star size={16}/>{ratingText(item.id)}</div></div>{favoriteButton(item)}
+                    <div className="specialist-identity"><span className="specialist-category">{t(item.category)}</span><h3><button onClick={()=>open('detail',item)}>{item.name}</button></h3><div className="specialist-rating"><Star size={16}/>{ratingText(item.id)}</div><span className={'availability'+(item.available===false?' busy':'')}>{t(item.available===false?'Пока занят':'Принимаю заказы')}</span></div>{favoriteButton(item)}
                   </div>
-                  <span className={'availability'+(item.available===false?' busy':'')}>{t(item.available===false?'Пока занят':'Принимаю заказы')}</span>
                   {item.title&&<h4 className="specialist-title">{item.title}</h4>}
                   <div className="specialist-facts"><div><MapPin size={16}/><span>{(item.cities?.length?item.cities:[item.city||'Латвия']).map(city=>t(city)).join(' · ')}</span></div>{item.transport&&<div><Truck size={16}/><span>{t('Собственный транспорт')}</span></div>}</div>
                   {item.description&&<p className="specialist-description">{item.description}</p>}
