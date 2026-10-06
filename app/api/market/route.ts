@@ -1,5 +1,6 @@
 import { localizedJson } from "../../i18n/shared";
 import {sendPush} from '../../push-store';
+import {communicationAllowed,consumeCommunicationQuota,threadPeer} from '../../communication-store';
 import { env } from "cloudflare:workers";
 import { getChatGPTUser } from "../../chatgpt-auth";
 import { isAdmin, blocked, unavailable } from "../../admin-access";
@@ -85,6 +86,14 @@ export async function GET(request: Request) {
     }
     const read = uid ? await database().prepare("SELECT parent FROM records WHERE kind='notification-read' AND owner=?").bind(uid).all<{parent:string}>() : {results:[]};
     const readIds = new Set(read.results.map(r=>r.parent));
+    const preferences=uid?await db.prepare("SELECT kind,parent,owner FROM records WHERE (kind='favorite' AND owner=?) OR (kind='user-block' AND (owner=? OR parent=?))").bind(uid,uid,uid).all<{kind:string;parent:string;owner:string}>():{results:[]};
+    const favoriteIds=new Set(preferences.results.filter(r=>r.kind==='favorite').map(r=>r.parent));
+    const ownBlocks=new Set(preferences.results.filter(r=>r.kind==='user-block'&&r.owner===uid).map(r=>r.parent));
+    const blockedPeers=new Set(preferences.results.filter(r=>r.kind==='user-block').map(r=>r.owner===uid?r.parent:r.owner));
+    const peerFor=(r:Row)=>{
+      const other=r.kind==='conversation'?r.parent:rows.results.find(t=>t.id===r.parent&&t.kind==='task')?.owner;
+      return r.owner===uid?other:r.owner;
+    };
     return reply(
       {
         user: u
@@ -100,7 +109,7 @@ export async function GET(request: Request) {
           : null,
         records: rows.results
           .filter((r) => r.kind !== "account")
-          .map((r) => ({...unpack(r, uid), ...(r.kind==='conversation'?{name:r.owner===uid?JSON.parse(r.data).recipientName:JSON.parse(r.data).name}:{}), unread: !!uid && r.owner!==uid && ['bid','message'].includes(r.kind) && !readIds.has(r.id)})),
+          .map((r) => ({...unpack(r, uid), favorite:favoriteIds.has(r.id), ...(['conversation','bid'].includes(r.kind)?{blockedByMe:ownBlocks.has(peerFor(r)||''),communicationBlocked:blockedPeers.has(peerFor(r)||'')}:{}), ...(r.kind==='conversation'?{name:r.owner===uid?JSON.parse(r.data).recipientName:JSON.parse(r.data).name}:{}), unread: !!uid && r.owner!==uid && ['bid','message'].includes(r.kind) && !readIds.has(r.id)})),
       },
       { headers: { "Cache-Control": "private, no-store" } },
     );
@@ -194,13 +203,34 @@ export async function POST(request: Request) {
     }
     if (!identity)
       throw Error("Сначала завершите регистрацию в личном кабинете");
+    if(action==='favorite') {
+      const target=value('id',240);
+      if(typeof b.enabled!=='boolean')throw Error('Неверный запрос');
+      if(b.enabled){
+        const record=await db.prepare("SELECT id,owner FROM records WHERE id=? AND kind IN ('profile','task') AND coalesce(json_extract(data,'$.deleted'),0)=0").bind(target).first<{id:string;owner:string}>();
+        if(!record||await unavailable(target)||await inactive(record.owner))throw Error('Публикация недоступна');
+        await db.prepare("INSERT INTO records(id,kind,owner,parent,data,created) VALUES (?,'favorite',?,?,'{}',?) ON CONFLICT(id) DO NOTHING").bind('favorite:'+u.userId+':'+target,u.userId,target,now).run();
+      }else await db.prepare("DELETE FROM records WHERE kind='favorite' AND owner=? AND parent=?").bind(u.userId,target).run();
+      return reply({ok:true});
+    }
+    if(action==='block-chat') {
+      const peer=await threadPeer(value('id',240),u.userId);
+      if(!peer)return reply({error:'Нет доступа к диалогу'},{status:403});
+      if(typeof b.enabled!=='boolean')throw Error('Неверный запрос');
+      if(b.enabled)await db.prepare("INSERT INTO records(id,kind,owner,parent,data,created) VALUES (?,'user-block',?,?,'{}',?) ON CONFLICT(id) DO NOTHING").bind('user-block:'+u.userId+':'+peer,u.userId,peer,now).run();
+      else await db.prepare("DELETE FROM records WHERE kind='user-block' AND owner=? AND parent=?").bind(u.userId,peer).run();
+      return reply({ok:true});
+    }
     if (action === 'start-chat') {
       const profile = await db.prepare("SELECT * FROM records WHERE id=? AND kind='profile'").bind(value('id',240)).first<Row>();
       if (!profile || profile.owner===u.userId || await inactive(profile.owner) || await unavailable(profile.id))
         return reply({error:'Диалог недоступен'},{status:403});
+      if(!await communicationAllowed(u.userId,profile.owner))return reply({error:'Переписка с этим пользователем недоступна.'},{status:403});
       const pair = [u.userId,profile.owner].sort();
       const digest = await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(pair)));
       const conversationId='conversation:'+Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');
+      const existingConversation=await db.prepare("SELECT id FROM records WHERE id=? AND kind='conversation'").bind(conversationId).first();
+      if(!existingConversation&&!await consumeCommunicationQuota(u.userId,'new-chat',10,3600000))return reply({error:'Слишком много новых диалогов. Попробуйте позже.'},{status:429});
       await db.prepare("INSERT INTO records(id,kind,owner,parent,data,created) VALUES (?,'conversation',?,?,?,?) ON CONFLICT(id) DO NOTHING")
         .bind(conversationId,u.userId,profile.owner,JSON.stringify({name:identity.name,recipientName:JSON.parse(profile.data).name}),now).run();
       const conversation=await db.prepare("SELECT * FROM records WHERE id=? AND kind='conversation'").bind(conversationId).first<Row>();
@@ -258,6 +288,8 @@ export async function POST(request: Request) {
         data.photo=b.photo===undefined?(old.photo||''):b.photo;
         data.portfolioImages=b.portfolioImages===undefined?(old.portfolioImages||[]):b.portfolioImages;
         data.skills = value("skills", 500);
+        if(b.available!==undefined&&typeof b.available!=='boolean')throw Error('Неверный запрос');
+        data.available=b.available===undefined?old.available!==false:b.available;
         const portfolio =
           typeof b.portfolio === "string" ? b.portfolio.trim() : "";
         if (portfolio) {
@@ -291,7 +323,11 @@ export async function POST(request: Request) {
         if (b.images !== undefined && (!Array.isArray(b.images) || b.images.length > 10 || !b.images.every(validImage)))
           throw Error("Не более 10 фотографий или неподдерживаемый формат");
         data.images = Array.isArray(b.images) ? b.images : [];
-        await insert("task", data);
+        if(b.id!==undefined){
+          const result=await db.prepare("UPDATE records SET data=json_set(data,'$.title',?,'$.description',?,'$.category',?,'$.city',?,'$.dateFrom',?,'$.dateTo',?,'$.transport',json(?),'$.images',json(?),'$.updatedAt',?) WHERE id=? AND kind='task' AND owner=? AND coalesce(json_extract(data,'$.deleted'),0)=0 AND json_extract(data,'$.status') IN ('open','active')")
+            .bind(data.title,data.description,data.category,data.city,from,to,JSON.stringify(data.transport),JSON.stringify(data.images),now,value('id',100),u.userId).run();
+          if(!result.meta.changes)return reply({error:'Редактирование задания недоступно.'},{status:403});
+        }else await insert("task", data);
       }
     } else if (action === "bid") {
       const parent = value("parent", 100);
@@ -305,6 +341,8 @@ export async function POST(request: Request) {
         JSON.parse(task.data).status !== "open" || JSON.parse(task.data).deleted
       )
         throw Error("Это задание недоступно для отклика");
+      if(!await communicationAllowed(u.userId,task.owner))return reply({error:'Переписка с этим пользователем недоступна.'},{status:403});
+      if(!await consumeCommunicationQuota(u.userId,'bid',20,3600000))return reply({error:'Слишком много откликов. Попробуйте позже.'},{status:429});
       const profile = await db
         .prepare("SELECT id FROM records WHERE kind='profile' AND owner=?")
         .bind(u.userId)
@@ -344,6 +382,13 @@ export async function POST(request: Request) {
       if (!result.meta.changes) throw Error("Завершение недоступно");
     } else if (action === "message") {
       const parent = value("parent", 240);
+      const peer=await threadPeer(parent,u.userId);
+      if(!peer)return reply({error:'Нет доступа к диалогу'},{status:403});
+      if(!await communicationAllowed(u.userId,peer))return reply({error:'Переписка с этим пользователем недоступна.'},{status:403});
+      const messageText=value('description');
+      if(!await consumeCommunicationQuota(u.userId,'message-minute',30,60000)||!await consumeCommunicationQuota(u.userId,'message-hour',300,3600000))return reply({error:'Слишком много сообщений. Попробуйте позже.'},{status:429});
+      const duplicate=await db.prepare("SELECT id FROM records WHERE kind='message' AND owner=? AND parent=? AND json_extract(data,'$.description')=? AND created>? LIMIT 1").bind(u.userId,parent,messageText,new Date(Date.now()-15000).toISOString()).first();
+      if(duplicate)return reply({error:'Это сообщение уже отправлено.'},{status:429});
       const conversation=await db.prepare("SELECT * FROM records WHERE id=? AND kind='conversation'").bind(parent).first<Row>();
       if(conversation){
         if(conversation.owner!==u.userId&&conversation.parent!==u.userId)return reply({error:'Нет доступа к диалогу'},{status:403});

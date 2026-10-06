@@ -26,6 +26,8 @@ export async function eraseAccount(owner: string, admin?: {id:string;email:strin
   const args=[owner,owner,'profile:'+owner];
   await db.batch([
     db.prepare("DELETE FROM records WHERE kind='message' AND parent IN (SELECT id FROM records WHERE kind='conversation' AND (owner=? OR parent=?))").bind(owner,owner),
+    db.prepare(`DELETE FROM records WHERE kind='favorite' AND parent IN (${affected})`).bind(...args),
+    db.prepare("DELETE FROM records WHERE kind='user-block' AND parent=?").bind(owner),
     db.prepare("DELETE FROM records WHERE kind='conversation' AND (owner=? OR parent=?)").bind(owner,owner),
     db.prepare(`DELETE FROM records WHERE kind IN ('audit','hidden','report','notice') AND parent IN (${affected})`).bind(...args),
     db.prepare("DELETE FROM records WHERE kind='message' AND parent IN (SELECT id FROM records WHERE kind='bid' AND (owner=? OR parent IN (SELECT id FROM records WHERE kind='task' AND owner=?)))").bind(owner,owner),

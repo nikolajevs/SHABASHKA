@@ -1,5 +1,6 @@
 "use client";
 import {Notifications} from './notifications';
+import {Inbox} from './inbox';
 import {prepareProfileImage} from './profile-image';
 import {PortfolioGallery} from './portfolio-gallery';
 import { useLanguage, LanguageSwitcher, localeTags } from "./i18n/provider";
@@ -36,6 +37,9 @@ import {
   Shield,
   FileText,
   UserCog,
+  Heart,
+  Share2,
+  Lock,
 } from "lucide-react";
 import {
   Dialog,
@@ -129,6 +133,10 @@ type Item = {
   created?: string;
   basis?: string;
   deleted?: boolean;
+  favorite?: boolean;
+  available?: boolean;
+  blockedByMe?: boolean;
+  communicationBlocked?: boolean;
 };
 type User = {
   name: string;
@@ -181,7 +189,8 @@ export default function Home() {
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [portfolioToKeep, setPortfolioToKeep] = useState<string[]>([]);
   const [profilePhotoPreview, setProfilePhotoPreview] = useState("");
-  const [taskPhotos, setTaskPhotos] = useState<{ file: File; url: string }[]>([]);
+  const [taskPhotos, setTaskPhotos] = useState<{ file?: File; url: string }[]>([]);
+  const [blockConfirmation,setBlockConfirmation]=useState(false);
   const [citySearch, setCitySearch] = useState("");
   const [deepLinkHandled,setDeepLinkHandled]=useState(false);
   const { locale, t, errorText } = useLanguage();
@@ -283,6 +292,7 @@ export default function Home() {
   function open(kind: string, item?: Item) {
     if(!user&&kind!=='detail'){setModal('');setAuthOpen(true);return;}
     setDeleteConfirmation(false);
+    setBlockConfirmation(false);
     setError("");
     setNotice("");
     setSelected(item || null);
@@ -290,7 +300,7 @@ export default function Home() {
     setProfilePhotoPreview(item?.photo || "");
     setTaskPhotos((current) => {
       current.forEach((p) => URL.revokeObjectURL(p.url));
-      return [];
+      return kind==='task'&&item?.kind==='task'?(item.images||[]).map(url=>({url})):[];
     });
     setCitySearch("");
     setFormCategory(item?.category || "Ремонт");
@@ -315,6 +325,16 @@ export default function Home() {
       await refresh(true);
       open('chat',data.conversation);
     }catch(e){setNotice(e instanceof Error?e.message:'Не удалось сохранить');}finally{setBusy(false);}
+  }
+  function favoriteButton(item:Item) {
+    return <button className={'favorite-button'+(item.favorite?' selected':'')} type="button" disabled={busy} aria-pressed={!!item.favorite} aria-label={t(item.favorite?'Удалить из избранного':'В избранное')} onClick={()=>{if(!user){setAuthOpen(true);return;}if(!user.registered||user.requiresTerms){open('register');return;}void action({action:'favorite',id:item.id,enabled:!item.favorite},false);}}><Heart size={19} fill={item.favorite?'currentColor':'none'}/></button>;
+  }
+  async function shareProfile(item:Item) {
+    const url=location.origin+'/?item='+encodeURIComponent(item.id);
+    try {
+      if(navigator.share)await navigator.share({title:item.name+' · Gigs',url});
+      else {await navigator.clipboard.writeText(url);setNotice('Ссылка скопирована.');}
+    }catch(e){if(!(e instanceof DOMException&&e.name==='AbortError'))setNotice('Не удалось скопировать ссылку.');}
   }
   function removeTaskPhoto(index: number) {
     setTaskPhotos((current) => {
@@ -342,6 +362,7 @@ export default function Home() {
       (r.kind==='bid'&&r.parent===item.id)||(r.kind==='message'&&records.some(b=>b.kind==='bid'&&b.id===r.parent&&b.parent===item.id)))).length;
   }
   function tabUnread(tab:string) {
+    if(tab==='messages')return records.filter(r=>r.kind==='message'&&r.unread).length;
     return records.filter(r=>r.mine&&(tab==='bids'?r.kind==='bid':r.kind==='task'&&(tab==='archive'?r.deleted||r.status==='complete':tab==='tasks'&&!r.deleted&&r.status!=='complete'))).reduce((sum,r)=>sum+unreadFor(r),0);
   }
   function navigate(v: string) {
@@ -400,6 +421,7 @@ export default function Home() {
       values.portfolioImages=[...portfolioToKeep];
       for(const file of images)(values.portfolioImages as string[]).push(await prepareProfileImage(file));
       values.transport=new FormData(form).get('transport')==='on';
+      values.available=new FormData(form).get('available')==='on';
       values.cities = Array.from(form.querySelectorAll<HTMLInputElement>('input[name="cities"]:checked')).map(input=>input.value);
       if(!(values.cities as string[]).length)throw Error('Выберите населённый пункт Латвии');
       }catch(e){setError(e instanceof Error?e.message:'Не удалось сохранить');setBusy(false);return;}
@@ -410,7 +432,7 @@ export default function Home() {
         values.transport = new FormData(form).get('transport') === 'on';
         if (taskPhotos.length > 10) throw Error('Не более 10 фотографий.');
         const images: string[] = [];
-        for (const { file } of taskPhotos) images.push(await prepareProfileImage(file));
+        for (const { file,url } of taskPhotos) images.push(file?await prepareProfileImage(file):url);
         values.images = images;
       } catch (e) { setError(e instanceof Error ? e.message : 'Не удалось сохранить'); setBusy(false); return; }
     }
@@ -420,6 +442,7 @@ export default function Home() {
         {
           ...values,
           action: kind,
+          ...(kind==='task'&&selected?.kind==='task'?{id:selected.id}:{}),
           category: formCategory,
           city: formCity,
           reopen:!!user?.erased,
@@ -431,7 +454,7 @@ export default function Home() {
     ) {
       if (kind === "message") form.reset();
       else if (kind === "profile") navigate("profile");
-      else navigate("mine");
+      else {navigate("mine");if(kind==='task')setMineTab('tasks');}
     }
   }
   const profiles = records.filter((r) => r.kind === "profile");
@@ -440,7 +463,7 @@ export default function Home() {
       ? profiles
       : view === "task"
         ? records.filter((r) => r.kind === "task" && !r.deleted)
-        : records.filter((r) => r.mine && (
+        : records.filter((r) => mineTab === 'favorites' ? r.favorite && ['task','profile'].includes(r.kind) : r.mine && (
             mineTab === 'tasks' ? r.kind === 'task' && !r.deleted && r.status !== 'complete' :
             mineTab === 'archive' ? r.kind === 'task' && (r.deleted || r.status === 'complete') :
             mineTab === 'bids' ? r.kind === 'bid' :
@@ -496,22 +519,23 @@ export default function Home() {
                 item.kind === 'profile' ? <article className="specialist-card specialist-profile-card" key={item.id}>
                   <div className="specialist-heading">
                     <div className={'specialist-avatar color'+(i%4)}>{item.photo?<img src={item.photo} alt={item.name} loading="lazy"/>:item.name.split(' ').map(s=>s[0]).slice(0,2).join('')}</div>
-                    <div className="specialist-identity"><span className="specialist-category">{t(item.category)}</span><h3><button onClick={()=>open('detail',item)}>{item.name}</button></h3><div className="specialist-rating"><Star size={16}/>{ratingText(item.id)}</div></div>
+                    <div className="specialist-identity"><span className="specialist-category">{t(item.category)}</span><h3><button onClick={()=>open('detail',item)}>{item.name}</button></h3><div className="specialist-rating"><Star size={16}/>{ratingText(item.id)}</div></div>{favoriteButton(item)}
                   </div>
+                  <span className={'availability'+(item.available===false?' busy':'')}>{t(item.available===false?'Пока занят':'Принимаю заказы')}</span>
                   {item.title&&<h4 className="specialist-title">{item.title}</h4>}
                   <div className="specialist-facts"><div><MapPin size={16}/><span>{(item.cities?.length?item.cities:[item.city||'Латвия']).map(city=>t(city)).join(' · ')}</span></div>{item.transport&&<div><Truck size={16}/><span>{t('Собственный транспорт')}</span></div>}</div>
                   {item.description&&<p className="specialist-description">{item.description}</p>}
                   {item.skills&&<ul className="specialist-skills" aria-label={t('Навыки')}>{item.skills.split(/[,;\n]+/).map(s=>s.trim()).filter(Boolean).slice(0,5).map((skill,index)=><li key={index}>{skill}</li>)}</ul>}
                   {!!item.portfolioImages?.length ? <PortfolioGallery images={item.portfolioImages} previewCount={3}/> : <div className="portfolio-empty"><Camera size={24}/><div><strong>{t('Портфолио пока не добавлено')}</strong><span>{item.mine ? t('Добавьте фотографии своих работ, чтобы клиентам было проще выбрать вас.') : t('Исполнитель ещё не добавил фотографии своих работ.')}</span></div>{item.mine&&view==='mine'&&mineTab==='profile'&&<button className="outline" onClick={()=>open('profile',item)}>{t('Добавить фото')}</button>}</div>}
                   <div className="specialist-actions"><button className="primary" onClick={()=>open('detail',item)}>{t('Посмотреть профиль')}</button>{!item.mine&&<button className="outline specialist-contact" disabled={busy} onClick={()=>void writeSpecialist(item)}><MessageCircle size={16}/>{t('Написать специалисту')}</button>}{view==='mine'&&mineTab==='profile'&&item.mine&&<button className="outline" onClick={()=>open('profile',item)}>{t('Изменить профиль')}</button>}</div>
-                  <ReportLink id={item.id}/>
+                  <div className="card-secondary-actions"><ReportLink id={item.id}/><button className="share-profile" onClick={()=>void shareProfile(item)}><Share2 size={16}/>{t('Поделиться профилем')}</button></div>
                 </article> : item.kind === 'task' ? <article className="specialist-card task-card" key={item.id}>
-                  <div className="task-heading"><span className="specialist-category">{t(item.category)}</span><span className={'task-status task-status-'+(item.deleted?'deleted':item.status||'open')}>{t(item.deleted?'Удалено':statusText(item.status))}</span></div>
+                  <div className="task-heading"><span className="specialist-category">{t(item.category)}</span><span className={'task-status task-status-'+(item.deleted?'deleted':item.status||'open')}>{t(item.deleted?'Удалено':statusText(item.status))}</span>{!item.deleted&&favoriteButton(item)}</div>
                   <h3 className="task-title"><button onClick={()=>open('detail',item)}>{item.title}</button></h3>
                   <p className="specialist-description">{item.description}</p>
                   <div className="task-facts"><div><MapPin size={17}/><span>{t(item.city||'Латвия')}</span></div><div><CalendarDays size={17}/><span><small>{t('Срок выполнения')}</small>{taskDates(item)}</span></div></div>
                   <div className="task-customer"><span className="task-customer-avatar" aria-hidden="true">{item.name.split(' ').map(s=>s[0]).slice(0,2).join('')}</span><span><small>{t('Заказчик')}</small>{item.name}</span></div>
-                  <div className="specialist-actions"><button className="primary" onClick={()=>open('detail',item)}>{t('Подробнее о задании')}</button>{item.mine&&!item.deleted&&<button className="outline" onClick={()=>{open('detail',item);setDeleteConfirmation(true);}}>{t('Удалить задание')}</button>}</div>
+                  <div className="specialist-actions"><button className="primary" onClick={()=>open('detail',item)}>{t('Подробнее о задании')}</button>{item.mine&&!item.deleted&&item.status!=='complete'&&<button className="outline" onClick={()=>open('task',item)}>{t('Изменить задание')}</button>}{item.mine&&!item.deleted&&<button className="outline" onClick={()=>{open('detail',item);setDeleteConfirmation(true);}}>{t('Удалить задание')}</button>}</div>
                   <ReportLink id={item.id}/>
                 </article> : item.kind === 'bid' ? <article className="specialist-card response-card" key={item.id}>
                   <div className="task-heading"><span className="specialist-category">{t('Ваш отклик')}{unreadFor(item)>0&&<span className="unread-count" aria-label={t('Непрочитанное')}>{unreadFor(item)}</span>}</span><span className="task-status">{bidStatus(item)}</span></div>
@@ -593,12 +617,12 @@ export default function Home() {
               <div className="empty">
                 <Search size={28} />
                 <h3>
-                  {view === "mine"
+                  {view==='mine'&&mineTab==='favorites'?t('В избранном пока пусто'):view === "mine"
                     ? t("Здесь будут ваши дела")
                     : t("Пока ничего не найдено")}
                 </h3>
                 <p>
-                  {view === 'mine' && mineTab === 'archive'
+                  {view==='mine'&&mineTab==='favorites'?t('Нажмите на сердечко в карточке специалиста или задания.'):view === 'mine' && mineTab === 'archive'
                     ? t('Здесь будут завершённые и удалённые задания.')
                     : view === "task"
                     ? t("Создайте первое задание или измените поиск.")
@@ -795,10 +819,10 @@ export default function Home() {
               </div>
                 <div className="cabinet-main">
                   <div className="mine-tabs" role="tablist" aria-label={t('Разделы кабинета')}>
-                    {([['tasks','Мои задания'],['bids','Мои отклики'],['profile','Мой профиль'],['decisions','Решения по публикациям'],['archive','Архив']] as const).map(([value,label])=><button key={value} type="button" role="tab" aria-selected={mineTab===value} onClick={()=>setMineTab(value)}>{t(label)}{tabUnread(value)>0&&<span className="unread-count">{tabUnread(value)}</span>}</button>)}
+                    {([['tasks','Мои задания'],['bids','Мои отклики'],['messages','Сообщения'],['profile','Мой профиль'],['favorites','Избранное'],['decisions','Решения по публикациям'],['archive','Архив']] as const).map(([value,label])=><button key={value} type="button" role="tab" aria-selected={mineTab===value} onClick={()=>setMineTab(value)}>{t(label)}{tabUnread(value)>0&&<span className="unread-count">{tabUnread(value)}</span>}</button>)}
                   </div>
-                  <div className="cabinet-city-filter"><Select value={city} onValueChange={setCity}><SelectTrigger aria-label={t("Город")}><SelectValue /></SelectTrigger><SelectContent>{["Все города", ...cities].map((c) => <SelectItem key={c} value={c}>{t(c)}</SelectItem>)}</SelectContent></Select></div>
-                  {browsingContent}
+                  {!['messages','decisions'].includes(mineTab)&&<div className="cabinet-city-filter"><Select value={city} onValueChange={setCity}><SelectTrigger aria-label={t("Город")}><SelectValue /></SelectTrigger><SelectContent>{["Все города", ...cities].map((c) => <SelectItem key={c} value={c}>{t(c)}</SelectItem>)}</SelectContent></Select></div>}
+                  {mineTab==='messages'?<Inbox records={records} onOpen={id=>{const thread=records.find(r=>r.id===id);if(thread)open('chat',thread);}}/>:browsingContent}
                 </div>
               </div>
             ) : (
@@ -876,7 +900,7 @@ export default function Home() {
           </div>
           <DialogTitle className={modal==='detail'&&detail?.kind==='profile'?'sr-only':''}>
             {modal === "task"
-              ? t("Новое задание")
+              ? t(selected?.kind==='task'?"Изменить задание":"Новое задание")
               : modal === "profile"
                 ? t("Профиль исполнителя")
                 : modal === "bid"
@@ -910,7 +934,7 @@ export default function Home() {
                       )
                     : modal === "bid"
                       ? t(
-                          "Предложите цену в евро и опишите, как вы поможете. Отклик видите только вы и заказчик.",
+                          "Опишите, как вы поможете. Отклик видите только вы и заказчик.",
                         )
                       : t(
                           "Заполните детали. Не указывайте личные контакты в публичном описании.",
@@ -1021,7 +1045,8 @@ export default function Home() {
                       <p className="profile-view-empty">{t("Пока нет отзывов")}</p>
                     )}
                   </section>
-                  <div className="detail-footer">{detail.mine&&<button className="primary" onClick={()=>open('profile',detail)}>{t('Изменить профиль')}</button>}<ReportLink id={detail.id}/></div>
+                  <span className={'availability'+(detail.available===false?' busy':'')}>{t(detail.available===false?'Пока занят':'Принимаю заказы')}</span>
+                  <div className="detail-footer">{detail.mine?<button className="primary" onClick={()=>open('profile',detail)}>{t('Изменить профиль')}</button>:<button className="primary" disabled={busy} onClick={()=>void writeSpecialist(detail)}>{t('Написать специалисту')}</button>}{favoriteButton(detail)}<button className="outline" onClick={()=>void shareProfile(detail)}><Share2 size={16}/>{t('Поделиться профилем')}</button><ReportLink id={detail.id}/></div>
                 </div>
               ) : detail.kind === "bid" ? (
                 <div className="response-view">
@@ -1173,7 +1198,7 @@ export default function Home() {
                     </>
                   )}
                   </div>
-                  <div className="detail-footer"><ReportLink id={detail.id}/></div>
+                  <div className="detail-footer">{detail.mine&&!detail.deleted&&detail.status!=='complete'&&<button className="outline" onClick={()=>open('task',detail)}>{t('Изменить задание')}</button>}{!detail.deleted&&favoriteButton(detail)}<ReportLink id={detail.id}/></div>
                 </div>
               )}
             </div>
@@ -1185,6 +1210,10 @@ export default function Home() {
             </button>
           ) : (
             <>
+              {modal==='chat'&&detail&&<div className="chat-controls">
+                {detail.communicationBlocked&&<p className="feedback"><Lock size={16}/>{t('Переписка заблокирована')}</p>}
+                {blockConfirmation?<div className="chat-block-confirm"><p>{t('Заблокировать собеседника? История сохранится, новые сообщения будут недоступны.')}</p><button type="button" className="outline" disabled={busy} onClick={()=>{void action({action:'block-chat',id:detail.id,enabled:true},false).then(ok=>{if(ok)setBlockConfirmation(false);});}}>{t('Заблокировать')}</button><button type="button" className="outline" onClick={()=>setBlockConfirmation(false)}>{t('Отмена')}</button></div>:<button type="button" className="outline" disabled={busy} onClick={()=>{if(detail.blockedByMe)void action({action:'block-chat',id:detail.id,enabled:false},false);else setBlockConfirmation(true);}}>{t(detail.blockedByMe?'Разблокировать собеседника':'Заблокировать собеседника')}</button>}
+              </div>}
               {modal === "chat" && (
                 <div
                   className="messages"
@@ -1263,6 +1292,7 @@ export default function Home() {
                             name="title"
                             required
                             maxLength={140}
+                            defaultValue={selected?.kind==='task'?selected.title:undefined}
                             placeholder={t("Например, собрать шкаф")}
                           />
                         </label>
@@ -1279,7 +1309,7 @@ export default function Home() {
                           values={cities}
                         />
                         <label className="check-card">
-                          <input type="checkbox" name="transport" />
+                          <input type="checkbox" name="transport" defaultChecked={selected?.kind==='task'&&selected.transport} />
                           <span>
                             <strong>{t("Нужен свой транспорт")}</strong>
                             <small>{t("Чтобы добраться до места выполнения заказа")}</small>
@@ -1361,6 +1391,7 @@ export default function Home() {
 
                         <section className="form-section">
                           <h4 className="form-section-title">{t("Где вы работаете")}</h4>
+                          <label className="check-card"><input type="checkbox" name="available" defaultChecked={selected?.available!==false}/><span><strong>{t('Принимаю заказы')}</strong><small>{t('Снимите отметку, если пока заняты.')}</small></span></label>
                           <label className="check-card">
                             <input type="checkbox" name="transport" defaultChecked={selected?.transport} />
                             <span>
@@ -1462,6 +1493,8 @@ export default function Home() {
                           required
                           maxLength={2000}
                           rows={modal === "chat" ? 2 : 4}
+                          defaultValue={modal==='task'&&selected?.kind==='task'?selected.description:undefined}
+                          disabled={modal==='chat'&&detail?.communicationBlocked}
                         />
                       </label>
                     )}
@@ -1505,10 +1538,10 @@ export default function Home() {
                         )}
                       </section>
                     )}
-                    {modal==='task'&&<fieldset className="task-date-fields"><legend>{t('Срок выполнения')}</legend><label>{t('Дата начала')}<input type="date" name="dateFrom" required onChange={e=>{const end=e.currentTarget.form?.elements.namedItem('dateTo') as HTMLInputElement|null;if(end)end.min=e.currentTarget.value;}}/></label><label>{t('Дата окончания')}<input type="date" name="dateTo" required/></label></fieldset>}
+                    {modal==='task'&&<fieldset className="task-date-fields"><legend>{t('Срок выполнения')}</legend><label>{t('Дата начала')}<input type="date" name="dateFrom" defaultValue={selected?.kind==='task'?selected.dateFrom:undefined} required onChange={e=>{const end=e.currentTarget.form?.elements.namedItem('dateTo') as HTMLInputElement|null;if(end)end.min=e.currentTarget.value;}}/></label><label>{t('Дата окончания')}<input type="date" name="dateTo" defaultValue={selected?.kind==='task'?selected.dateTo:undefined} min={selected?.kind==='task'?selected.dateFrom:undefined} required/></label></fieldset>}
                   </>
                 )}
-                <button className="primary" disabled={busy}>
+                <button className="primary" disabled={busy||(modal==='chat'&&detail?.communicationBlocked)}>
                   {busy
                     ? t("Сохраняем\u2026")
                     : modal === "register"
@@ -1521,7 +1554,7 @@ export default function Home() {
                             ? t("Отправить отклик")
                             : modal === "profile"
                               ? t("Сохранить профиль")
-                              : t("Опубликовать задание")}
+                              : t(selected?.kind==='task'?"Сохранить изменения":"Опубликовать задание")}
                 </button>
               </form>
             </>
