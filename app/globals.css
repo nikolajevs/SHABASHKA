@@ -381,6 +381,10 @@ h1 em {
 .profile-hero>.favorite-button { align-self:flex-start; }
 .profile-hero-info .availability { justify-self:start; margin-top:5px; }
 .task-topline>.favorite-button { margin-left:auto; flex-shrink:0; }
+.task-card .task-heading { align-items:center; }
+.task-card .task-heading>.favorite-button { margin-left:auto; }
+.task-card-status { display:flex; align-items:center; margin-top:-4px; }
+.task-card-status .task-status { border-radius:8px; padding:5px 9px; font-size:14px; line-height:1.4; }
 .profile-hero-category { justify-self:start; font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:#4d6141; background:#e4efce; padding:3px 10px; border-radius:999px; }
 .profile-hero-name { margin:0; font-size:24px; line-height:1.15; overflow-wrap:anywhere; }
 .profile-hero-rating { display:flex; align-items:center; gap:6px; font-size:14px; color:#4e5f43; flex-wrap:wrap; }
