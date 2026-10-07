@@ -128,6 +128,7 @@ type Item = {
   images?: string[];
   cities?: string[];
   transport?: boolean;
+  legalEntitiesOnly?: boolean;
   rating?: number;
   profile?: string;
   created?: string;
@@ -438,6 +439,7 @@ export default function Home() {
       setBusy(true);setError('');
       try {
         values.transport = new FormData(form).get('transport') === 'on';
+        values.legalEntitiesOnly = new FormData(form).get('legalEntitiesOnly') === 'on';
         if (taskPhotos.length > 10) throw Error('Не более 10 фотографий.');
         const images: string[] = [];
         for (const { file,url } of taskPhotos) images.push(file?await prepareProfileImage(file):url);
@@ -538,7 +540,7 @@ export default function Home() {
                 </article> : item.kind === 'task' ? <article className="specialist-card task-card" key={item.id}>
                   <div className="task-heading"><span className="specialist-category">{t(item.category)}</span>{dialogActions(item)}</div>
                   <h3 className="task-title"><button onClick={()=>open('detail',item)}>{item.title}</button></h3>
-                  <div className="task-card-status"><span className={'task-status task-status-'+(item.deleted?'deleted':item.status||'open')}>{t(item.deleted?'Удалено':statusText(item.status))}</span></div>
+                  <div className="task-card-status">{item.legalEntitiesOnly&&<span className="specialist-category">{t('Только для юридических лиц')}</span>}<span className={'task-status task-status-'+(item.deleted?'deleted':item.status||'open')}>{t(item.deleted?'Удалено':statusText(item.status))}</span></div>
                   <p className="specialist-description">{item.description}</p>
                   <div className="task-facts"><div><MapPin size={17}/><span>{t(item.city||'Латвия')}</span></div><div><CalendarDays size={17}/><span><small>{t('Срок выполнения')}</small>{taskDates(item)}</span></div></div>
                   <div className="task-customer"><span className="task-customer-avatar" aria-hidden="true">{item.name.split(' ').map(s=>s[0]).slice(0,2).join('')}</span><span><small>{t('Заказчик')}</small>{item.name}</span></div>
@@ -1072,6 +1074,7 @@ export default function Home() {
                 </div>
               ) : (
                 <div className="task-view">
+                  {detail.legalEntitiesOnly&&<span className="specialist-category">{t('Только для юридических лиц')}</span>}
                   <div className="task-topline">
                     {detail.category && (
                       <span className="task-topline-cat">
@@ -1317,6 +1320,7 @@ export default function Home() {
                           onChange={setFormCity}
                           values={cities}
                         />
+                        <label className="check-card"><input type="checkbox" name="legalEntitiesOnly" defaultChecked={selected?.kind==='task'&&selected.legalEntitiesOnly}/><span><strong>{t('Только для юридических лиц')}</strong></span></label>
                         <label className="check-card">
                           <input type="checkbox" name="transport" defaultChecked={selected?.kind==='task'&&selected.transport} />
                           <span>

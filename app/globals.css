@@ -1241,3 +1241,5 @@ header {
   .cards .specialist-card:has(.dialog-icon-actions) { padding-right:76px; }
   .cards .specialist-card .dialog-icon-actions { top:18px; right:18px; }
 }
+
+.task-card-status { flex-wrap:wrap; gap:8px; }

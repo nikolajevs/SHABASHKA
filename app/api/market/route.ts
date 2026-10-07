@@ -329,13 +329,14 @@ export async function POST(request: Request) {
         if (!validDate(from) || !validDate(to) || to < from) throw Error('Укажите корректный диапазон дат.');
         data.dateFrom = from;
         data.dateTo = to;
+        data.legalEntitiesOnly = b.legalEntitiesOnly === true || b.legalEntitiesOnly === "true";
         data.transport = b.transport === true || b.transport === "true";
         if (b.images !== undefined && (!Array.isArray(b.images) || b.images.length > 10 || !b.images.every(validImage)))
           throw Error("Не более 10 фотографий или неподдерживаемый формат");
         data.images = Array.isArray(b.images) ? b.images : [];
         if(b.id!==undefined){
-          const result=await db.prepare("UPDATE records SET data=json_set(data,'$.title',?,'$.description',?,'$.category',?,'$.city',?,'$.dateFrom',?,'$.dateTo',?,'$.transport',json(?),'$.images',json(?),'$.updatedAt',?) WHERE id=? AND kind='task' AND owner=? AND coalesce(json_extract(data,'$.deleted'),0)=0 AND json_extract(data,'$.status') IN ('open','active')")
-            .bind(data.title,data.description,data.category,data.city,from,to,JSON.stringify(data.transport),JSON.stringify(data.images),now,value('id',100),u.userId).run();
+          const result=await db.prepare("UPDATE records SET data=json_set(data,'$.title',?,'$.description',?,'$.category',?,'$.city',?,'$.dateFrom',?,'$.dateTo',?,'$.transport',json(?),'$.legalEntitiesOnly',json(?),'$.images',json(?),'$.updatedAt',?) WHERE id=? AND kind='task' AND owner=? AND coalesce(json_extract(data,'$.deleted'),0)=0 AND json_extract(data,'$.status') IN ('open','active')")
+            .bind(data.title,data.description,data.category,data.city,from,to,JSON.stringify(data.transport),JSON.stringify(data.legalEntitiesOnly),JSON.stringify(data.images),now,value('id',100),u.userId).run();
           if(!result.meta.changes)return reply({error:'Редактирование задания недоступно.'},{status:403});
         }else await insert("task", data);
       }
