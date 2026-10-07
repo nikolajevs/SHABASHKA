@@ -1076,15 +1076,6 @@ export default function Home() {
                 <div className="task-view">
                   {detail.legalEntitiesOnly&&<span className="specialist-category">{t('Только для юридических лиц')}</span>}
                   <div className="task-topline">
-                    {detail.category && (
-                      <span className="task-topline-cat">
-                        {(() => {
-                          const Icon = categories.find((c) => c[0] === detail.category)?.[1] || Grid2X2;
-                          return <Icon size={18} />;
-                        })()}
-                        {t(detail.category)}
-                      </span>
-                    )}
                     <span className={"task-status task-status-" + (detail.deleted ? "deleted" : detail.status || "open")}>{t(detail.deleted ? "Удалено" : statusText(detail.status))}</span>
                     {dialogActions(detail)}
                   </div>
@@ -1111,6 +1102,10 @@ export default function Home() {
                       <span className="task-customer-avatar" aria-hidden="true">{detail.name.split(" ").map((s) => s[0]).slice(0, 2).join("")}</span>
                       <div><span className="fact-label">{t("Заказчик")}</span><span className="fact-value">{detail.name}</span></div>
                     </div>
+                    {detail.category&&<div className="fact-card fact-card-col">
+                      {(() => {const Icon=categories.find(c=>c[0]===detail.category)?.[1]||Grid2X2;return <Icon size={18}/>;})()}
+                      <div><span className="fact-label">{t('Категория')}</span><span className="fact-value">{t(detail.category)}</span></div>
+                    </div>}
                   </div>
                   {detail.description&&<section className="task-description-section"><h4 className="profile-view-heading">{t('Описание')}</h4><p className="task-view-lead">{detail.description}</p></section>}
                   {!!detail.images?.length && (
