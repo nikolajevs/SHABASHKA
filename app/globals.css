@@ -1225,10 +1225,11 @@ header {
   .task-topline>.dialog-icon-actions { width:100%; justify-content:flex-end; order:-1; }
 }
 
-.specialist-heading .dialog-icon-actions { flex-wrap:wrap; max-width:144px; }
+/* Card utility actions stay in a compact vertical column. */
+.cards .dialog-icon-actions { flex-direction:column; flex-wrap:nowrap; width:44px; max-width:44px; justify-content:flex-start; }
+.specialist-heading { align-items:flex-start; }
 @media(max-width:600px) {
-  .specialist-heading { flex-wrap:wrap; }
-  .specialist-heading>.dialog-icon-actions { max-width:none; width:100%; justify-content:flex-end; }
-  .task-heading { flex-wrap:wrap; }
-  .task-heading>.dialog-icon-actions { margin-left:auto; }
+  .specialist-heading { flex-wrap:nowrap; }
+  .specialist-heading>.dialog-icon-actions { width:44px; max-width:44px; }
+  .task-heading { align-items:flex-start; }
 }
