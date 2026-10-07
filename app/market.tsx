@@ -974,7 +974,6 @@ export default function Home() {
                       )}
                     </div>
                     <div className="profile-hero-info">
-                      {detail.category && <span className="profile-hero-category">{t(detail.category)}</span>}
                       <h3 className="profile-hero-name">{detail.name}</h3>
                       {detail.title&&<p className="profile-hero-service">{detail.title}</p>}
                       <div className="profile-hero-rating"><Star size={15} />{ratingText(detail.id)}</div>
