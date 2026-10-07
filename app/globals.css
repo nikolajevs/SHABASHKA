@@ -377,7 +377,9 @@ h1 em {
 .profile-hero { display:flex; gap:18px; align-items:center; padding:20px; border-radius:16px; background:linear-gradient(135deg,#eaf3da,#f7faf1); border:1px solid #e2ecce; }
 .profile-hero-avatar { width:92px; height:92px; border-radius:50%; overflow:hidden; flex-shrink:0; display:grid; place-items:center; background:#dfe9d0; color:#4c6138; font-size:30px; font-weight:700; box-shadow:0 0 0 4px #fff, 0 2px 8px rgba(60,80,40,.14); }
 .profile-hero-avatar img { width:100%; height:100%; object-fit:cover; }
-.profile-hero-info { display:grid; gap:5px; min-width:0; }
+.profile-hero-info { display:grid; gap:5px; min-width:0; flex:1; }
+.profile-hero>.favorite-button { align-self:flex-start; }
+.profile-hero-info .availability { justify-self:start; margin-top:5px; }
 .profile-hero-category { justify-self:start; font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; color:#4d6141; background:#e4efce; padding:3px 10px; border-radius:999px; }
 .profile-hero-name { margin:0; font-size:24px; line-height:1.15; overflow-wrap:anywhere; }
 .profile-hero-rating { display:flex; align-items:center; gap:6px; font-size:14px; color:#4e5f43; flex-wrap:wrap; }

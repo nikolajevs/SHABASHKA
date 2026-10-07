@@ -969,7 +969,9 @@ export default function Home() {
                       <h3 className="profile-hero-name">{detail.name}</h3>
                       {detail.title&&<p className="profile-hero-service">{detail.title}</p>}
                       <div className="profile-hero-rating"><Star size={15} />{ratingText(detail.id)}</div>
+                      <span className={'availability'+(detail.available===false?' busy':'')}>{t(detail.available===false?'Пока занят':'Принимаю заказы')}</span>
                     </div>
+                    {favoriteButton(detail)}
                   </header>
                   <div className="profile-facts-grid profile-view-facts">
                     <div className="fact-card">
@@ -1043,8 +1045,7 @@ export default function Home() {
                       <p className="profile-view-empty">{t("Пока нет отзывов")}</p>
                     )}
                   </section>
-                  <span className={'availability'+(detail.available===false?' busy':'')}>{t(detail.available===false?'Пока занят':'Принимаю заказы')}</span>
-                  <div className="detail-footer">{detail.mine?<button className="primary" onClick={()=>open('profile',detail)}>{t('Изменить профиль')}</button>:<button className="primary" disabled={busy} onClick={()=>void writeSpecialist(detail)}>{t('Написать специалисту')}</button>}{favoriteButton(detail)}<button className="outline" onClick={()=>void shareProfile(detail)}><Share2 size={16}/>{t('Поделиться профилем')}</button><ReportLink id={detail.id}/></div>
+                  <div className="detail-footer">{detail.mine?<button className="primary" onClick={()=>open('profile',detail)}>{t('Изменить профиль')}</button>:<button className="primary" disabled={busy} onClick={()=>void writeSpecialist(detail)}>{t('Написать специалисту')}</button>}<button className="outline" onClick={()=>void shareProfile(detail)}><Share2 size={16}/>{t('Поделиться профилем')}</button><ReportLink id={detail.id}/></div>
                 </div>
               ) : detail.kind === "bid" ? (
                 <div className="response-view">
