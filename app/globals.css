@@ -1234,12 +1234,14 @@ header {
   .task-heading { align-items:flex-start; }
 }
 
-.cards .specialist-card:has(.dialog-icon-actions) { position:relative; padding-right:84px; }
+.cards .specialist-card:has(.dialog-icon-actions) { position:relative; }
 .cards .specialist-card .dialog-icon-actions { position:absolute; top:24px; right:24px; }
 .cards .task-card .task-heading { justify-content:flex-start; }
 @media(max-width:600px) {
-  .cards .specialist-card:has(.dialog-icon-actions) { padding-right:76px; }
   .cards .specialist-card .dialog-icon-actions { top:18px; right:18px; }
 }
 
 .task-card-status { flex-wrap:wrap; gap:8px; }
+
+.cards .task-card :is(.task-heading,.task-title,.task-card-status,.specialist-description) { margin-right:60px; }
+.cards .specialist-profile-card .specialist-heading { padding-right:60px; min-height:144px; }
