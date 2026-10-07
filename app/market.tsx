@@ -1075,6 +1075,7 @@ export default function Home() {
                       </span>
                     )}
                     <span className={"task-status task-status-" + (detail.deleted ? "deleted" : detail.status || "open")}>{t(detail.deleted ? "Удалено" : statusText(detail.status))}</span>
+                    {!detail.deleted&&favoriteButton(detail)}
                   </div>
                   <div className="profile-facts-grid">
                     <div className="fact-card fact-card-col">
@@ -1197,7 +1198,7 @@ export default function Home() {
                     </>
                   )}
                   </div>
-                  <div className="detail-footer">{detail.mine&&!detail.deleted&&detail.status!=='complete'&&<button className="outline" onClick={()=>open('task',detail)}>{t('Изменить задание')}</button>}{!detail.deleted&&favoriteButton(detail)}<ReportLink id={detail.id}/></div>
+                  <div className="detail-footer">{detail.mine&&!detail.deleted&&detail.status!=='complete'&&<button className="outline" onClick={()=>open('task',detail)}>{t('Изменить задание')}</button>}<ReportLink id={detail.id}/></div>
                 </div>
               )}
             </div>
