@@ -527,7 +527,7 @@ export default function Home() {
                 item.kind === 'profile' ? <article className="specialist-card specialist-profile-card" key={item.id}>
                   <div className="specialist-heading">
                     <div className={'specialist-avatar color'+(i%4)}>{item.photo?<img src={item.photo} alt={item.name} loading="lazy"/>:item.name.split(' ').map(s=>s[0]).slice(0,2).join('')}</div>
-                    <div className="specialist-identity"><span className="specialist-category">{t(item.category)}</span><h3><button onClick={()=>open('detail',item)}>{item.name}</button></h3><div className="specialist-rating"><Star size={16}/>{ratingText(item.id)}</div><span className={'availability'+(item.available===false?' busy':'')}>{t(item.available===false?'Пока занят':'Принимаю заказы')}</span></div>{favoriteButton(item)}
+                    <div className="specialist-identity"><span className="specialist-category">{t(item.category)}</span><h3><button onClick={()=>open('detail',item)}>{item.name}</button></h3><div className="specialist-rating"><Star size={16}/>{ratingText(item.id)}</div><span className={'availability'+(item.available===false?' busy':'')}>{t(item.available===false?'Пока занят':'Принимаю заказы')}</span></div>{dialogActions(item)}
                   </div>
                   {item.title&&<h4 className="specialist-title">{item.title}</h4>}
                   <div className="specialist-facts"><div><MapPin size={16}/><span>{(item.cities?.length?item.cities:[item.city||'Латвия']).map(city=>t(city)).join(' · ')}</span></div>{item.transport&&<div><Truck size={16}/><span>{t('Собственный транспорт')}</span></div>}</div>
@@ -535,15 +535,14 @@ export default function Home() {
                   {item.skills&&<ul className="specialist-skills" aria-label={t('Навыки')}>{item.skills.split(/[,;\n]+/).map(s=>s.trim()).filter(Boolean).slice(0,5).map((skill,index)=><li key={index}>{skill}</li>)}</ul>}
                   {!!item.portfolioImages?.length ? <PortfolioGallery images={item.portfolioImages} previewCount={3}/> : <div className="portfolio-empty"><Camera size={24}/><div><strong>{t('Портфолио пока не добавлено')}</strong><span>{item.mine ? t('Добавьте фотографии своих работ, чтобы клиентам было проще выбрать вас.') : t('Исполнитель ещё не добавил фотографии своих работ.')}</span></div>{item.mine&&view==='mine'&&mineTab==='profile'&&<button className="outline" onClick={()=>open('profile',item)}>{t('Добавить фото')}</button>}</div>}
                   <div className="specialist-actions"><button className="primary" onClick={()=>open('detail',item)}>{t('Посмотреть профиль')}</button>{!item.mine&&<button className="outline specialist-contact" disabled={busy} onClick={()=>void writeSpecialist(item)}><MessageCircle size={16}/>{t('Написать специалисту')}</button>}{view==='mine'&&mineTab==='profile'&&item.mine&&<button className="outline" onClick={()=>open('profile',item)}>{t('Изменить профиль')}</button>}</div>
-                  <div className="card-secondary-actions"><button className="share-profile" title={t('Поделиться профилем')} onClick={()=>void shareProfile(item)}><Share2 size={16}/>{t('Поделиться')}</button><ReportLink id={item.id}/></div>
                 </article> : item.kind === 'task' ? <article className="specialist-card task-card" key={item.id}>
-                  <div className="task-heading"><span className="specialist-category">{t(item.category)}</span>{!item.deleted&&favoriteButton(item)}</div>
+                  <div className="task-heading"><span className="specialist-category">{t(item.category)}</span>{dialogActions(item)}</div>
                   <h3 className="task-title"><button onClick={()=>open('detail',item)}>{item.title}</button></h3>
                   <div className="task-card-status"><span className={'task-status task-status-'+(item.deleted?'deleted':item.status||'open')}>{t(item.deleted?'Удалено':statusText(item.status))}</span></div>
                   <p className="specialist-description">{item.description}</p>
                   <div className="task-facts"><div><MapPin size={17}/><span>{t(item.city||'Латвия')}</span></div><div><CalendarDays size={17}/><span><small>{t('Срок выполнения')}</small>{taskDates(item)}</span></div></div>
                   <div className="task-customer"><span className="task-customer-avatar" aria-hidden="true">{item.name.split(' ').map(s=>s[0]).slice(0,2).join('')}</span><span><small>{t('Заказчик')}</small>{item.name}</span></div>
-                  <div className="task-card-actions"><div className="task-card-action-row"><button className="primary" onClick={()=>open('detail',item)}>{t('Подробнее о задании')}</button><ReportLink id={item.id}/></div>{item.mine&&!item.deleted&&<div className="task-card-action-row">{item.status!=='complete'&&<button className="outline" onClick={()=>open('task',item)}>{t('Изменить задание')}</button>}<button className="outline" onClick={()=>{open('detail',item);setDeleteConfirmation(true);}}>{t('Удалить задание')}</button></div>}</div>
+                  <div className="task-card-actions"><div className="task-card-action-row"><button className="primary" onClick={()=>open('detail',item)}>{t('Подробнее о задании')}</button></div>{item.mine&&!item.deleted&&<div className="task-card-action-row">{item.status!=='complete'&&<button className="outline" onClick={()=>open('task',item)}>{t('Изменить задание')}</button>}<button className="outline" onClick={()=>{open('detail',item);setDeleteConfirmation(true);}}>{t('Удалить задание')}</button></div>}</div>
                 </article> : item.kind === 'bid' ? <article className="specialist-card response-card" key={item.id}>
                   <div className="task-heading"><span className="specialist-category">{t('Ваш отклик')}{unreadFor(item)>0&&<span className="unread-count" aria-label={t('Непрочитанное')}>{unreadFor(item)}</span>}</span><span className="task-status">{bidStatus(item)}</span></div>
                   <h3 className="task-title"><button onClick={()=>open('detail',item)}>{taskFor(item)?.title||t('Предложение по заданию')}</button></h3>
@@ -615,7 +614,7 @@ export default function Home() {
                         {t(item.kind==='profile'?'Посмотреть профиль':item.kind==='task'?'Подробнее о задании':'Посмотреть отклик')}
                       </button>
                     </div>
-                    {['task','profile'].includes(item.kind) && <ReportLink id={item.id}/>}
+                    {['task','profile'].includes(item.kind) && dialogActions(item)}
                   </div>
                 </article>
               ))}

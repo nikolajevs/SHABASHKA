@@ -1224,3 +1224,11 @@ header {
   .profile-hero>.dialog-icon-actions { width:100%; justify-content:flex-end; order:-1; }
   .task-topline>.dialog-icon-actions { width:100%; justify-content:flex-end; order:-1; }
 }
+
+.specialist-heading .dialog-icon-actions { flex-wrap:wrap; max-width:144px; }
+@media(max-width:600px) {
+  .specialist-heading { flex-wrap:wrap; }
+  .specialist-heading>.dialog-icon-actions { max-width:none; width:100%; justify-content:flex-end; }
+  .task-heading { flex-wrap:wrap; }
+  .task-heading>.dialog-icon-actions { margin-left:auto; }
+}
