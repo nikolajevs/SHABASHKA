@@ -32,6 +32,16 @@ try {
  await market({action:'read-notifications',ids:[message.id]},b);
  assert.equal((await market(null,b)).records.find(r=>r.id===message.id).unread,false);
  await market({action:'message',parent:conversation.id,description:'Hello customer'},b);
+ await market({action:'delete-chat',id:conversation.id,confirm:true},c,403);
+ await market({action:'delete-chat',id:conversation.id,confirm:true},a);
+ assert.equal((await market(null,a)).records.find(r=>r.id===conversation.id).chatHidden,true);
+ assert.equal((await market(null,b)).records.find(r=>r.id===conversation.id).chatHidden,false);
+ assert.equal((await market(null,a)).records.some(r=>r.kind==='message'&&r.parent===conversation.id&&r.unread),false);
+ await market({action:'message',parent:conversation.id,description:'New message restores conversation'},b);
+ assert.equal((await market(null,a)).records.find(r=>r.id===conversation.id).chatHidden,false);
+ await market({action:'delete-chat',id:conversation.id,confirm:true},a);
+ await market({action:'start-chat',id:pb.id},a);
+ assert.equal((await market(null,a)).records.find(r=>r.id===conversation.id).chatHidden,false);
  assert.ok((await request('/api/privacy?export=1',null,a)).records.some(r=>r.description==='Hello customer'||r.data?.description==='Hello customer'));
  await request('/api/privacy',{action:'deactivate'},b);
  await market({action:'message',parent:conversation.id,description:'Unavailable'},a,403);

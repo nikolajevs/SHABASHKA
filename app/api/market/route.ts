@@ -90,6 +90,8 @@ export async function GET(request: Request) {
     const favoriteIds=new Set(preferences.results.filter(r=>r.kind==='favorite').map(r=>r.parent));
     const ownBlocks=new Set(preferences.results.filter(r=>r.kind==='user-block'&&r.owner===uid).map(r=>r.parent));
     const blockedPeers=new Set(preferences.results.filter(r=>r.kind==='user-block').map(r=>r.owner===uid?r.parent:r.owner));
+    const hiddenChats=uid?await db.prepare("SELECT parent,created FROM records WHERE kind='chat-hidden' AND owner=?").bind(uid).all<{parent:string;created:string}>():{results:[]};
+    const hiddenIds=new Set(hiddenChats.results.filter(h=>!rows.results.some(r=>r.kind==='message'&&r.parent===h.parent&&r.created>h.created)).map(h=>h.parent));
     const peerFor=(r:Row)=>{
       const other=r.kind==='conversation'?r.parent:rows.results.find(t=>t.id===r.parent&&t.kind==='task')?.owner;
       return r.owner===uid?other:r.owner;
@@ -109,7 +111,7 @@ export async function GET(request: Request) {
           : null,
         records: rows.results
           .filter((r) => r.kind !== "account")
-          .map((r) => ({...unpack(r, uid), favorite:favoriteIds.has(r.id), ...(['conversation','bid'].includes(r.kind)?{blockedByMe:ownBlocks.has(peerFor(r)||''),communicationBlocked:blockedPeers.has(peerFor(r)||'')}:{}), ...(r.kind==='conversation'?{name:r.owner===uid?JSON.parse(r.data).recipientName:JSON.parse(r.data).name}:{}), unread: !!uid && r.owner!==uid && ['bid','message'].includes(r.kind) && !readIds.has(r.id)})),
+          .map((r) => ({...unpack(r, uid), favorite:favoriteIds.has(r.id), chatHidden:hiddenIds.has(r.id), ...(['conversation','bid'].includes(r.kind)?{blockedByMe:ownBlocks.has(peerFor(r)||''),communicationBlocked:blockedPeers.has(peerFor(r)||'')}:{}), ...(r.kind==='conversation'?{name:r.owner===uid?JSON.parse(r.data).recipientName:JSON.parse(r.data).name}:{}), unread: !!uid && r.owner!==uid && ['bid','message'].includes(r.kind) && !readIds.has(r.id)&&!(r.kind==='message'&&hiddenIds.has(r.parent||''))})),
       },
       { headers: { "Cache-Control": "private, no-store" } },
     );
@@ -213,6 +215,13 @@ export async function POST(request: Request) {
       }else await db.prepare("DELETE FROM records WHERE kind='favorite' AND owner=? AND parent=?").bind(u.userId,target).run();
       return reply({ok:true});
     }
+    if(action==='delete-chat') {
+      const thread=value('id',240);
+      if(b.confirm!==true)throw Error('Подтвердите удаление переписки.');
+      if(!await threadPeer(thread,u.userId))return reply({error:'Нет доступа к диалогу'},{status:403});
+      await db.prepare("INSERT INTO records(id,kind,owner,parent,data,created) VALUES (?,'chat-hidden',?,?,'{}',?) ON CONFLICT(id) DO UPDATE SET created=excluded.created").bind('chat-hidden:'+u.userId+':'+thread,u.userId,thread,now).run();
+      return reply({ok:true});
+    }
     if(action==='block-chat') {
       const peer=await threadPeer(value('id',240),u.userId);
       if(!peer)return reply({error:'Нет доступа к диалогу'},{status:403});
@@ -235,6 +244,7 @@ export async function POST(request: Request) {
         .bind(conversationId,u.userId,profile.owner,JSON.stringify({name:identity.name,recipientName:JSON.parse(profile.data).name}),now).run();
       const conversation=await db.prepare("SELECT * FROM records WHERE id=? AND kind='conversation'").bind(conversationId).first<Row>();
       if(!conversation)throw Error('Диалог не найден');
+      await db.prepare("DELETE FROM records WHERE kind='chat-hidden' AND owner=? AND parent=?").bind(u.userId,conversationId).run();
       return reply({ok:true,conversation:{...unpack(conversation,u.userId),name:conversation.owner===u.userId?JSON.parse(conversation.data).recipientName:JSON.parse(conversation.data).name}});
     }
     if (action === "delete-task") {

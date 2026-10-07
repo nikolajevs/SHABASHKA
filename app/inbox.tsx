@@ -2,10 +2,10 @@
 import {MessageCircle,Search,Lock} from 'lucide-react';
 import {useState} from 'react';
 import {useLanguage,localeTags} from './i18n/provider';
-type Entry={id:string;kind:string;parent?:string;name:string;title?:string;description?:string;created?:string;mine?:boolean;unread?:boolean;communicationBlocked?:boolean};
+type Entry={id:string;kind:string;parent?:string;name:string;title?:string;description?:string;created?:string;mine?:boolean;unread?:boolean;communicationBlocked?:boolean;chatHidden?:boolean};
 export function Inbox({records,onOpen}:{records:Entry[];onOpen:(id:string)=>void}) {
  const {t,locale}=useLanguage(),[query,setQuery]=useState('');
- const threads=records.filter(r=>['conversation','bid'].includes(r.kind)).map(thread=>{
+ const threads=records.filter(r=>['conversation','bid'].includes(r.kind)&&!r.chatHidden).map(thread=>{
    const task=records.find(r=>r.id===thread.parent&&r.kind==='task');
    const name=thread.kind==='conversation'?thread.name:thread.mine?task?.name||t('Заказчик'):thread.name;
    const messages=records.filter(r=>r.kind==='message'&&r.parent===thread.id).sort((a,b)=>(b.created||'').localeCompare(a.created||''));

@@ -4,12 +4,13 @@ import {Bell,MessageCircle} from 'lucide-react';
 import {Dialog,DialogContent,DialogTitle,DialogDescription} from '@/components/ui/dialog';
 import {useLanguage} from './i18n/provider';
 import {NotificationSettings} from './notification-settings';
-type Entry={id:string;kind:string;parent?:string;name:string;title?:string;created?:string;unread?:boolean;mine?:boolean};
+type Entry={id:string;kind:string;parent?:string;name:string;title?:string;created?:string;unread?:boolean;mine?:boolean;chatHidden?:boolean};
 export function Notifications({records,activeId,activeKind,onOpen,onRead}:{records:Entry[];activeId?:string;activeKind:string;onOpen:(kind:string,id:string)=>void;onRead:(ids:string[])=>void}) {
   const {t,locale}=useLanguage();
   const [settingsContainer,setSettingsContainer]=useState<HTMLDivElement|null>(null);
   const [open,setOpen]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState('');
-  const incoming=records.filter(r=>(r.kind==='message'||r.kind==='bid')&&!r.mine);
+  const visibleRecords=records.filter(r=>!r.chatHidden);
+  const incoming=records.filter(r=>(r.kind==='message'||r.kind==='bid')&&!r.mine&&!(r.kind==='message'&&records.some(thread=>thread.id===r.parent&&thread.chatHidden)));
   async function mark(ids:string[]) {
     if(!ids.length||busy)return;
     setBusy(true);setError('');
@@ -40,8 +41,8 @@ export function Notifications({records,activeId,activeKind,onOpen,onRead}:{recor
       {error&&<p role="alert">{error}</p>}
       <div ref={setSettingsContainer}/>
       <button className="outline" disabled={busy||!unread} onClick={()=>void mark(incoming.filter(r=>r.unread).map(r=>r.id))}>{t('Прочитать всё')}</button>
-      {records.some(r=>r.kind==='conversation')&&<div className="notification-list"><h3>{t('Личные диалоги')}</h3>{records.filter(r=>r.kind==='conversation').map(chat=><button key={chat.id} className="notification-item" onClick={()=>{onOpen('chat',chat.id);setOpen(false);}}><MessageCircle size={19}/><span><strong>{chat.name}</strong><small>{t('Открыть чат')}</small></span></button>)}</div>}
-      {!grouped.length&&!records.some(r=>r.kind==='conversation')&&<p>{t('Уведомлений пока нет')}</p>}
+      {visibleRecords.some(r=>r.kind==='conversation')&&<div className="notification-list"><h3>{t('Личные диалоги')}</h3>{visibleRecords.filter(r=>r.kind==='conversation').map(chat=><button key={chat.id} className="notification-item" onClick={()=>{onOpen('chat',chat.id);setOpen(false);}}><MessageCircle size={19}/><span><strong>{chat.name}</strong><small>{t('Открыть чат')}</small></span></button>)}</div>}
+      {!grouped.length&&!visibleRecords.some(r=>r.kind==='conversation')&&<p>{t('Уведомлений пока нет')}</p>}
       <div className="notification-list">{grouped.map(group=>{
         const item=group[0],target=records.find(r=>r.id===item.parent),task=item.kind==='message'?records.find(r=>r.id===target?.parent):target;
         const count=group.filter(r=>r.unread).length;

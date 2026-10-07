@@ -137,6 +137,7 @@ type Item = {
   available?: boolean;
   blockedByMe?: boolean;
   communicationBlocked?: boolean;
+  chatHidden?: boolean;
 };
 type User = {
   name: string;
@@ -191,6 +192,7 @@ export default function Home() {
   const [profilePhotoPreview, setProfilePhotoPreview] = useState("");
   const [taskPhotos, setTaskPhotos] = useState<{ file?: File; url: string }[]>([]);
   const [blockConfirmation,setBlockConfirmation]=useState(false);
+  const [chatDeleteConfirmation,setChatDeleteConfirmation]=useState(false);
   const [citySearch, setCitySearch] = useState("");
   const [deepLinkHandled,setDeepLinkHandled]=useState(false);
   const { locale, t, errorText } = useLanguage();
@@ -293,6 +295,7 @@ export default function Home() {
     if(!user&&kind!=='detail'){setModal('');setAuthOpen(true);return;}
     setDeleteConfirmation(false);
     setBlockConfirmation(false);
+    setChatDeleteConfirmation(false);
     setError("");
     setNotice("");
     setSelected(item || null);
@@ -1212,6 +1215,7 @@ export default function Home() {
           ) : (
             <>
               {modal==='chat'&&detail&&<div className="chat-controls">
+                {chatDeleteConfirmation?<div className="chat-block-confirm"><p>{t('Удалить переписку из вашего списка? У собеседника история сохранится. Новое сообщение вернёт диалог в список.')}</p><button type="button" className="outline" disabled={busy} onClick={()=>void action({action:'delete-chat',id:detail.id,confirm:true}).then(ok=>{if(ok){navigate('mine');setMineTab('messages');}})}>{t('Удалить переписку')}</button><button type="button" className="outline" onClick={()=>setChatDeleteConfirmation(false)}>{t('Отмена')}</button></div>:<button type="button" className="outline" disabled={busy} onClick={()=>setChatDeleteConfirmation(true)}>{t('Удалить переписку')}</button>}
                 {detail.communicationBlocked&&<p className="feedback"><Lock size={16}/>{t('Переписка заблокирована')}</p>}
                 {blockConfirmation?<div className="chat-block-confirm"><p>{t('Заблокировать собеседника? История сохранится, новые сообщения будут недоступны.')}</p><button type="button" className="outline" disabled={busy} onClick={()=>{void action({action:'block-chat',id:detail.id,enabled:true},false).then(ok=>{if(ok)setBlockConfirmation(false);});}}>{t('Заблокировать')}</button><button type="button" className="outline" onClick={()=>setBlockConfirmation(false)}>{t('Отмена')}</button></div>:<button type="button" className="outline" disabled={busy} onClick={()=>{if(detail.blockedByMe)void action({action:'block-chat',id:detail.id,enabled:false},false);else setBlockConfirmation(true);}}>{t(detail.blockedByMe?'Разблокировать собеседника':'Заблокировать собеседника')}</button>}
               </div>}
