@@ -1212,3 +1212,15 @@ header {
     gap: 6px;
   }
 }
+
+.dialog-icon-actions { display:flex; gap:6px; align-items:center; flex-shrink:0; margin-left:auto; align-self:flex-start; }
+.dialog-icon-actions .dialog-icon-button:hover { background:#f0f5e7; color:#3a4a2c; border-color:#bdcbb0; }
+.dialog-icon-actions a { text-decoration:none; }
+.dialog-icon-actions .favorite-button { margin:0; }
+.review-pagination { display:flex; align-items:center; justify-content:center; gap:16px; margin-top:18px; }
+.review-pagination .outline { min-height:44px; padding:10px 16px; }
+@media(max-width:600px) {
+  .detail-dialog .profile-hero { flex-wrap:wrap; }
+  .profile-hero>.dialog-icon-actions { width:100%; justify-content:flex-end; order:-1; }
+  .task-topline>.dialog-icon-actions { width:100%; justify-content:flex-end; order:-1; }
+}

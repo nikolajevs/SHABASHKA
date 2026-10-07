@@ -193,6 +193,7 @@ export default function Home() {
   const [taskPhotos, setTaskPhotos] = useState<{ file?: File; url: string }[]>([]);
   const [blockConfirmation,setBlockConfirmation]=useState(false);
   const [chatDeleteConfirmation,setChatDeleteConfirmation]=useState(false);
+  const [reviewPage, setReviewPage] = useState(1);
   const [citySearch, setCitySearch] = useState("");
   const [deepLinkHandled,setDeepLinkHandled]=useState(false);
   const { locale, t, errorText } = useLanguage();
@@ -296,6 +297,7 @@ export default function Home() {
     setDeleteConfirmation(false);
     setBlockConfirmation(false);
     setChatDeleteConfirmation(false);
+    setReviewPage(1);
     setError("");
     setNotice("");
     setSelected(item || null);
@@ -332,10 +334,13 @@ export default function Home() {
   function favoriteButton(item:Item) {
     return <button className={'favorite-button'+(item.favorite?' selected':'')} type="button" disabled={busy} aria-pressed={!!item.favorite} aria-label={t(item.favorite?'Удалить из избранного':'В избранное')} onClick={()=>{if(!user){setAuthOpen(true);return;}if(!user.registered||user.requiresTerms){open('register');return;}void action({action:'favorite',id:item.id,enabled:!item.favorite},false);}}><Heart size={19} fill={item.favorite?'currentColor':'none'}/></button>;
   }
+  function dialogActions(item:Item) {
+    return <div className="dialog-icon-actions">{!item.deleted&&['profile','task'].includes(item.kind)&&favoriteButton(item)}<button type="button" className="favorite-button dialog-icon-button" title={t('Поделиться')} aria-label={t('Поделиться')} onClick={()=>void shareProfile(item)}><Share2 size={19}/></button><ReportLink id={item.id} compact/></div>;
+  }
   async function shareProfile(item:Item) {
     const url=location.origin+'/?item='+encodeURIComponent(item.id);
     try {
-      if(navigator.share)await navigator.share({title:item.name+' · Gigs',url});
+      if(navigator.share)await navigator.share({title:(item.title||item.name)+' · Gigs',url});
       else {await navigator.clipboard.writeText(url);setNotice('Ссылка скопирована.');}
     }catch(e){if(!(e instanceof DOMException&&e.name==='AbortError'))setNotice('Не удалось скопировать ссылку.');}
   }
@@ -950,7 +955,7 @@ export default function Home() {
           {modal === "detail" && detail ? (
             <div className="details">
               {((detail.kind === "task" && detail.deleted) || (detail.kind === "bid" && taskFor(detail)?.deleted)) && <p className="feedback">{t("Задание удалено из каталога. История доступна только участникам.")}</p>}
-              {detail.kind==='review' && <ReportLink id={detail.id}/>}
+              {detail.kind==='review' && dialogActions(detail)}
               {!['profile','task','bid'].includes(detail.kind) && <b>{detail.name}</b>}
               {!['profile','task','bid'].includes(detail.kind) && <p>{detail.description}</p>}
               {!['profile','task','bid'].includes(detail.kind) && (
@@ -975,7 +980,7 @@ export default function Home() {
                       <div className="profile-hero-rating"><Star size={15} />{ratingText(detail.id)}</div>
                       <span className={'availability'+(detail.available===false?' busy':'')}>{t(detail.available===false?'Пока занят':'Принимаю заказы')}</span>
                     </div>
-                    {favoriteButton(detail)}
+                    {dialogActions(detail)}
                   </header>
                   <div className="profile-facts-grid profile-view-facts">
                     <div className="fact-card">
@@ -1036,7 +1041,7 @@ export default function Home() {
                       {!!reviews(detail.id).length && <span className="profile-reviews-count">{reviews(detail.id).length}</span>}
                     </div>
                     {reviews(detail.id).length ? (
-                      reviews(detail.id).map((r) => (
+                      reviews(detail.id).slice((Math.min(reviewPage,Math.ceil(reviews(detail.id).length/5))-1)*5,Math.min(reviewPage,Math.ceil(reviews(detail.id).length/5))*5).map((r) => (
                         <div className="review-card" key={r.id}>
                           <div className="review-card-head">
                             <b>{r.name}</b>
@@ -1048,8 +1053,9 @@ export default function Home() {
                     ) : (
                       <p className="profile-view-empty">{t("Пока нет отзывов")}</p>
                     )}
+                    {reviews(detail.id).length>5&&<nav className="review-pagination" aria-label={t('Страницы отзывов')}><button type="button" className="outline" disabled={reviewPage<=1} onClick={()=>setReviewPage(p=>Math.max(1,p-1))}>{t('Назад')}</button><span aria-live="polite">{Math.min(reviewPage,Math.ceil(reviews(detail.id).length/5))} / {Math.ceil(reviews(detail.id).length/5)}</span><button type="button" className="outline" disabled={reviewPage>=Math.ceil(reviews(detail.id).length/5)} onClick={()=>setReviewPage(p=>p+1)}>{t('Далее')}</button></nav>}
                   </section>
-                  <div className="detail-footer">{detail.mine?<button className="primary" onClick={()=>open('profile',detail)}>{t('Изменить профиль')}</button>:<button className="primary" disabled={busy} onClick={()=>void writeSpecialist(detail)}>{t('Написать специалисту')}</button>}<button className="outline" onClick={()=>void shareProfile(detail)}><Share2 size={16}/>{t('Поделиться профилем')}</button><ReportLink id={detail.id}/></div>
+                  <div className="detail-footer">{detail.mine?<button className="primary" onClick={()=>open('profile',detail)}>{t('Изменить профиль')}</button>:<button className="primary" disabled={busy} onClick={()=>void writeSpecialist(detail)}>{t('Написать специалисту')}</button>}</div>
                 </div>
               ) : detail.kind === "bid" ? (
                 <div className="response-view">
@@ -1079,7 +1085,7 @@ export default function Home() {
                       </span>
                     )}
                     <span className={"task-status task-status-" + (detail.deleted ? "deleted" : detail.status || "open")}>{t(detail.deleted ? "Удалено" : statusText(detail.status))}</span>
-                    {!detail.deleted&&favoriteButton(detail)}
+                    {dialogActions(detail)}
                   </div>
                   <div className="profile-facts-grid">
                     <div className="fact-card fact-card-col">
@@ -1202,7 +1208,7 @@ export default function Home() {
                     </>
                   )}
                   </div>
-                  <div className="detail-footer">{detail.mine&&!detail.deleted&&detail.status!=='complete'&&<button className="outline" onClick={()=>open('task',detail)}>{t('Изменить задание')}</button>}<ReportLink id={detail.id}/></div>
+                  <div className="detail-footer">{detail.mine&&!detail.deleted&&detail.status!=='complete'&&<button className="outline" onClick={()=>open('task',detail)}>{t('Изменить задание')}</button>}</div>
                 </div>
               )}
             </div>

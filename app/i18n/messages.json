@@ -1,4 +1,9 @@
 [
+  ["Назад", "Atpakaļ", "Previous", "Назад"],
+  ["Далее", "Tālāk", "Next", "Далі"],
+  ["Назад", "Atpakaļ", "Previous", "Назад"],
+  ["Далее", "Tālāk", "Next", "Далі"],
+  ["Страницы отзывов", "Atsauksmju lapas", "Review pages", "Сторінки відгуків"],
   ["Удалить переписку", "Dzēst saraksti", "Delete conversation", "Видалити листування"],
   ["Подтвердите удаление переписки.", "Apstipriniet sarakstes dzēšanu.", "Confirm conversation deletion.", "Підтвердьте видалення листування."],
   ["Удалить переписку из вашего списка? У собеседника история сохранится. Новое сообщение вернёт диалог в список.", "Dzēst saraksti no jūsu saraksta? Otram dalībniekam vēsture saglabāsies. Jauna ziņa atjaunos saraksti sarakstā.", "Delete this conversation from your list? The other person keeps the history. A new message will bring the conversation back.", "Видалити листування з вашого списку? У співрозмовника історія збережеться. Нове повідомлення поверне діалог до списку."],
